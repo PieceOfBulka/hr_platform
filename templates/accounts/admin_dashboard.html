@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Панель администратора - HR Платформа{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-tachometer-alt me-2"></i>Панель администратора
+        </h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ pending_vacancies }}</h4>
+                        <p class="card-text">Вакансии на модерации</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-briefcase fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ pending_internships }}</h4>
+                        <p class="card-text">Стажировки на модерации</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-graduation-cap fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ total_users }}</h4>
+                        <p class="card-text">Всего пользователей</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ new_users_today }}</h4>
+                        <p class="card-text">Новых сегодня</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-user-plus fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-cogs me-2"></i>Модерация
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'moderation:vacancies' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-briefcase me-2"></i>Модерация вакансий
+                        {% if pending_vacancies > 0 %}
+                            <span class="badge bg-primary rounded-pill ms-2">{{ pending_vacancies }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'moderation:internships' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-graduation-cap me-2"></i>Модерация стажировок
+                        {% if pending_internships > 0 %}
+                            <span class="badge bg-info rounded-pill ms-2">{{ pending_internships }}</span>
+                        {% endif %}
+                    </a>
+                    <a href="{% url 'moderation:users' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-users me-2"></i>Управление пользователями
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>Аналитика
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'moderation:statistics' %}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-chart-line me-2"></i>Общая статистика
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="fas fa-download me-2"></i>Выгрузка данных
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="fas fa-envelope me-2"></i>Рассылки
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
