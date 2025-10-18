@@ -1,0 +1,314 @@
+import React, { useState } from "react";
+import { base44 } from "@/api/base44Client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Upload, CheckCircle, Loader2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+export default function ApplyModal({ vacancy, internship, onClose }) {
+  const [applicationMethod, setApplicationMethod] = useState("form");
+  const [formData, setFormData] = useState({
+    applicant_name: "",
+    applicant_email: "",
+    applicant_phone: "",
+    education: "",
+    experience: "",
+    skills: "",
+    cover_letter: ""
+  });
+  const [resumeFile, setResumeFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(null);
+
+  const queryClient = useQueryClient();
+
+  const createApplicationMutation = useMutation({
+    mutationFn: async (data) => {
+      if (vacancy) {
+        await base44.entities.Vacancy.update(vacancy.id, {
+          applications_count: (vacancy.applications_count || 0) + 1
+        });
+      }
+      return base44.entities.Application.create(data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['vacancies'] });
+      setSuccess(true);
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    },
+  });
+
+  const handleFileSelect = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Размер файла не должен превышать 5 МБ");
+      return;
+    }
+
+    setResumeFile(file);
+    setError(null);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setUploading(true);
+
+    try {
+      let resume_file_url = null;
+
+      if (applicationMethod === "file" && resumeFile) {
+        const { file_url } = await base44.integrations.Core.UploadFile({ file: resumeFile });
+        resume_file_url = file_url;
+      }
+
+      const applicationData = {
+        ...formData,
+        resume_file_url,
+        type: vacancy ? "vacancy" : "internship",
+        vacancy_id: vacancy?.id,
+        internship_id: internship?.id,
+        company_name: vacancy?.company_name,
+        position: vacancy?.position
+      };
+
+      await createApplicationMutation.mutateAsync(applicationData);
+    } catch (err) {
+      setError("Произошла ошибка при отправке отклика. Попробуйте еще раз.");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const title = vacancy ? `Отклик на вакансию: ${vacancy.position}` : `Отклик на стажировку: ${internship?.specialty}`;
+
+  return (
+    <Dialog open={true} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-2xl">{title}</DialogTitle>
+          <DialogDescription>
+            {vacancy && `${vacancy.company_name}`}
+            {internship && `${internship.university_name}`}
+          </DialogDescription>
+        </DialogHeader>
+
+        {success ? (
+          <div className="py-8 text-center">
+            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Отклик отправлен!</h3>
+            <p className="text-gray-600">
+              Ваш отклик успешно отправлен. С вами свяжутся в ближайшее время.
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Tabs value={applicationMethod} onValueChange={setApplicationMethod}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="form">Заполнить анкету</TabsTrigger>
+                <TabsTrigger value="file">Загрузить резюме</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="form" className="space-y-4 mt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">ФИО *</Label>
+                    <Input
+                      id="name"
+                      required
+                      value={formData.applicant_name}
+                      onChange={(e) => setFormData({ ...formData, applicant_name: e.target.value })}
+                      placeholder="Иванов Иван Иванович"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      required
+                      value={formData.applicant_email}
+                      onChange={(e) => setFormData({ ...formData, applicant_email: e.target.value })}
+                      placeholder="ivan@example.com"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Телефон *</Label>
+                  <Input
+                    id="phone"
+                    required
+                    value={formData.applicant_phone}
+                    onChange={(e) => setFormData({ ...formData, applicant_phone: e.target.value })}
+                    placeholder="+7 (999) 123-45-67"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="education">Образование</Label>
+                  <Textarea
+                    id="education"
+                    value={formData.education}
+                    onChange={(e) => setFormData({ ...formData, education: e.target.value })}
+                    placeholder="Укажите ваше образование"
+                    rows={2}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="experience">Опыт работы</Label>
+                  <Textarea
+                    id="experience"
+                    value={formData.experience}
+                    onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                    placeholder="Опишите ваш опыт работы"
+                    rows={3}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="skills">Навыки</Label>
+                  <Textarea
+                    id="skills"
+                    value={formData.skills}
+                    onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
+                    placeholder="Перечислите ваши ключевые навыки"
+                    rows={2}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="cover_letter">Сопроводительное письмо</Label>
+                  <Textarea
+                    id="cover_letter"
+                    value={formData.cover_letter}
+                    onChange={(e) => setFormData({ ...formData, cover_letter: e.target.value })}
+                    placeholder="Расскажите, почему вы хотите работать в этой компании..."
+                    rows={3}
+                  />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="file" className="space-y-4 mt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="name2">ФИО *</Label>
+                    <Input
+                      id="name2"
+                      required
+                      value={formData.applicant_name}
+                      onChange={(e) => setFormData({ ...formData, applicant_name: e.target.value })}
+                      placeholder="Иванов Иван Иванович"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email2">Email *</Label>
+                    <Input
+                      id="email2"
+                      type="email"
+                      required
+                      value={formData.applicant_email}
+                      onChange={(e) => setFormData({ ...formData, applicant_email: e.target.value })}
+                      placeholder="ivan@example.com"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phone2">Телефон *</Label>
+                  <Input
+                    id="phone2"
+                    required
+                    value={formData.applicant_phone}
+                    onChange={(e) => setFormData({ ...formData, applicant_phone: e.target.value })}
+                    placeholder="+7 (999) 123-45-67"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="resume">Резюме (PDF, DOC, DOCX до 5 МБ) *</Label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-indigo-400 transition-colors">
+                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <input
+                      id="resume"
+                      type="file"
+                      accept=".pdf,.doc,.docx"
+                      onChange={handleFileSelect}
+                      required
+                      className="hidden"
+                    />
+                    <label htmlFor="resume" className="cursor-pointer">
+                      <span className="text-indigo-600 hover:text-indigo-700 font-medium">
+                        Выберите файл
+                      </span>
+                      <span className="text-gray-500"> или перетащите его сюда</span>
+                    </label>
+                    {resumeFile && (
+                      <p className="text-sm text-green-600 mt-2">
+                        Выбран файл: {resumeFile.name}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="cover_letter2">Сопроводительное письмо</Label>
+                  <Textarea
+                    id="cover_letter2"
+                    value={formData.cover_letter}
+                    onChange={(e) => setFormData({ ...formData, cover_letter: e.target.value })}
+                    placeholder="Расскажите, почему вы хотите работать в этой компании..."
+                    rows={3}
+                  />
+                </div>
+              </TabsContent>
+            </Tabs>
+
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="flex justify-end gap-3 pt-4">
+              <Button type="button" variant="outline" onClick={onClose}>
+                Отмена
+              </Button>
+              <Button
+                type="submit"
+                disabled={uploading}
+                className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700"
+              >
+                {uploading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Отправка...
+                  </>
+                ) : (
+                  "Отправить отклик"
+                )}
+              </Button>
+            </div>
+          </form>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

@@ -1,0 +1,304 @@
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { createPageUrl } from "@/utils";
+import { base44 } from "@/api/base44Client";
+import {
+  Briefcase, Building2, GraduationCap, FileText, BarChart3,
+  LogOut, Menu, Users, CheckCircle, Bell, Home, FolderOpen
+} from "lucide-react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarHeader,
+  SidebarFooter,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
+export default function Layout({ children, currentPageName }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [pendingCount, setPendingCount] = useState(0);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  const loadUser = async () => {
+    try {
+      const currentUser = await base44.auth.me();
+      setUser(currentUser);
+      
+      if (currentUser.role === 'admin_oez') {
+        const [vacancies, internships] = await Promise.all([
+          base44.entities.Vacancy.filter({ status: 'pending' }),
+          base44.entities.Internship.filter({ status: 'pending' })
+        ]);
+        setPendingCount(vacancies.length + internships.length);
+      }
+    } catch (error) {
+      console.error('Error loading user:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    base44.auth.logout(createPageUrl("PublicCatalog"));
+  };
+
+  const getNavigationItems = () => {
+    if (!user) return [];
+
+    const commonItems = [
+      {
+        title: "Главная",
+        url: createPageUrl("PublicCatalog"),
+        icon: Home,
+      }
+    ];
+
+    if (user.role === 'admin_oez') {
+      return [
+        ...commonItems,
+        {
+          title: "Панель управления",
+          url: createPageUrl("AdminDashboard"),
+          icon: BarChart3,
+        },
+        {
+          title: "Модерация",
+          url: createPageUrl("Moderation"),
+          icon: CheckCircle,
+          badge: pendingCount > 0 ? pendingCount : null,
+        },
+        {
+          title: "Банк резюме",
+          url: createPageUrl("ResumeBank"),
+          icon: FolderOpen,
+        },
+        {
+          title: "Аналитика",
+          url: createPageUrl("Analytics"),
+          icon: BarChart3,
+        }
+      ];
+    }
+
+    if (user.role === 'hr_company') {
+      return [
+        ...commonItems,
+        {
+          title: "Мои вакансии",
+          url: createPageUrl("MyVacancies"),
+          icon: Briefcase,
+        },
+        {
+          title: "Отклики",
+          url: createPageUrl("Applications"),
+          icon: FileText,
+        },
+        {
+          title: "Банк резюме",
+          url: createPageUrl("ResumeBank"),
+          icon: FolderOpen,
+        },
+        {
+          title: "Стажировки",
+          url: createPageUrl("InternshipCatalog"),
+          icon: GraduationCap,
+        }
+      ];
+    }
+
+    if (user.role === 'university_rep') {
+      return [
+        ...commonItems,
+        {
+          title: "Мои стажировки",
+          url: createPageUrl("MyInternships"),
+          icon: GraduationCap,
+        },
+        {
+          title: "Отклики компаний",
+          url: createPageUrl("InternshipResponses"),
+          icon: Building2,
+        }
+      ];
+    }
+
+    return commonItems;
+  };
+
+  const navigationItems = getNavigationItems();
+
+  const getRoleLabel = (role) => {
+    const labels = {
+      admin_oez: 'Администратор ОЭЗ',
+      hr_company: 'HR компании',
+      university_rep: 'Представитель вуза',
+      applicant: 'Соискатель'
+    };
+    return labels[role] || 'Пользователь';
+  };
+
+  const getRoleColor = (role) => {
+    const colors = {
+      admin_oez: 'bg-gradient-to-r from-indigo-600 to-blue-600',
+      hr_company: 'bg-gradient-to-r from-cyan-600 to-teal-600',
+      university_rep: 'bg-gradient-to-r from-purple-600 to-pink-600',
+      applicant: 'bg-gradient-to-r from-orange-500 to-amber-500'
+    };
+    return colors[role] || 'bg-gray-600';
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <Link to={createPageUrl("PublicCatalog")} className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Briefcase className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+                    Техноработа
+                  </h1>
+                  <p className="text-xs text-gray-500">Технополис Москва</p>
+                </div>
+              </Link>
+              <Button 
+                onClick={() => base44.auth.redirectToLogin(createPageUrl("AdminDashboard"))}
+                className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700"
+              >
+                Войти
+              </Button>
+            </div>
+          </div>
+        </header>
+        <main className="flex-1">
+          {children}
+        </main>
+      </div>
+    );
+  }
+
+  return (
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+        <Sidebar className="border-r border-gray-200 bg-white/80 backdrop-blur-md">
+          <SidebarHeader className="border-b border-gray-200 p-6">
+            <Link to={createPageUrl("PublicCatalog")} className="flex items-center gap-3">
+              <div className={`w-12 h-12 ${getRoleColor(user.role)} rounded-xl flex items-center justify-center shadow-lg`}>
+                <Briefcase className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <h2 className="font-bold text-lg bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+                  Техноработа
+                </h2>
+                <p className="text-xs text-gray-500">Технополис Москва</p>
+              </div>
+            </Link>
+          </SidebarHeader>
+          
+          <SidebarContent className="p-3">
+            <SidebarGroup>
+              <SidebarGroupLabel className="text-xs font-medium text-gray-500 uppercase tracking-wider px-3 py-2">
+                Навигация
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {navigationItems.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton 
+                        asChild 
+                        className={`hover:bg-indigo-50 hover:text-indigo-700 transition-all duration-200 rounded-xl mb-1 ${
+                          location.pathname === item.url ? 'bg-indigo-50 text-indigo-700 shadow-sm' : ''
+                        }`}
+                      >
+                        <Link to={item.url} className="flex items-center gap-3 px-4 py-3">
+                          <item.icon className="w-5 h-5" />
+                          <span className="font-medium">{item.title}</span>
+                          {item.badge && (
+                            <Badge className="ml-auto bg-orange-500 text-white">
+                              {item.badge}
+                            </Badge>
+                          )}
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+
+          <SidebarFooter className="border-t border-gray-200 p-4">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <Avatar className="w-10 h-10">
+                  <AvatarFallback className={`${getRoleColor(user.role)} text-white font-semibold`}>
+                    {user.full_name?.charAt(0) || 'U'}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 text-sm truncate">{user.full_name || user.email}</p>
+                  <p className="text-xs text-gray-500 truncate">{getRoleLabel(user.role)}</p>
+                  {user.company_name && (
+                    <p className="text-xs text-gray-400 truncate">{user.company_name}</p>
+                  )}
+                  {user.university_name && (
+                    <p className="text-xs text-gray-400 truncate">{user.university_name}</p>
+                  )}
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="w-full justify-start gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Выйти
+              </Button>
+            </div>
+          </SidebarFooter>
+        </Sidebar>
+
+        <main className="flex-1 flex flex-col">
+          <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 px-6 py-4 md:hidden">
+            <div className="flex items-center gap-4">
+              <SidebarTrigger className="hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200" />
+              <h1 className="text-xl font-semibold">Техноработа</h1>
+            </div>
+          </header>
+
+          <div className="flex-1 overflow-auto">
+            {children}
+          </div>
+        </main>
+      </div>
+    </SidebarProvider>
+  );
+}
