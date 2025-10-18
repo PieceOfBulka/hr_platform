@@ -1,0 +1,371 @@
+/* Корпоративные элементы ОЭЗ "Технополис Москва" */
+
+/* Корпоративная цветовая схема */
+:root {
+  /* Основные корпоративные цвета */
+  --corporate-primary: #0066cc;     /* Основной синий */
+  --corporate-secondary: #004499;   /* Темно-синий */
+  --corporate-accent: #3399ff;      /* Светло-синий */
+  --corporate-red: #cc0000;         /* Корпоративный красный */
+  --corporate-green: #00cc66;       /* Корпоративный зеленый */
+  --corporate-orange: #ff6600;      /* Корпоративный оранжевый */
+  
+  /* Градиенты */
+  --corporate-gradient-primary: linear-gradient(135deg, var(--corporate-primary) 0%, var(--corporate-secondary) 100%);
+  --corporate-gradient-accent: linear-gradient(135deg, var(--corporate-accent) 0%, var(--corporate-green) 100%);
+  --corporate-gradient-hero: linear-gradient(135deg, var(--corporate-primary) 0%, var(--corporate-secondary) 50%, #6633cc 100%);
+}
+
+/* Корпоративные компоненты */
+.corporate-header {
+  background: var(--corporate-gradient-primary);
+  color: white;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.corporate-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.corporate-header p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  margin-bottom: 0;
+}
+
+/* Корпоративные карточки */
+.corporate-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0,102,204,0.1);
+  border: 1px solid rgba(0,102,204,0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.corporate-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--corporate-gradient-primary);
+}
+
+.corporate-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(0,102,204,0.2);
+}
+
+.corporate-card h3 {
+  color: var(--corporate-primary);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.corporate-card p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Корпоративные кнопки */
+.btn-corporate {
+  background: var(--corporate-gradient-primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0,102,204,0.3);
+}
+
+.btn-corporate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,102,204,0.4);
+  color: white;
+}
+
+.btn-corporate-outline {
+  background: transparent;
+  color: var(--corporate-primary);
+  border: 2px solid var(--corporate-primary);
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-corporate-outline:hover {
+  background: var(--corporate-primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Корпоративные бейджи */
+.corporate-badge {
+  background: var(--corporate-gradient-primary);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+.corporate-badge-success {
+  background: linear-gradient(135deg, var(--corporate-green), #00aa55);
+}
+
+.corporate-badge-warning {
+  background: linear-gradient(135deg, var(--corporate-orange), #e55a00);
+}
+
+.corporate-badge-danger {
+  background: linear-gradient(135deg, var(--corporate-red), #990000);
+}
+
+/* Корпоративная статистика */
+.corporate-stats {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0,102,204,0.1);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.corporate-stats::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--corporate-gradient-primary);
+}
+
+.corporate-stats-number {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--corporate-primary);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.corporate-stats-label {
+  font-size: 1rem;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Корпоративные секции */
+.corporate-section {
+  padding: 4rem 0;
+  position: relative;
+}
+
+.corporate-section-light {
+  background: #f8f9fa;
+}
+
+.corporate-section-dark {
+  background: var(--corporate-gradient-hero);
+  color: white;
+}
+
+.corporate-section-dark h2,
+.corporate-section-dark h3,
+.corporate-section-dark p {
+  color: white;
+}
+
+/* Корпоративные формы */
+.corporate-form {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0,102,204,0.1);
+}
+
+.corporate-form .form-control {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.corporate-form .form-control:focus {
+  border-color: var(--corporate-primary);
+  box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+}
+
+.corporate-form label {
+  font-weight: 600;
+  color: var(--corporate-primary);
+  margin-bottom: 0.5rem;
+}
+
+/* Корпоративные таблицы */
+.corporate-table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,102,204,0.1);
+}
+
+.corporate-table th {
+  background: var(--corporate-gradient-primary);
+  color: white;
+  font-weight: 600;
+  padding: 1rem;
+  border: none;
+}
+
+.corporate-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: middle;
+}
+
+.corporate-table tbody tr:hover {
+  background: rgba(0,102,204,0.05);
+}
+
+/* Корпоративные уведомления */
+.corporate-alert {
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  border: none;
+  font-weight: 500;
+}
+
+.corporate-alert-primary {
+  background: rgba(0,102,204,0.1);
+  color: var(--corporate-primary);
+  border-left: 4px solid var(--corporate-primary);
+}
+
+.corporate-alert-success {
+  background: rgba(0,204,102,0.1);
+  color: var(--corporate-green);
+  border-left: 4px solid var(--corporate-green);
+}
+
+.corporate-alert-warning {
+  background: rgba(255,102,0,0.1);
+  color: var(--corporate-orange);
+  border-left: 4px solid var(--corporate-orange);
+}
+
+.corporate-alert-danger {
+  background: rgba(204,0,0,0.1);
+  color: var(--corporate-red);
+  border-left: 4px solid var(--corporate-red);
+}
+
+/* Корпоративные иконки */
+.corporate-icon {
+  width: 4rem;
+  height: 4rem;
+  background: var(--corporate-gradient-primary);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  margin: 0 auto 1rem;
+}
+
+.corporate-icon-success {
+  background: linear-gradient(135deg, var(--corporate-green), #00aa55);
+}
+
+.corporate-icon-warning {
+  background: linear-gradient(135deg, var(--corporate-orange), #e55a00);
+}
+
+.corporate-icon-danger {
+  background: linear-gradient(135deg, var(--corporate-red), #990000);
+}
+
+/* Корпоративные анимации */
+@keyframes corporate-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.corporate-pulse {
+  animation: corporate-pulse 2s infinite;
+}
+
+@keyframes corporate-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.corporate-slide-in {
+  animation: corporate-slide-in 0.6s ease-out;
+}
+
+/* Корпоративные утилиты */
+.text-corporate-primary { color: var(--corporate-primary) !important; }
+.text-corporate-secondary { color: var(--corporate-secondary) !important; }
+.text-corporate-accent { color: var(--corporate-accent) !important; }
+.text-corporate-red { color: var(--corporate-red) !important; }
+.text-corporate-green { color: var(--corporate-green) !important; }
+.text-corporate-orange { color: var(--corporate-orange) !important; }
+
+.bg-corporate-primary { background-color: var(--corporate-primary) !important; }
+.bg-corporate-secondary { background-color: var(--corporate-secondary) !important; }
+.bg-corporate-accent { background-color: var(--corporate-accent) !important; }
+.bg-corporate-red { background-color: var(--corporate-red) !important; }
+.bg-corporate-green { background-color: var(--corporate-green) !important; }
+.bg-corporate-orange { background-color: var(--corporate-orange) !important; }
+
+.border-corporate-primary { border-color: var(--corporate-primary) !important; }
+.border-corporate-secondary { border-color: var(--corporate-secondary) !important; }
+.border-corporate-accent { border-color: var(--corporate-accent) !important; }
+
+/* Корпоративные тени */
+.shadow-corporate {
+  box-shadow: 0 8px 32px rgba(0,102,204,0.15) !important;
+}
+
+.shadow-corporate-lg {
+  box-shadow: 0 16px 48px rgba(0,102,204,0.2) !important;
+}
+
+/* Корпоративные градиенты */
+.gradient-corporate-primary {
+  background: var(--corporate-gradient-primary) !important;
+}
+
+.gradient-corporate-accent {
+  background: var(--corporate-gradient-accent) !important;
+}
+
+.gradient-corporate-hero {
+  background: var(--corporate-gradient-hero) !important;
+}
