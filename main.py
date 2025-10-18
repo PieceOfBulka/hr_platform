@@ -6,9 +6,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database import get_db, create_tables, User, Resume, Vacancy, Company, ListOfSkills, Recommendation
 from recommendation_engine import RecommendationEngine
+from ai_recommendation_engine import AIRecommendationEngine, create_ai_recommendation_engine
 from pydantic import BaseModel
 from typing import List, Optional
 import os
+from dotenv import load_dotenv
+
+# Загружаем переменные окружения
+load_dotenv()
 
 # Создаем таблицы
 create_tables()
@@ -102,6 +107,11 @@ async def read_root():
                         <label for="resumeId">ID резюме:</label>
                         <input type="number" id="resumeId" name="resumeId" placeholder="Введите ID вашего резюме" required>
                     </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="useAI" checked> Использовать AI рекомендации (Hugging Face)
+                        </label>
+                    </div>
                     <button type="submit">Получить рекомендации</button>
                 </form>
             </div>
@@ -113,12 +123,14 @@ async def read_root():
             document.getElementById('recommendationForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const resumeId = document.getElementById('resumeId').value;
+                const useAI = document.getElementById('useAI').checked;
                 const resultsDiv = document.getElementById('results');
                 
                 resultsDiv.innerHTML = '<div class="loading">Загрузка рекомендаций...</div>';
                 
                 try {
-                    const response = await fetch(`/api/recommendations/resume/${resumeId}`);
+                    const endpoint = useAI ? `/api/ai/recommendations/resume/${resumeId}` : `/api/recommendations/resume/${resumeId}`;
+                    const response = await fetch(endpoint);
                     const data = await response.json();
                     
                     if (data.length === 0) {
@@ -127,20 +139,33 @@ async def read_root():
                     }
                     
                     let html = '<div class="recommendations">';
+                    if (useAI) {
+                        html += '<div style="background: #e3f2fd; padding: 10px; border-radius: 5px; margin-bottom: 20px; color: #1976d2;">🤖 AI рекомендации с использованием Hugging Face</div>';
+                    }
+                    
                     data.forEach(rec => {
+                        const scoreColor = rec.score > 0.7 ? '#4caf50' : rec.score > 0.5 ? '#ff9800' : '#f44336';
                         html += `
                             <div class="recommendation-card">
-                                <div class="score">Совместимость: ${Math.round(rec.score * 100)}%</div>
+                                <div class="score" style="background: ${scoreColor}">Совместимость: ${Math.round(rec.score * 100)}%</div>
                                 <h3>${rec.vacancy_title}</h3>
                                 <div class="company">${rec.company_name}</div>
                                 <div class="reason">${rec.reason}</div>
+                                ${useAI ? `
+                                    <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                                        <div>Навыки: ${Math.round(rec.skill_score * 100)}% | 
+                                             Текст: ${Math.round(rec.text_score * 100)}% | 
+                                             Специализация: ${Math.round(rec.specialty_score * 100)}% | 
+                                             Свежесть: ${Math.round(rec.freshness_score * 100)}%</div>
+                                    </div>
+                                ` : ''}
                             </div>
                         `;
                     });
                     html += '</div>';
                     resultsDiv.innerHTML = html;
                 } catch (error) {
-                    resultsDiv.innerHTML = '<div class="error">Ошибка при загрузке рекомендаций</div>';
+                    resultsDiv.innerHTML = '<div class="error">Ошибка при загрузке рекомендаций: ' + error.message + '</div>';
                 }
             });
         </script>
@@ -158,6 +183,36 @@ async def get_recommendations_for_resume(resume_id: int, db: Session = Depends(g
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/api/ai/recommendations/resume/{resume_id}", response_model=List[RecommendationResponse])
+async def get_ai_recommendations_for_resume(resume_id: int, db: Session = Depends(get_db)):
+    """Получить AI рекомендации для конкретного резюме"""
+    try:
+        # Получаем токен Hugging Face из переменных окружения
+        huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
+        
+        engine = create_ai_recommendation_engine(db, huggingface_token)
+        recommendations = engine.get_recommendations_for_resume(resume_id)
+        
+        # Конвертируем в формат API
+        api_recommendations = []
+        for rec in recommendations:
+            api_recommendations.append(RecommendationResponse(
+                vacancy_id=rec.vacancy_id,
+                vacancy_title=rec.vacancy_title,
+                company_name=rec.company_name,
+                score=rec.score,
+                reason=rec.reason,
+                skill_score=rec.skill_score,
+                experience_score=rec.experience_score,
+                text_score=rec.text_score,
+                specialty_score=rec.specialty_score,
+                freshness_score=rec.freshness_score
+            ))
+        
+        return api_recommendations
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/api/recommendations/user/{user_id}", response_model=List[RecommendationResponse])
 async def get_recommendations_for_user(user_id: int, db: Session = Depends(get_db)):
     """Получить рекомендации для пользователя"""
@@ -165,6 +220,35 @@ async def get_recommendations_for_user(user_id: int, db: Session = Depends(get_d
         engine = RecommendationEngine(db)
         recommendations = engine.get_recommendations_for_user(user_id)
         return recommendations
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/ai/recommendations/user/{user_id}", response_model=List[RecommendationResponse])
+async def get_ai_recommendations_for_user(user_id: int, db: Session = Depends(get_db)):
+    """Получить AI рекомендации для пользователя"""
+    try:
+        huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
+        
+        engine = create_ai_recommendation_engine(db, huggingface_token)
+        recommendations = engine.get_recommendations_for_user(user_id)
+        
+        # Конвертируем в формат API
+        api_recommendations = []
+        for rec in recommendations:
+            api_recommendations.append(RecommendationResponse(
+                vacancy_id=rec.vacancy_id,
+                vacancy_title=rec.vacancy_title,
+                company_name=rec.company_name,
+                score=rec.score,
+                reason=rec.reason,
+                skill_score=rec.skill_score,
+                experience_score=rec.experience_score,
+                text_score=rec.text_score,
+                specialty_score=rec.specialty_score,
+                freshness_score=rec.freshness_score
+            ))
+        
+        return api_recommendations
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -250,4 +334,6 @@ async def get_recommendation_stats(resume_id: int, db: Session = Depends(get_db)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    host = os.getenv("HOST", "127.0.0.1")
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host=host, port=port)

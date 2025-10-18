@@ -99,17 +99,17 @@ def create_simple_data():
         
         db.commit()
         
-        print("✅ Тестовые данные созданы успешно!")
-        print(f"   - Пользователь HR: {hr_user.id}")
-        print(f"   - Компания: {company.id}")
-        print(f"   - Вакансия: {vacancy.id}")
-        print(f"   - Соискатель: {applicant.id}")
-        print(f"   - Резюме: {resume.id}")
+        print("Test data created successfully!")
+        print(f"   - HR User: {hr_user.id}")
+        print(f"   - Company: {company.id}")
+        print(f"   - Vacancy: {vacancy.id}")
+        print(f"   - Applicant: {applicant.id}")
+        print(f"   - Resume: {resume.id}")
         
         db.close()
         
     except Exception as e:
-        print(f"❌ Ошибка: {e}")
+        print(f"Error: {e}")
         import traceback
         traceback.print_exc()
 

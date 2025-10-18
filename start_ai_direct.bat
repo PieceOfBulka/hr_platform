@@ -1,0 +1,3 @@
+@echo off
+echo Starting AI HR Platform directly...
+python ai_main.py
