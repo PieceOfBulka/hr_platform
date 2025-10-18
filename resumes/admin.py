@@ -38,6 +38,6 @@ class WorkExperienceAdmin(admin.ModelAdmin):
 class EducationAdmin(admin.ModelAdmin):
     """Админка для образования"""
     
-    list_display = ('institution', 'degree', 'field_of_study', 'start_date', 'end_date', 'is_current')
+    list_display = ('institution', 'degree', 'start_date', 'end_date', 'is_current')
     list_filter = ('is_current', 'start_date')
-    search_fields = ('institution', 'degree', 'field_of_study')
+    search_fields = ('institution', 'degree')
