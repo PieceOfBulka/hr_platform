@@ -1,0 +1,220 @@
+[
+  {
+    "model": "accounts.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "admin@technopolis.ru",
+      "first_name": "Администратор",
+      "last_name": "ОЭЗ",
+      "email": "admin@technopolis.ru",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-01-01T00:00:00Z",
+      "role": "ADMIN",
+      "phone": "+7 (495) 123-45-67",
+      "company": "ОЭЗ Технополис Москва",
+      "position": "Администратор",
+      "is_verified": true,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "hr@yandex.ru",
+      "first_name": "Анна",
+      "last_name": "Петрова",
+      "email": "hr@yandex.ru",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-15T00:00:00Z",
+      "role": "HR",
+      "phone": "+7 (495) 234-56-78",
+      "company": "Яндекс",
+      "position": "HR-менеджер",
+      "is_verified": true,
+      "created_at": "2024-01-15T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "university@miet.ru",
+      "first_name": "Иван",
+      "last_name": "Сидоров",
+      "email": "university@miet.ru",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-20T00:00:00Z",
+      "role": "UNIVERSITY",
+      "phone": "+7 (495) 345-67-89",
+      "company": "МИЭТ",
+      "position": "Начальник отдела практик",
+      "is_verified": true,
+      "created_at": "2024-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "candidate@mail.ru",
+      "first_name": "Мария",
+      "last_name": "Иванова",
+      "email": "candidate@mail.ru",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-02-01T00:00:00Z",
+      "role": "CANDIDATE",
+      "phone": "+7 (495) 456-78-90",
+      "company": "",
+      "position": "",
+      "is_verified": false,
+      "created_at": "2024-02-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "vacancies.vacancy",
+    "pk": 1,
+    "fields": {
+      "title": "Python разработчик",
+      "description": "Ищем опытного Python разработчика для работы над высоконагруженными системами. Требуется знание Django, FastAPI, PostgreSQL, Redis, Docker.",
+      "requirements": "• Опыт разработки на Python от 3 лет\n• Знание Django/FastAPI\n• Опыт работы с PostgreSQL\n• Знание Docker, Git\n• Английский язык intermediate+",
+      "responsibilities": "• Разработка backend сервисов\n• Оптимизация производительности\n• Code review\n• Участие в планировании архитектуры",
+      "salary_min": 150000,
+      "salary_max": 250000,
+      "experience_level": "middle",
+      "is_remote": true,
+      "contact_email": "hr@yandex.ru",
+      "contact_phone": "+7 (495) 234-56-78",
+      "status": "published",
+      "created_at": "2024-02-01T00:00:00Z",
+      "updated_at": "2024-02-01T00:00:00Z",
+      "published_at": "2024-02-01T00:00:00Z",
+      "company": 2
+    }
+  },
+  {
+    "model": "vacancies.vacancy",
+    "pk": 2,
+    "fields": {
+      "title": "Frontend разработчик (React)",
+      "description": "Разработка пользовательских интерфейсов для веб-приложений. Работа в команде опытных разработчиков над интересными проектами.",
+      "requirements": "• Опыт разработки на React от 2 лет\n• Знание TypeScript, Redux\n• Опыт работы с REST API\n• Знание HTML5, CSS3, JavaScript ES6+\n• Опыт работы с Git",
+      "responsibilities": "• Разработка компонентов React\n• Интеграция с backend API\n• Оптимизация производительности\n• Code review",
+      "salary_min": 120000,
+      "salary_max": 200000,
+      "experience_level": "middle",
+      "is_remote": false,
+      "contact_email": "hr@yandex.ru",
+      "contact_phone": "+7 (495) 234-56-78",
+      "status": "published",
+      "created_at": "2024-02-02T00:00:00Z",
+      "updated_at": "2024-02-02T00:00:00Z",
+      "published_at": "2024-02-02T00:00:00Z",
+      "company": 2
+    }
+  },
+  {
+    "model": "vacancies.vacancy",
+    "pk": 3,
+    "fields": {
+      "title": "DevOps инженер",
+      "description": "Настройка и поддержка инфраструктуры для высоконагруженных сервисов. Автоматизация процессов развертывания и мониторинга.",
+      "requirements": "• Опыт работы с Linux\n• Знание Docker, Kubernetes\n• Опыт работы с AWS/GCP\n• Знание CI/CD\n• Опыт работы с мониторингом (Prometheus, Grafana)",
+      "responsibilities": "• Настройка и поддержка инфраструктуры\n• Автоматизация процессов\n• Мониторинг и алертинг\n• Оптимизация производительности",
+      "salary_min": 180000,
+      "salary_max": 300000,
+      "experience_level": "senior",
+      "is_remote": true,
+      "contact_email": "hr@yandex.ru",
+      "contact_phone": "+7 (495) 234-56-78",
+      "status": "published",
+      "created_at": "2024-02-03T00:00:00Z",
+      "updated_at": "2024-02-03T00:00:00Z",
+      "published_at": "2024-02-03T00:00:00Z",
+      "company": 2
+    }
+  },
+  {
+    "model": "internships.internship",
+    "pk": 1,
+    "fields": {
+      "title": "Стажировка по программированию на Python",
+      "description": "Стажировка для студентов IT-направлений. Изучение основ программирования на Python, работа с базами данных, создание веб-приложений.",
+      "requirements": "• Базовые знания программирования\n• Желание изучать Python\n• Ответственность и пунктуальность",
+      "tasks": "• Изучение основ Python\n• Работа с базами данных\n• Создание веб-приложений\n• Участие в реальных проектах",
+      "specialization": "Программирование на Python",
+      "students_count": 5,
+      "duration": "3",
+      "start_date": "2024-03-01",
+      "end_date": "2024-06-30",
+      "contact_email": "university@miet.ru",
+      "contact_phone": "+7 (495) 345-67-89",
+      "status": "published",
+      "created_at": "2024-02-01T00:00:00Z",
+      "updated_at": "2024-02-01T00:00:00Z",
+      "published_at": "2024-02-01T00:00:00Z",
+      "university": 3
+    }
+  },
+  {
+    "model": "internships.internship",
+    "pk": 2,
+    "fields": {
+      "title": "Стажировка по веб-разработке (Frontend)",
+      "description": "Стажировка по созданию пользовательских интерфейсов. Изучение HTML, CSS, JavaScript, React. Работа над реальными проектами.",
+      "requirements": "• Базовые знания HTML, CSS\n• Желание изучать JavaScript\n• Креативность и внимание к деталям",
+      "tasks": "• Изучение HTML, CSS, JavaScript\n• Работа с React\n• Создание пользовательских интерфейсов\n• Участие в командной разработке",
+      "specialization": "Веб-разработка (Frontend)",
+      "students_count": 8,
+      "duration": "3",
+      "start_date": "2024-03-15",
+      "end_date": "2024-07-15",
+      "contact_email": "university@miet.ru",
+      "contact_phone": "+7 (495) 345-67-89",
+      "status": "published",
+      "created_at": "2024-02-02T00:00:00Z",
+      "updated_at": "2024-02-02T00:00:00Z",
+      "published_at": "2024-02-02T00:00:00Z",
+      "university": 3
+    }
+  },
+  {
+    "model": "resumes.resume",
+    "pk": 1,
+    "fields": {
+      "title": "Python разработчик",
+      "summary": "Опытный Python разработчик с 3+ годами опыта. Специализируюсь на backend разработке, работе с базами данных и создании REST API.",
+      "experience_level": "middle",
+      "education_level": "bachelor",
+      "university": "МГУ им. М.В. Ломоносова",
+      "faculty": "Факультет вычислительной математики и кибернетики",
+      "graduation_year": 2017,
+      "skills": "Python, Django, FastAPI, PostgreSQL, Redis, Docker, Git, Linux",
+      "languages": "Русский (родной), Английский (intermediate)",
+      "salary_expectation": 200000,
+      "is_remote": true,
+      "is_relocation": false,
+      "resume_file": null,
+      "is_public": true,
+      "created_at": "2024-02-01T00:00:00Z",
+      "updated_at": "2024-02-01T00:00:00Z",
+      "user": 4
+    }
+  }
+]
