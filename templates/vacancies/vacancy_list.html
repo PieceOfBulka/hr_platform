@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Вакансии - HR Платформа{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold text-dark mb-4">
+                    <span class="text-danger">ВАКАНСИИ</span> 
+                    <span class="text-muted">СТАЖИРОВКИ</span>
+                </h1>
+                <div class="red-line mb-4"></div>
+                <p class="lead text-muted">
+                    Найдите работу мечты в технологическом кластере ОЭЗ «Технополис Москва»
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filter Section -->
+<section class="filter-section py-4 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Location Filters -->
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="badge bg-danger px-3 py-2">ВСЕ</span>
+                    <span class="badge bg-light text-dark px-3 py-2">АЛАБУШЕВО</span>
+                    <span class="badge bg-light text-dark px-3 py-2">АНГСТРЕМ</span>
+                    <span class="badge bg-light text-dark px-3 py-2">МИКРОН</span>
+                    <span class="badge bg-light text-dark px-3 py-2">МИЭТ</span>
+                    <span class="badge bg-light text-dark px-3 py-2">ПЕЧАТНИКИ</span>
+                    <span class="badge bg-light text-dark px-3 py-2">РУДНЕВО</span>
+                </div>
+                
+                <!-- Category Filters -->
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-danger px-3 py-2">Все</span>
+                    <span class="badge bg-light text-dark px-3 py-2">Микроэлектроника</span>
+                    <span class="badge bg-light text-dark px-3 py-2">HR</span>
+                    <span class="badge bg-light text-dark px-3 py-2">IT</span>
+                    <span class="badge bg-light text-dark px-3 py-2">Административная работа</span>
+                    <span class="badge bg-light text-dark px-3 py-2">Другое</span>
+                    <span class="badge bg-light text-dark px-3 py-2">Логистика</span>
+                    <span class="badge bg-light text-dark px-3 py-2">Маркетинг</span>
+                    <span class="badge bg-light text-dark px-3 py-2">Медицина</span>
+                    <span class="badge bg-light text-dark px-3 py-2">Продажи</span>
+                    <span class="badge bg-light text-dark px-3 py-2">Производство</span>
+                    <span class="badge bg-light text-dark px-3 py-2">Финансы</span>
+                    <span class="badge bg-light text-dark px-3 py-2">Юриспруденция</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Job Listings -->
+<section class="job-listings py-5">
+    <div class="container">
+        <div class="row g-4">
+            {% for vacancy in vacancies %}
+                <div class="col-md-4">
+                    <div class="job-card">
+                        <div class="job-location text-muted small">Руднево</div>
+                        <h5 class="job-company fw-bold">{{ vacancy.company.company }}</h5>
+                        <h6 class="job-title">{{ vacancy.title }}</h6>
+                        <div class="job-category text-muted small">{{ vacancy.experience_level }}</div>
+                        <div class="job-arrow">
+                            <a href="{% url 'vacancies:detail' vacancy.pk %}">
+                                <i class="fas fa-arrow-right text-danger fa-2x"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center py-5">
+                    <div class="text-muted">
+                        <i class="fas fa-briefcase fa-3x mb-3"></i>
+                        <h4>Нет доступных вакансий</h4>
+                        <p>Попробуйте изменить фильтры или зайти позже</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+            <nav aria-label="Page navigation" class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

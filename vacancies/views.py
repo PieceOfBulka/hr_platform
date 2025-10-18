@@ -116,6 +116,8 @@ class VacancyCreateView(CreateView):
     success_url = reverse_lazy('vacancies:my_vacancies')
     
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
         if not request.user.is_hr:
             messages.error(request, 'Только HR могут создавать вакансии.')
             return redirect('accounts:dashboard')
