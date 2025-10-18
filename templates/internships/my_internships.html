@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои стажировки - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-2">Мои стажировки</h2>
+                        <p class="text-muted">Управляйте заявками на стажировки и отслеживайте отклики компаний</p>
+                    </div>
+                    <a href="{% url 'internships:create' %}" class="btn btn-danger btn-lg">
+                        <i class="fas fa-plus me-2"></i>Создать стажировку
+                    </a>
+                </div>
+                
+                <!-- Filter Tabs -->
+                <div class="filter-tabs mb-4">
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="?status=" class="badge {% if not status %}bg-danger{% else %}bg-light text-dark{% endif %} px-3 py-2 text-decoration-none">Все</a>
+                        <a href="?status=draft" class="badge {% if status == 'draft' %}bg-danger{% else %}bg-light text-dark{% endif %} px-3 py-2 text-decoration-none">Черновики</a>
+                        <a href="?status=pending" class="badge {% if status == 'pending' %}bg-danger{% else %}bg-light text-dark{% endif %} px-3 py-2 text-decoration-none">На модерации</a>
+                        <a href="?status=published" class="badge {% if status == 'published' %}bg-danger{% else %}bg-light text-dark{% endif %} px-3 py-2 text-decoration-none">Опубликованные</a>
+                        <a href="?status=closed" class="badge {% if status == 'closed' %}bg-danger{% else %}bg-light text-dark{% endif %} px-3 py-2 text-decoration-none">Закрытые</a>
+                        <a href="?status=rejected" class="badge {% if status == 'rejected' %}bg-danger{% else %}bg-light text-dark{% endif %} px-3 py-2 text-decoration-none">Отклоненные</a>
+                    </div>
+                </div>
+                
+                <!-- Internships List -->
+                <div class="row g-4">
+                    {% for internship in page_obj %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div class="flex-grow-1">
+                                            <h5 class="card-title fw-bold">{{ internship.title }}</h5>
+                                            <p class="text-muted small mb-2">{{ internship.specialization }}</p>
+                                        </div>
+                                        <span class="badge 
+                                            {% if internship.status == 'published' %}bg-success
+                                            {% elif internship.status == 'pending' %}bg-warning
+                                            {% elif internship.status == 'draft' %}bg-secondary
+                                            {% elif internship.status == 'closed' %}bg-dark
+                                            {% elif internship.status == 'rejected' %}bg-danger
+                                            {% endif %} px-3 py-2">
+                                            {{ internship.get_status_display }}
+                                        </span>
+                                    </div>
+                                    
+                                    <p class="card-text text-muted small mb-3">
+                                        {{ internship.description|truncatewords:20 }}
+                                    </p>
+                                    
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-users me-1"></i>{{ internship.students_count }} студентов
+                                            </small>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-clock me-1"></i>{{ internship.get_duration_display }}
+                                            </small>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i>{{ internship.start_date|date:"d.m.Y" }}
+                                            </small>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i>{{ internship.end_date|date:"d.m.Y" }}
+                                            </small>
+                                        </div>
+                                        {% if internship.is_remote %}
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-home me-1"></i>Удаленно
+                                            </small>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="fas fa-building me-1"></i>{{ internship.applications.count }} заявок
+                                        </small>
+                                        <small class="text-muted">
+                                            {{ internship.created_at|date:"d.m.Y" }}
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-footer bg-transparent border-0 p-3">
+                                    <div class="d-flex gap-2">
+                                        <a href="{% url 'internships:detail' internship.pk %}" class="btn btn-outline-primary btn-sm flex-grow-1">
+                                            <i class="fas fa-eye me-1"></i>Просмотр
+                                        </a>
+                                        <a href="{% url 'internships:applications' internship.pk %}" class="btn btn-outline-success btn-sm flex-grow-1">
+                                            <i class="fas fa-building me-1"></i>Заявки
+                                        </a>
+                                        <a href="{% url 'internships:update' internship.pk %}" class="btn btn-outline-secondary btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-12 text-center py-5">
+                            <div class="text-muted">
+                                <i class="fas fa-graduation-cap fa-3x mb-3"></i>
+                                <h4>Нет стажировок</h4>
+                                <p>Создайте свою первую заявку на стажировку</p>
+                                <a href="{% url 'internships:create' %}" class="btn btn-danger">
+                                    <i class="fas fa-plus me-2"></i>Создать стажировку
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                    <nav aria-label="Page navigation" class="mt-5">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                                </li>
+                            {% endif %}
+                            
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

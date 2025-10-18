@@ -122,6 +122,8 @@ class InternshipCreateView(CreateView):
     success_url = reverse_lazy('internships:my_internships')
     
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
         if not request.user.is_university:
             messages.error(request, 'Только представители вузов могут создавать стажировки.')
             return redirect('accounts:dashboard')
