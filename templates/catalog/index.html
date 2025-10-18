@@ -8,10 +8,29 @@
 <section class="hero-section-modern">
     <div class="hero-background">
         <div class="hero-grid"></div>
+        <div class="floating-elements">
+            <div class="floating-icon" style="top: 20%; left: 10%; animation-delay: 0s;">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="floating-icon" style="top: 30%; right: 15%; animation-delay: 1s;">
+                <i class="fas fa-database"></i>
+            </div>
+            <div class="floating-icon" style="top: 60%; left: 20%; animation-delay: 2s;">
+                <i class="fas fa-cloud"></i>
+            </div>
+            <div class="floating-icon" style="top: 70%; right: 10%; animation-delay: 3s;">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+        </div>
     </div>
     <div class="container">
         <div class="row align-items-center min-vh-50">
             <div class="col-lg-8 mx-auto text-center text-white">
+                <div class="hero-badge mb-4">
+                    <span class="badge bg-white bg-opacity-20 px-3 py-2 rounded-pill">
+                        <i class="fas fa-star me-2"></i>Официальная платформа ОЭЗ
+                    </span>
+                </div>
                 <h1 class="display-3 fw-bold mb-4">
                     Карьера в технологическом
                     <span class="hero-gradient-text">кластере Москвы</span>
@@ -19,7 +38,7 @@
                 <p class="lead mb-5 text-blue-100">
                     Платформа для поиска работы и стажировок в ОЭЗ «Технополис Москва»
                 </p>
-                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mb-5">
                     <a class="btn btn-light btn-lg px-5 py-3 rounded-pill shadow-lg" href="{% url 'catalog:vacancies' %}">
                         <i class="fas fa-briefcase me-2"></i>
                         Найти вакансию
@@ -28,6 +47,22 @@
                         <i class="fas fa-graduation-cap me-2"></i>
                         Разместить стажировку
                     </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <div class="stat-number text-white fw-bold">500+</div>
+                            <div class="stat-label text-blue-200 small">Компаний</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-number text-white fw-bold">1000+</div>
+                            <div class="stat-label text-blue-200 small">Вакансий</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-number text-white fw-bold">200+</div>
+                            <div class="stat-label text-blue-200 small">Стажировок</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,6 +119,157 @@
                     <div class="stats-content">
                         <div class="stats-number">1000+</div>
                         <div class="stats-label">Успешных трудоустройств</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">Почему выбирают нас?</h2>
+                <p class="lead text-muted">Мы создаем экосистему для успешного трудоустройства в технологическом кластере</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4 class="feature-title">Проверенные компании</h4>
+                    <p class="feature-description">Все вакансии проходят модерацию администрации ОЭЗ. Работайте только с надежными работодателями.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h4 class="feature-title">Быстрый поиск</h4>
+                    <p class="feature-description">Умные фильтры и поиск помогут найти подходящую позицию за считанные минуты.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h4 class="feature-title">Стажировки</h4>
+                    <p class="feature-description">Уникальная возможность получить практический опыт в ведущих IT-компаниях.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4 class="feature-title">Аналитика рынка</h4>
+                    <p class="feature-description">Получайте актуальную информацию о трендах рынка труда и зарплатах.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h4 class="feature-title">Прямое общение</h4>
+                    <p class="feature-description">Связывайтесь напрямую с HR-менеджерами без посредников.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h4 class="feature-title">Мобильная версия</h4>
+                    <p class="feature-description">Удобный интерфейс на всех устройствах. Ищите работу где угодно.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-5 fw-bold mb-4">Отзывы наших пользователей</h2>
+                <p class="lead text-muted">Истории успеха от тех, кто уже нашел работу через нашу платформу</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="stars mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <p class="testimonial-text">"Отличная платформа! Нашел работу мечты в Яндекс всего за неделю. Очень удобный интерфейс и быстрый отклик от HR."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-info">
+                            <h5 class="author-name">Алексей Петров</h5>
+                            <p class="author-position">Frontend разработчик в Яндекс</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="stars mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <p class="testimonial-text">"Стажировка в Mail.ru Group стала отличным стартом карьеры. Получил много практического опыта и предложение о работе."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-info">
+                            <h5 class="author-name">Мария Сидорова</h5>
+                            <p class="author-position">Data Scientist в Mail.ru</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <div class="stars mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <p class="testimonial-text">"Как HR-менеджер, очень довольна качеством кандидатов. Платформа помогает найти именно тех специалистов, которые нам нужны."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-info">
+                            <h5 class="author-name">Елена Козлова</h5>
+                            <p class="author-position">HR Director в Сбербанке</p>
+                        </div>
                     </div>
                 </div>
             </div>
