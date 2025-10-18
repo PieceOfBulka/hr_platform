@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+
+{% block title %}Модерация вакансии "{{ vacancy.title }}" - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'moderation:dashboard' %}" class="text-decoration-none">Панель модерации</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'moderation:vacancies' %}" class="text-decoration-none">Вакансии</a></li>
+                                <li class="breadcrumb-item active">{{ vacancy.title }}</li>
+                            </ol>
+                        </nav>
+                        <h2 class="fw-bold text-dark mb-2">Модерация вакансии</h2>
+                        <p class="text-muted">{{ vacancy.company.company }} • {{ vacancy.get_status_display }}</p>
+                    </div>
+                    <a href="{% url 'moderation:vacancies' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Назад к списку
+                    </a>
+                </div>
+                
+                <!-- Vacancy Details -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Информация о вакансии</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <strong>Должность:</strong><br>
+                                        <span class="text-muted">{{ vacancy.title }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Компания:</strong><br>
+                                        <span class="text-muted">{{ vacancy.company.company }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Уровень опыта:</strong><br>
+                                        <span class="text-muted">{{ vacancy.get_experience_level_display }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Контактное лицо:</strong><br>
+                                        <span class="text-muted">{{ vacancy.company.get_full_name }}</span>
+                                    </div>
+                                    {% if vacancy.salary_min or vacancy.salary_max %}
+                                    <div class="col-md-6">
+                                        <strong>Зарплата:</strong><br>
+                                        <span class="text-muted">
+                                            {% if vacancy.salary_min and vacancy.salary_max %}
+                                                {{ vacancy.salary_min|floatformat:0 }} - {{ vacancy.salary_max|floatformat:0 }} ₽
+                                            {% elif vacancy.salary_min %}
+                                                от {{ vacancy.salary_min|floatformat:0 }} ₽
+                                            {% elif vacancy.salary_max %}
+                                                до {{ vacancy.salary_max|floatformat:0 }} ₽
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    {% endif %}
+                                    <div class="col-md-6">
+                                        <strong>Удаленная работа:</strong><br>
+                                        <span class="text-muted">{% if vacancy.is_remote %}Да{% else %}Нет{% endif %}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Дата создания:</strong><br>
+                                        <span class="text-muted">{{ vacancy.created_at|date:"d.m.Y H:i" }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Контактный email:</strong><br>
+                                        <span class="text-muted">{{ vacancy.contact_email }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <strong>Описание:</strong>
+                                    <div class="mt-2 p-3 bg-light rounded">
+                                        {{ vacancy.description|linebreaks }}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <strong>Требования:</strong>
+                                    <div class="mt-2 p-3 bg-light rounded">
+                                        {{ vacancy.requirements|linebreaks }}
+                                    </div>
+                                </div>
+                                
+                                {% if vacancy.responsibilities %}
+                                <div class="mb-4">
+                                    <strong>Обязанности:</strong>
+                                    <div class="mt-2 p-3 bg-light rounded">
+                                        {{ vacancy.responsibilities|linebreaks }}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <!-- Moderation Actions -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Действия модерации</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if vacancy.status == 'pending' %}
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label for="comment" class="form-label fw-medium">Комментарий (необязательно)</label>
+                                            <textarea class="form-control" name="comment" id="comment" rows="3" 
+                                                      placeholder="Укажите причину одобрения или отклонения..."></textarea>
+                                        </div>
+                                        
+                                        <div class="d-grid gap-2">
+                                            <button type="submit" name="action" value="approve" class="btn btn-success btn-lg">
+                                                <i class="fas fa-check me-2"></i>Одобрить и опубликовать
+                                            </button>
+                                            <button type="submit" name="action" value="reject" class="btn btn-danger btn-lg">
+                                                <i class="fas fa-times me-2"></i>Отклонить
+                                            </button>
+                                        </div>
+                                    </form>
+                                {% else %}
+                                    <div class="text-center">
+                                        <div class="mb-3">
+                                            <span class="badge 
+                                                {% if vacancy.status == 'published' %}bg-success
+                                                {% elif vacancy.status == 'rejected' %}bg-danger
+                                                {% elif vacancy.status == 'closed' %}bg-dark
+                                                {% endif %} px-3 py-2">
+                                                {{ vacancy.get_status_display }}
+                                            </span>
+                                        </div>
+                                        <p class="text-muted small">
+                                            Вакансия уже обработана
+                                        </p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Company Info -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Информация о компании</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <strong>Название:</strong><br>
+                                    <span class="text-muted">{{ vacancy.company.company }}</span>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Контактное лицо:</strong><br>
+                                    <span class="text-muted">{{ vacancy.company.get_full_name }}</span>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Email:</strong><br>
+                                    <a href="mailto:{{ vacancy.company.email }}" class="text-decoration-none">{{ vacancy.company.email }}</a>
+                                </div>
+                                
+                                {% if vacancy.company.phone %}
+                                <div class="mb-3">
+                                    <strong>Телефон:</strong><br>
+                                    <a href="tel:{{ vacancy.company.phone }}" class="text-decoration-none">{{ vacancy.company.phone }}</a>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="mb-3">
+                                    <strong>Статус верификации:</strong><br>
+                                    <span class="badge {% if vacancy.company.is_verified %}bg-success{% else %}bg-warning{% endif %}">
+                                        {% if vacancy.company.is_verified %}Верифицирован{% else %}Не верифицирован{% endif %}
+                                    </span>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Дата регистрации:</strong><br>
+                                    <span class="text-muted">{{ vacancy.company.created_at|date:"d.m.Y" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Statistics -->
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Статистика</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3 text-center">
+                                    <div class="col-6">
+                                        <div class="border rounded p-2">
+                                            <div class="fw-bold text-danger">{{ vacancy.applications.count }}</div>
+                                            <div class="text-muted small">Откликов</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="border rounded p-2">
+                                            <div class="fw-bold text-danger">{{ vacancy.applications.filter.status='new'|length }}</div>
+                                            <div class="text-muted small">Новых</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

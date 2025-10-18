@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block title %}Управление пользователями - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'moderation:dashboard' %}" class="text-decoration-none">Модерация</a></li>
+                                <li class="breadcrumb-item active">Пользователи</li>
+                            </ol>
+                        </nav>
+                        <h2 class="fw-bold text-dark mb-2">Управление пользователями</h2>
+                        <p class="text-muted">Управляйте пользователями системы и их правами доступа</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'moderation:dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Назад к панели
+                        </a>
+                        <a href="{% url 'moderation:statistics' %}" class="btn btn-outline-danger">
+                            <i class="fas fa-chart-bar me-2"></i>Статистика
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form method="get" class="row g-3">
+                            <div class="col-md-4">
+                                <label for="search" class="form-label">Поиск</label>
+                                <input type="text" class="form-control" id="search" name="search" 
+                                       value="{{ request.GET.search }}" placeholder="Имя, email, компания...">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="role" class="form-label">Роль</label>
+                                <select class="form-select" id="role" name="role">
+                                    <option value="">Все</option>
+                                    <option value="ADMIN" {% if request.GET.role == 'ADMIN' %}selected{% endif %}>Администратор</option>
+                                    <option value="HR" {% if request.GET.role == 'HR' %}selected{% endif %}>HR</option>
+                                    <option value="UNIVERSITY" {% if request.GET.role == 'UNIVERSITY' %}selected{% endif %}>Университет</option>
+                                    <option value="CANDIDATE" {% if request.GET.role == 'CANDIDATE' %}selected{% endif %}>Кандидат</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="verified" class="form-label">Верификация</label>
+                                <select class="form-select" id="verified" name="verified">
+                                    <option value="">Все</option>
+                                    <option value="true" {% if request.GET.verified == 'true' %}selected{% endif %}>Верифицированы</option>
+                                    <option value="false" {% if request.GET.verified == 'false' %}selected{% endif %}>Не верифицированы</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">&nbsp;</label>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-search me-2"></i>Найти
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Results -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-dark mb-0">Найдено пользователей: {{ users|length }}</h5>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="sortBy('created_at')">
+                                    <i class="fas fa-sort me-1"></i>По дате
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="sortBy('role')">
+                                    <i class="fas fa-sort me-1"></i>По роли
+                                </button>
+                            </div>
+                        </div>
+                        
+                        {% if users %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Пользователь</th>
+                                        <th>Роль</th>
+                                        <th>Компания/Вуз</th>
+                                        <th>Верификация</th>
+                                        <th>Дата регистрации</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                                    {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold text-dark">{{ user.get_full_name }}</div>
+                                                    <div class="text-muted small">{{ user.email }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge {% if user.role == 'ADMIN' %}bg-danger{% elif user.role == 'HR' %}bg-primary{% elif user.role == 'UNIVERSITY' %}bg-success{% else %}bg-secondary{% endif %}">
+                                                {% if user.role == 'ADMIN' %}Администратор{% elif user.role == 'HR' %}HR{% elif user.role == 'UNIVERSITY' %}Университет{% else %}Кандидат{% endif %}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if user.company %}
+                                            <span class="text-muted">{{ user.company }}</span>
+                                            {% else %}
+                                            <span class="text-muted">-</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge {% if user.is_verified %}bg-success{% else %}bg-warning{% endif %}">
+                                                {% if user.is_verified %}Верифицирован{% else %}Не верифицирован{% endif %}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-muted">{{ user.created_at|date:"d.m.Y" }}</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-1">
+                                                <a href="{% url 'moderation:user_detail' user.pk %}" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                {% if not user.is_verified %}
+                                                <form method="post" action="{% url 'moderation:verify_user' user.pk %}" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Верифицировать пользователя?')">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                </form>
+                                                {% endif %}
+                                                {% if user.role != 'ADMIN' %}
+                                                <form method="post" action="{% url 'moderation:block_user' user.pk %}" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Заблокировать пользователя?')">
+                                                        <i class="fas fa-ban"></i>
+                                                    </button>
+                                                </form>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        {% if is_paginated %}
+                        <nav aria-label="Page navigation" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.role %}&role={{ request.GET.role }}{% endif %}{% if request.GET.verified %}&verified={{ request.GET.verified }}{% endif %}">Предыдущая</a>
+                                </li>
+                                {% endif %}
+                                
+                                {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.role %}&role={{ request.GET.role }}{% endif %}{% if request.GET.verified %}&verified={{ request.GET.verified }}{% endif %}">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                
+                                {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.role %}&role={{ request.GET.role }}{% endif %}{% if request.GET.verified %}&verified={{ request.GET.verified }}{% endif %}">Следующая</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                        
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                            <h5 class="fw-bold text-dark mb-2">Пользователи не найдены</h5>
+                            <p class="text-muted">Попробуйте изменить параметры поиска</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function sortBy(field) {
+    const url = new URL(window.location);
+    url.searchParams.set('sort', field);
+    window.location = url.toString();
+}
+</script>
+{% endblock %}

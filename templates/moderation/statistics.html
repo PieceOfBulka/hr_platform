@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+
+{% block title %}Аналитика и статистика - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-2">Аналитика и статистика</h2>
+                        <p class="text-muted">Общая статистика по платформе</p>
+                    </div>
+                    <a href="{% url 'moderation:dashboard' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Назад к панели
+                    </a>
+                </div>
+                
+                <!-- Key Metrics -->
+                <div class="row g-4 mb-5">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h4 class="card-title">{{ total_vacancies }}</h4>
+                                        <p class="card-text">Всего вакансий</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-briefcase fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h4 class="card-title">{{ published_vacancies }}</h4>
+                                        <p class="card-text">Опубликованных</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-eye fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h4 class="card-title">{{ pending_vacancies }}</h4>
+                                        <p class="card-text">На модерации</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-clock fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h4 class="card-title">{{ total_internships }}</h4>
+                                        <p class="card-text">Стажировок</p>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-graduation-cap fa-2x"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Users Statistics -->
+                <div class="row g-4 mb-5">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Пользователи по ролям</h5>
+                            </div>
+                            <div class="card-body">
+                                {% for role, count in users_by_role.items %}
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="fw-medium">{{ role }}</span>
+                                        <span class="badge bg-primary px-3 py-2">{{ count }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Общая статистика</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="text-center">
+                                            <div class="fw-bold text-danger fs-4">{{ total_users }}</div>
+                                            <div class="text-muted small">Всего пользователей</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-center">
+                                            <div class="fw-bold text-success fs-4">{{ verified_users }}</div>
+                                            <div class="text-muted small">Верифицированных</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-center">
+                                            <div class="fw-bold text-info fs-4">{{ companies_count }}</div>
+                                            <div class="text-muted small">Компаний</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-center">
+                                            <div class="fw-bold text-warning fs-4">{{ published_internships }}</div>
+                                            <div class="text-muted small">Стажировок</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Detailed Statistics -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Статистика вакансий</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Опубликованные</span>
+                                        <span class="fw-bold text-success">{{ published_vacancies }}</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: {% widthratio published_vacancies total_vacancies 100 %}%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>На модерации</span>
+                                        <span class="fw-bold text-warning">{{ pending_vacancies }}</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-warning" style="width: {% widthratio pending_vacancies total_vacancies 100 %}%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Отклоненные</span>
+                                        <span class="fw-bold text-danger">{{ total_vacancies|add:published_vacancies|add:pending_vacancies|add:"-2" }}</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-danger" style="width: 10%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Статистика стажировок</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Опубликованные</span>
+                                        <span class="fw-bold text-success">{{ published_internships }}</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-success" style="width: {% widthratio published_internships total_internships 100 %}%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>На модерации</span>
+                                        <span class="fw-bold text-warning">{{ pending_internships }}</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-warning" style="width: {% widthratio pending_internships total_internships 100 %}%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>Всего</span>
+                                        <span class="fw-bold text-primary">{{ total_internships }}</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-primary" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Export Actions -->
+                <div class="row g-4 mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Экспорт данных</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <button class="btn btn-outline-primary w-100">
+                                            <i class="fas fa-file-excel me-2"></i>Экспорт вакансий
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-outline-success w-100">
+                                            <i class="fas fa-file-excel me-2"></i>Экспорт стажировок
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-outline-info w-100">
+                                            <i class="fas fa-file-excel me-2"></i>Экспорт пользователей
+                                        </button>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-outline-warning w-100">
+                                            <i class="fas fa-file-pdf me-2"></i>Полный отчет
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

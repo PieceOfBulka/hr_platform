@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block title %}Модерация стажировок - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'moderation:dashboard' %}" class="text-decoration-none">Модерация</a></li>
+                                <li class="breadcrumb-item active">Стажировки</li>
+                            </ol>
+                        </nav>
+                        <h2 class="fw-bold text-dark mb-2">Модерация стажировок</h2>
+                        <p class="text-muted">Проверьте и одобрите заявки на стажировки от учебных заведений</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'moderation:dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Назад к панели
+                        </a>
+                        <a href="{% url 'moderation:statistics' %}" class="btn btn-outline-danger">
+                            <i class="fas fa-chart-bar me-2"></i>Статистика
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form method="get" class="row g-3">
+                            <div class="col-md-4">
+                                <label for="search" class="form-label">Поиск</label>
+                                <input type="text" class="form-control" id="search" name="search" 
+                                       value="{{ request.GET.search }}" placeholder="Специальность, вуз...">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="status" class="form-label">Статус</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="">Все</option>
+                                    <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>На модерации</option>
+                                    <option value="approved" {% if request.GET.status == 'approved' %}selected{% endif %}>Одобрено</option>
+                                    <option value="rejected" {% if request.GET.status == 'rejected' %}selected{% endif %}>Отклонено</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="university" class="form-label">Учебное заведение</label>
+                                <select class="form-select" id="university" name="university">
+                                    <option value="">Все</option>
+                                    {% for uni in universities %}
+                                    <option value="{{ uni.id }}" {% if request.GET.university == uni.id|stringformat:"s" %}selected{% endif %}>{{ uni.company }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">&nbsp;</label>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-search me-2"></i>Найти
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Results -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-dark mb-0">Найдено стажировок: {{ internships|length }}</h5>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="sortBy('created_at')">
+                                    <i class="fas fa-sort me-1"></i>По дате
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="sortBy('status')">
+                                    <i class="fas fa-sort me-1"></i>По статусу
+                                </button>
+                            </div>
+                        </div>
+                        
+                        {% if internships %}
+                        <div class="row g-4">
+                            {% for internship in internships %}
+                            <div class="col-lg-6">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div class="flex-grow-1">
+                                                <h5 class="fw-bold text-dark mb-1">{{ internship.specialization }}</h5>
+                                                <p class="text-danger fw-bold mb-1">{{ internship.university.company }}</p>
+                                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                                    <span class="badge {% if internship.status == 'pending' %}bg-warning{% elif internship.status == 'approved' %}bg-success{% else %}bg-danger{% endif %}">
+                                                        {% if internship.status == 'pending' %}На модерации{% elif internship.status == 'approved' %}Одобрено{% else %}Отклонено{% endif %}
+                                                    </span>
+                                                    <span class="badge bg-light text-dark">{{ internship.students_count }} студентов</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                <div class="text-muted small">{{ internship.created_at|date:"d.m.Y" }}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-muted mb-3">{{ internship.description|truncatewords:20 }}</p>
+                                        
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-6">
+                                                <strong>Период:</strong><br>
+                                                <span class="text-muted">{{ internship.start_date|date:"d.m.Y" }} - {{ internship.end_date|date:"d.m.Y" }}</span>
+                                            </div>
+                                            <div class="col-6">
+                                                <strong>Контакт:</strong><br>
+                                                <span class="text-muted">{{ internship.contact_person }}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex gap-2">
+                                                <a href="{% url 'moderation:internship_moderate' internship.pk %}" class="btn btn-outline-danger btn-sm">
+                                                    <i class="fas fa-eye me-1"></i>Проверить
+                                                </a>
+                                                {% if internship.status == 'pending' %}
+                                                <form method="post" action="{% url 'moderation:internship_moderate' internship.pk %}" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="approve">
+                                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Одобрить стажировку?')">
+                                                        <i class="fas fa-check me-1"></i>Одобрить
+                                                    </button>
+                                                </form>
+                                                <form method="post" action="{% url 'moderation:internship_moderate' internship.pk %}" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="reject">
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Отклонить стажировку?')">
+                                                        <i class="fas fa-times me-1"></i>Отклонить
+                                                    </button>
+                                                </form>
+                                                {% endif %}
+                                            </div>
+                                            <div class="text-muted small">
+                                                <i class="fas fa-calendar me-1"></i>{{ internship.created_at|date:"d.m.Y" }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Pagination -->
+                        {% if is_paginated %}
+                        <nav aria-label="Page navigation" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}">Предыдущая</a>
+                                </li>
+                                {% endif %}
+                                
+                                {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                
+                                {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}">Следующая</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                        
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <h5 class="fw-bold text-dark mb-2">Стажировки не найдены</h5>
+                            <p class="text-muted">Попробуйте изменить параметры поиска</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function sortBy(field) {
+    const url = new URL(window.location);
+    url.searchParams.set('sort', field);
+    window.location = url.toString();
+}
+</script>
+{% endblock %}

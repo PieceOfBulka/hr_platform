@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+
+{% block title %}Модерация стажировки - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'moderation:dashboard' %}" class="text-decoration-none">Модерация</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'moderation:internship_list' %}" class="text-decoration-none">Стажировки</a></li>
+                                <li class="breadcrumb-item active">Модерация</li>
+                            </ol>
+                        </nav>
+                        <h2 class="fw-bold text-dark mb-2">Модерация стажировки</h2>
+                        <p class="text-muted">Проверьте и одобрите заявку на стажировку</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'moderation:internship_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Назад к списку
+                        </a>
+                        {% if internship.status == 'pending' %}
+                        <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="approve">
+                            <button type="submit" class="btn btn-success" onclick="return confirm('Одобрить стажировку?')">
+                                <i class="fas fa-check me-2"></i>Одобрить
+                            </button>
+                        </form>
+                        <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="reject">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Отклонить стажировку?')">
+                                <i class="fas fa-times me-2"></i>Отклонить
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Internship Details -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Информация о стажировке</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <strong>Специальность:</strong><br>
+                                        <span class="text-muted">{{ internship.specialization }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Учебное заведение:</strong><br>
+                                        <span class="text-muted">{{ internship.university.company }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Количество студентов:</strong><br>
+                                        <span class="text-muted">{{ internship.students_count }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Период:</strong><br>
+                                        <span class="text-muted">{{ internship.start_date|date:"d.m.Y" }} - {{ internship.end_date|date:"d.m.Y" }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Контактное лицо:</strong><br>
+                                        <span class="text-muted">{{ internship.contact_person }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Email:</strong><br>
+                                        <a href="mailto:{{ internship.contact_email }}" class="text-decoration-none">{{ internship.contact_email }}</a>
+                                    </div>
+                                    {% if internship.contact_phone %}
+                                    <div class="col-md-6">
+                                        <strong>Телефон:</strong><br>
+                                        <a href="tel:{{ internship.contact_phone }}" class="text-decoration-none">{{ internship.contact_phone }}</a>
+                                    </div>
+                                    {% endif %}
+                                    <div class="col-md-6">
+                                        <strong>Дата подачи:</strong><br>
+                                        <span class="text-muted">{{ internship.created_at|date:"d.m.Y H:i" }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <strong>Описание:</strong>
+                                    <div class="mt-2 p-3 bg-light rounded">
+                                        {{ internship.description|linebreaks }}
+                                    </div>
+                                </div>
+                                
+                                {% if internship.requirements %}
+                                <div class="mb-4">
+                                    <strong>Требования:</strong>
+                                    <div class="mt-2 p-3 bg-light rounded">
+                                        {{ internship.requirements|linebreaks }}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if internship.benefits %}
+                                <div class="mb-4">
+                                    <strong>Преимущества:</strong>
+                                    <div class="mt-2 p-3 bg-light rounded">
+                                        {{ internship.benefits|linebreaks }}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- University Info -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Информация об учебном заведении</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <strong>Название:</strong><br>
+                                        <span class="text-muted">{{ internship.university.company }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Контактное лицо:</strong><br>
+                                        <span class="text-muted">{{ internship.university.get_full_name }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Email:</strong><br>
+                                        <a href="mailto:{{ internship.university.email }}" class="text-decoration-none">{{ internship.university.email }}</a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Телефон:</strong><br>
+                                        <a href="tel:{{ internship.university.phone }}" class="text-decoration-none">{{ internship.university.phone }}</a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Статус верификации:</strong><br>
+                                        <span class="badge {% if internship.university.is_verified %}bg-success{% else %}bg-warning{% endif %}">
+                                            {% if internship.university.is_verified %}Верифицирован{% else %}Не верифицирован{% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Дата регистрации:</strong><br>
+                                        <span class="text-muted">{{ internship.university.created_at|date:"d.m.Y" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <!-- Status -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Статус модерации</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <strong>Текущий статус:</strong><br>
+                                    <span class="badge {% if internship.status == 'pending' %}bg-warning{% elif internship.status == 'approved' %}bg-success{% else %}bg-danger{% endif %} fs-6">
+                                        {% if internship.status == 'pending' %}На модерации{% elif internship.status == 'approved' %}Одобрено{% else %}Отклонено{% endif %}
+                                    </span>
+                                </div>
+                                
+                                {% if internship.moderated_by %}
+                                <div class="mb-3">
+                                    <strong>Модератор:</strong><br>
+                                    <span class="text-muted">{{ internship.moderated_by.get_full_name }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if internship.moderated_at %}
+                                <div class="mb-3">
+                                    <strong>Дата модерации:</strong><br>
+                                    <span class="text-muted">{{ internship.moderated_at|date:"d.m.Y H:i" }}</span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if internship.rejection_reason %}
+                                <div class="mb-3">
+                                    <strong>Причина отклонения:</strong><br>
+                                    <span class="text-muted">{{ internship.rejection_reason }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Statistics -->
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Статистика</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3 text-center">
+                                    <div class="col-6">
+                                        <div class="border rounded p-2">
+                                            <div class="fw-bold text-danger">{{ internship.students_count }}</div>
+                                            <div class="text-muted small">Студентов</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="border rounded p-2">
+                                            <div class="fw-bold text-danger">{{ internship.applications.count }}</div>
+                                            <div class="text-muted small">Откликов</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

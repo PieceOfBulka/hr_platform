@@ -41,6 +41,8 @@ class VacancyModerationListView(ListView):
     paginate_by = 10
     
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
         if not request.user.is_admin:
             messages.error(request, 'Доступ запрещен.')
             return redirect('accounts:dashboard')
@@ -89,6 +91,8 @@ class InternshipModerationListView(ListView):
     paginate_by = 10
     
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
         if not request.user.is_admin:
             messages.error(request, 'Доступ запрещен.')
             return redirect('accounts:dashboard')
@@ -137,6 +141,8 @@ class UserModerationListView(ListView):
     paginate_by = 20
     
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
         if not request.user.is_admin:
             messages.error(request, 'Доступ запрещен.')
             return redirect('accounts:dashboard')
