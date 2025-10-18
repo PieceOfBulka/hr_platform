@@ -1,0 +1,139 @@
+:root{
+  /* Основная акцентная палитра (приблизительные hex для RAL цветов) */
+  --accent-1: #d63344;    /* RAL 3026 */
+  --accent-2: #8f453d;    /* RAL 3000 */
+  --accent-3: #c68487;    /* RAL 3014 */
+  --accent-4: #8a4b4b;    /* RAL 3027 */
+  --accent-5: #4b2624;    /* RAL 3032 */
+  --accent-6: #2a1c1b;    /* RAL 3007 */
+
+  /* Нейтральная палитра */
+  --neutral-1: #9fa1a3;   /* RAL 7004 */
+  --neutral-2: #3f3f3f;   /* RAL 7022 */
+  --neutral-3: #3a3f44;   /* RAL 7024 / тёмный серый */
+  --neutral-4: #b9b9b6;   /* RAL 9018 / светло-серый */
+  --neutral-5: #e6e5dd;   /* RAL 9002 */
+  --neutral-6: #fbfdf4;   /* RAL 9010 */
+
+  --bg: var(--neutral-6);
+  --text: #222;
+  --muted: #666;
+  --radius: 6px;
+  --container-width: 1100px;
+  --shadow: 0 6px 18px rgba(32,32,32,0.08);
+}
+
+/* Базовая типографика */
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  margin:0;
+  line-height:1.45;
+}
+
+/* Главная обёртка */
+.container{
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 28px;
+}
+
+/* Хедер */
+.site-header{
+  background: white;
+  border-bottom: 4px solid var(--accent-1);
+  box-shadow: var(--shadow);
+}
+.site-header .container{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  padding:18px 28px;
+}
+.site-brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  text-decoration:none;
+  color:var(--text);
+}
+.site-brand img{ height:56px; display:block; }
+.site-brand .title{
+  font-size:28px;
+  font-weight:700;
+  color:var(--accent-1);
+  letter-spacing:1px;
+}
+.site-nav{ margin-left:auto; display:flex; gap:18px; align-items:center; }
+.site-nav a{
+  color:var(--muted);
+  text-decoration:none;
+  padding:8px 12px;
+  border-radius:4px;
+}
+.site-nav a:hover{ color:var(--accent-1); background:rgba(214,51,68,0.04); }
+
+/* Герой для страниц (опционально) */
+.page-hero{
+  background: linear-gradient(90deg, rgba(214,51,68,0.04), rgba(214,51,68,0.01));
+  padding:24px;
+  border-radius:var(--radius);
+  margin:18px 0;
+}
+
+/* Кнопки */
+.btn{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:6px;
+  text-decoration:none;
+  font-weight:600;
+  cursor:pointer;
+}
+.btn-primary{
+  background:var(--accent-1);
+  color:white;
+  box-shadow: 0 6px 12px rgba(214,51,68,0.12);
+}
+.btn-outline{
+  background:transparent;
+  border:1px solid var(--neutral-4);
+  color:var(--text);
+}
+
+/* Карточки */
+.card{
+  background:white;
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow: var(--shadow);
+}
+
+/* Акцентные элементы (статусы / теги) */
+.tag{
+  display:inline-block;
+  background:var(--accent-3);
+  color:white;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:13px;
+}
+
+/* Футер */
+.site-footer{
+  margin-top:36px;
+  padding:28px;
+  background:#fff;
+  border-top:1px solid rgba(0,0,0,0.04);
+  color:var(--muted);
+  text-align:center;
+}
+
+/* Мелкие правки для таблиц/форм */
+table { width:100%; border-collapse:collapse; }
+th, td { padding:10px 12px; border-bottom:1px solid rgba(0,0,0,0.04); }
+label{ font-weight:600; color:var(--muted); }
+
+/* ...existing code... */
