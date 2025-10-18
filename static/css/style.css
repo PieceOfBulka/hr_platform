@@ -670,21 +670,158 @@ footer {
     margin: 0;
 }
 
-/* Responsive Design Updates */
-@media (max-width: 768px) {
-    .floating-icon {
-        width: 2rem;
-        height: 2rem;
-        font-size: 1rem;
-    }
-    
-    .feature-card {
-        padding: 1.5rem;
-    }
-    
-    .testimonial-card {
-        padding: 1.5rem;
-    }
+/* Technopolis Logo */
+.technopolis-logo h2 {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.logo-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* Vacancy Description Toggle */
+.vacancy-description {
+    position: relative;
+}
+
+.description-preview {
+    margin-bottom: 0.5rem;
+}
+
+.description-full {
+    margin-bottom: 0.5rem;
+}
+
+#toggle-description {
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#toggle-description:hover {
+    text-decoration: underline;
+}
+
+/* Application Form Checkbox */
+.form-check-input {
+    margin-top: 0.25rem;
+}
+
+.form-check-label {
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Recommendation Cards */
+.recommendation-card {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-left: 4px solid #dc3545;
+    margin-bottom: 1rem;
+}
+
+.recommendation-card.high-priority {
+    border-left-color: #dc3545;
+}
+
+.recommendation-card.medium-priority {
+    border-left-color: #ffc107;
+}
+
+.recommendation-card.low-priority {
+    border-left-color: #28a745;
+}
+
+.recommendation-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.recommendation-description {
+    color: #64748b;
+    margin-bottom: 1rem;
+}
+
+.recommendation-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.priority-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.priority-high {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.priority-medium {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.priority-low {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+/* Skill Test Styles */
+.skill-test-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.skill-test-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.skill-test-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.skill-test-description {
+    color: #64748b;
+    margin-bottom: 1rem;
+}
+
+.skill-test-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.skill-test-score {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #dc3545;
+}
+
+.skill-test-passed {
+    color: #28a745;
+}
+
+.skill-test-failed {
+    color: #dc3545;
 }
 
 .hero-section,

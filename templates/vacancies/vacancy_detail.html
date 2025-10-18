@@ -77,9 +77,17 @@
                                 </div>
                                 
                                 <div class="mb-4">
-                                    <strong>Описание:</strong>
-                                    <div class="mt-2 p-3 bg-light rounded">
-                                        {{ vacancy.description|linebreaks }}
+                                    <h5 class="fw-bold text-dark mb-3">Описание вакансии</h5>
+                                    <div class="vacancy-description">
+                                        <div class="description-preview" id="description-preview">
+                                            {{ vacancy.description|truncatewords:50 }}
+                                        </div>
+                                        <div class="description-full" id="description-full" style="display: none;">
+                                            {{ vacancy.description|linebreaks }}
+                                        </div>
+                                        <button class="btn btn-link p-0 text-danger" id="toggle-description">
+                                            <i class="fas fa-chevron-down me-1"></i>Показать полностью
+                                        </button>
                                     </div>
                                 </div>
                                 
@@ -168,4 +176,26 @@
         </div>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleBtn = document.getElementById('toggle-description');
+    const preview = document.getElementById('description-preview');
+    const full = document.getElementById('description-full');
+    
+    if (toggleBtn && preview && full) {
+        toggleBtn.addEventListener('click', function() {
+            if (full.style.display === 'none') {
+                preview.style.display = 'none';
+                full.style.display = 'block';
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-up me-1"></i>Свернуть';
+            } else {
+                preview.style.display = 'block';
+                full.style.display = 'none';
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-down me-1"></i>Показать полностью';
+            }
+        });
+    }
+});
+</script>
 {% endblock %}

@@ -73,6 +73,23 @@ def apply_to_vacancy(request, pk):
             application.vacancy = vacancy
             application.candidate = request.user
             application.save()
+            
+            # Если пользователь выбрал размещение в общем банке
+            if form.cleaned_data.get('add_to_public_bank'):
+                # Создаем или обновляем резюме пользователя
+                from resumes.models import Resume
+                resume, created = Resume.objects.get_or_create(
+                    user=request.user,
+                    defaults={
+                        'title': f'Резюме {request.user.get_full_name() or request.user.email}',
+                        'summary': application.cover_letter,
+                        'is_public': True
+                    }
+                )
+                if not created:
+                    resume.is_public = True
+                    resume.save()
+            
             messages.success(request, 'Ваш отклик успешно отправлен!')
             return redirect('vacancies:detail', pk=pk)
     else:

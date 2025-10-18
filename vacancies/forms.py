@@ -35,6 +35,13 @@ class VacancyForm(forms.ModelForm):
 class ApplicationForm(forms.ModelForm):
     """Форма отклика на вакансию"""
     
+    add_to_public_bank = forms.BooleanField(
+        required=False,
+        initial=True,
+        label='Разместить резюме в общем банке',
+        help_text='Позволит другим HR-менеджерам увидеть ваше резюме'
+    )
+    
     class Meta:
         model = Application
         fields = ['cover_letter', 'resume_file']
@@ -45,8 +52,13 @@ class ApplicationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
+            if field.widget.__class__.__name__ != 'CheckboxInput':
+                field.widget.attrs.update({'class': 'form-control'})
         
         self.fields['resume_file'].widget.attrs.update({
             'accept': '.pdf,.doc,.docx'
+        })
+        
+        self.fields['add_to_public_bank'].widget.attrs.update({
+            'class': 'form-check-input'
         })
