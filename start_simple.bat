@@ -1,0 +1,6 @@
+@echo off
+echo Creating test data...
+python simple_seed.py
+echo.
+echo Starting server...
+python main.py
