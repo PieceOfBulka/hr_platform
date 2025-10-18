@@ -125,8 +125,8 @@ class VacancyCreateView(CreateView):
     
     def form_valid(self, form):
         form.instance.company = self.request.user
-        form.instance.status = 'pending'  # Отправляем на модерацию
-        messages.success(self.request, 'Вакансия создана и отправлена на модерацию.')
+        form.instance.status = 'draft'  # Создаем как черновик
+        messages.success(self.request, 'Вакансия создана как черновик.')
         return super().form_valid(form)
 
 

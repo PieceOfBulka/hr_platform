@@ -95,6 +95,7 @@ class VacancyFormTest(TestCase):
             'contact_email': 'hr@test.com',
             'contact_phone': '+7 (999) 123-45-67',
             'is_remote': True,
+            'status': Vacancy.Status.DRAFT,
         }
         
         form = VacancyForm(data=form_data)

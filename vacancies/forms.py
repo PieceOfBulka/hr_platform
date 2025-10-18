@@ -11,13 +11,14 @@ class VacancyForm(forms.ModelForm):
         fields = [
             'title', 'description', 'requirements', 'responsibilities',
             'salary_min', 'salary_max', 'experience_level',
-            'contact_email', 'contact_phone', 'is_remote', 'auto_close_date'
+            'contact_email', 'contact_phone', 'is_remote', 'auto_close_date', 'status'
         ]
         widgets = {
             'description': forms.Textarea(attrs={'rows': 5}),
             'requirements': forms.Textarea(attrs={'rows': 5}),
             'responsibilities': forms.Textarea(attrs={'rows': 5}),
             'auto_close_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'status': forms.Select(choices=Vacancy.Status.choices),
         }
     
     def __init__(self, *args, **kwargs):
