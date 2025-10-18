@@ -34,6 +34,8 @@ class ResumeCreateView(CreateView):
     success_url = reverse_lazy('resumes:my_resume')
     
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
         if not request.user.is_candidate:
             messages.error(request, 'Только соискатели могут создавать резюме.')
             return redirect('accounts:dashboard')
@@ -72,6 +74,8 @@ class ResumeListView(ListView):
     paginate_by = 10
     
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
         if not request.user.is_hr:
             messages.error(request, 'Доступ запрещен.')
             return redirect('accounts:dashboard')
@@ -111,10 +115,19 @@ class ResumeDetailView(DetailView):
     context_object_name = 'resume'
     
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('accounts:login')
         if not request.user.is_hr:
             messages.error(request, 'Доступ запрещен.')
             return redirect('accounts:dashboard')
         return super().dispatch(request, *args, **kwargs)
+    
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if not obj.is_public:
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied("Резюме не доступно для просмотра")
+        return obj
 
 
 @login_required

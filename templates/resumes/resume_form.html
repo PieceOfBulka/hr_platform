@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Редактировать резюме{% else %}Создать резюме{% endif %} - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-white text-center py-4">
+                        <h3 class="fw-bold text-dark mb-0">
+                            <span class="text-danger">{% if object %}Редактировать{% else %}Создать{% endif %}</span> резюме
+                        </h3>
+                        <p class="text-muted mt-2">Заполните информацию о себе для поиска работы</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            <div class="mb-4">
+                                <label for="{{ form.title.id_for_label }}" class="form-label fw-medium">Желаемая должность *</label>
+                                {{ form.title }}
+                                {% if form.title.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.title.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="{{ form.summary.id_for_label }}" class="form-label fw-medium">О себе</label>
+                                {{ form.summary }}
+                                {% if form.summary.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.summary.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Кратко расскажите о себе, своих навыках и достижениях</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label for="{{ form.experience_level.id_for_label }}" class="form-label fw-medium">Уровень опыта *</label>
+                                        {{ form.experience_level }}
+                                        {% if form.experience_level.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {% for error in form.experience_level.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label for="{{ form.education_level.id_for_label }}" class="form-label fw-medium">Уровень образования *</label>
+                                        {{ form.education_level }}
+                                        {% if form.education_level.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {% for error in form.education_level.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label for="{{ form.university.id_for_label }}" class="form-label fw-medium">Университет</label>
+                                        {{ form.university }}
+                                        {% if form.university.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {% for error in form.university.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label for="{{ form.faculty.id_for_label }}" class="form-label fw-medium">Факультет</label>
+                                        {{ form.faculty }}
+                                        {% if form.faculty.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {% for error in form.faculty.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label for="{{ form.graduation_year.id_for_label }}" class="form-label fw-medium">Год окончания</label>
+                                        {{ form.graduation_year }}
+                                        {% if form.graduation_year.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {% for error in form.graduation_year.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label for="{{ form.salary_expectation.id_for_label }}" class="form-label fw-medium">Желаемая зарплата (₽)</label>
+                                        {{ form.salary_expectation }}
+                                        {% if form.salary_expectation.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {% for error in form.salary_expectation.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="{{ form.skills.id_for_label }}" class="form-label fw-medium">Навыки</label>
+                                {{ form.skills }}
+                                {% if form.skills.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.skills.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Перечислите ваши профессиональные навыки через запятую</div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="{{ form.languages.id_for_label }}" class="form-label fw-medium">Языки</label>
+                                {{ form.languages }}
+                                {% if form.languages.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.languages.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Укажите знание языков и уровень владения</div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="{{ form.resume_file.id_for_label }}" class="form-label fw-medium">Файл резюме</label>
+                                {{ form.resume_file }}
+                                {% if form.resume_file.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.resume_file.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">Загрузите файл резюме в формате PDF, DOC или DOCX</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <div class="form-check">
+                                            {{ form.is_remote }}
+                                            <label class="form-check-label fw-medium" for="{{ form.is_remote.id_for_label }}">
+                                                Готов к удаленной работе
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <div class="form-check">
+                                            {{ form.is_relocation }}
+                                            <label class="form-check-label fw-medium" for="{{ form.is_relocation.id_for_label }}">
+                                                Готов к переезду
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    {{ form.is_public }}
+                                    <label class="form-check-label fw-medium" for="{{ form.is_public.id_for_label }}">
+                                        Публичное резюме (доступно для HR)
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {% for error in form.non_field_errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-danger btn-lg">
+                                    <i class="fas fa-save me-2"></i>{% if object %}Обновить{% else %}Создать{% endif %} резюме
+                                </button>
+                                <a href="{% url 'resumes:my_resume' %}" class="btn btn-outline-secondary btn-lg">
+                                    <i class="fas fa-arrow-left me-2"></i>Отмена
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

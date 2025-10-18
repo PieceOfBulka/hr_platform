@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ resume.user.get_full_name }} - Резюме{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'resumes:list' %}" class="text-decoration-none">Резюме</a></li>
+                                <li class="breadcrumb-item active">{{ resume.user.get_full_name }}</li>
+                            </ol>
+                        </nav>
+                        <h2 class="fw-bold text-dark mb-2">{{ resume.user.get_full_name }}</h2>
+                        <p class="text-danger fw-bold mb-1">{{ resume.position }}</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'resumes:list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Назад к списку
+                        </a>
+                        {% if user.is_authenticated and user.role == 'HR' %}
+                        <button class="btn btn-danger" onclick="contactCandidate()">
+                            <i class="fas fa-envelope me-2"></i>Связаться
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Resume Details -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Основная информация</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <strong>ФИО:</strong><br>
+                                        <span class="text-muted">{{ resume.user.get_full_name }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Должность:</strong><br>
+                                        <span class="text-muted">{{ resume.position }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Email:</strong><br>
+                                        <a href="mailto:{{ resume.user.email }}" class="text-decoration-none">{{ resume.user.email }}</a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Телефон:</strong><br>
+                                        <a href="tel:{{ resume.user.phone }}" class="text-decoration-none">{{ resume.user.phone }}</a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Город:</strong><br>
+                                        <span class="text-muted">{{ resume.city }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Дата рождения:</strong><br>
+                                        <span class="text-muted">{{ resume.birth_date|date:"d.m.Y" }}</span>
+                                    </div>
+                                </div>
+                                
+                                {% if resume.summary %}
+                                <div class="mb-4">
+                                    <strong>О себе:</strong>
+                                    <div class="mt-2 p-3 bg-light rounded">
+                                        {{ resume.summary|linebreaks }}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if resume.skills %}
+                                <div class="mb-4">
+                                    <strong>Навыки:</strong>
+                                    <div class="mt-2">
+                                        {% for skill in resume.skills_list %}
+                                        <span class="badge bg-light text-dark me-2 mb-2">{{ skill }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Work Experience -->
+                        {% if resume.workexperience_set.all %}
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Опыт работы</h5>
+                            </div>
+                            <div class="card-body">
+                                {% for experience in resume.workexperience_set.all %}
+                                <div class="border-bottom pb-3 mb-3 {% if forloop.last %}border-0 pb-0 mb-0{% endif %}">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-1">{{ experience.position }}</h6>
+                                            <p class="text-danger fw-bold mb-1">{{ experience.company }}</p>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-light text-dark">
+                                                {{ experience.start_date|date:"M Y" }} - 
+                                                {% if experience.end_date %}{{ experience.end_date|date:"M Y" }}{% else %}Настоящее время{% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {% if experience.description %}
+                                    <p class="text-muted mb-0">{{ experience.description }}</p>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Education -->
+                        {% if resume.education_set.all %}
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Образование</h5>
+                            </div>
+                            <div class="card-body">
+                                {% for education in resume.education_set.all %}
+                                <div class="border-bottom pb-3 mb-3 {% if forloop.last %}border-0 pb-0 mb-0{% endif %}">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-1">{{ education.degree }}</h6>
+                                            <p class="text-danger fw-bold mb-1">{{ education.institution }}</p>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-light text-dark">
+                                                {{ education.start_date|date:"Y" }} - 
+                                                {% if education.end_date %}{{ education.end_date|date:"Y" }}{% else %}Настоящее время{% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {% if education.description %}
+                                    <p class="text-muted mb-0">{{ education.description }}</p>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <!-- Contact Info -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Контактная информация</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <strong>Email:</strong><br>
+                                    <a href="mailto:{{ resume.user.email }}" class="text-decoration-none">{{ resume.user.email }}</a>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Телефон:</strong><br>
+                                    <a href="tel:{{ resume.user.phone }}" class="text-decoration-none">{{ resume.user.phone }}</a>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Город:</strong><br>
+                                    <span class="text-muted">{{ resume.city }}</span>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Дата создания:</strong><br>
+                                    <span class="text-muted">{{ resume.created_at|date:"d.m.Y" }}</span>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Статус верификации:</strong><br>
+                                    <span class="badge {% if resume.user.is_verified %}bg-success{% else %}bg-warning{% endif %}">
+                                        {% if resume.user.is_verified %}Верифицирован{% else %}Не верифицирован{% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Info -->
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Дополнительная информация</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if resume.linkedin_url %}
+                                <div class="mb-3">
+                                    <strong>LinkedIn:</strong><br>
+                                    <a href="{{ resume.linkedin_url }}" target="_blank" class="text-decoration-none">
+                                        <i class="fab fa-linkedin me-2"></i>Профиль
+                                    </a>
+                                </div>
+                                {% endif %}
+                                
+                                {% if resume.portfolio_url %}
+                                <div class="mb-3">
+                                    <strong>Портфолио:</strong><br>
+                                    <a href="{{ resume.portfolio_url }}" target="_blank" class="text-decoration-none">
+                                        <i class="fas fa-external-link-alt me-2"></i>Ссылка
+                                    </a>
+                                </div>
+                                {% endif %}
+                                
+                                {% if resume.resume_file %}
+                                <div class="mb-3">
+                                    <strong>Файл резюме:</strong><br>
+                                    <a href="{{ resume.resume_file.url }}" target="_blank" class="text-decoration-none">
+                                        <i class="fas fa-download me-2"></i>Скачать
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function contactCandidate() {
+    const email = '{{ resume.user.email }}';
+    const phone = '{{ resume.user.phone }}';
+    
+    if (confirm(`Связаться с кандидатом?\n\nEmail: ${email}\nТелефон: ${phone}`)) {
+        window.location.href = `mailto:${email}`;
+    }
+}
+</script>
+{% endblock %}

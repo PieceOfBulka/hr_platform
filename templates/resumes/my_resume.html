@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+
+{% block title %}Мое резюме - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-2">Мое резюме</h2>
+                        <p class="text-muted">Управляйте своим резюме и отслеживайте отклики</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'resumes:update' resume.pk %}" class="btn btn-danger">
+                            <i class="fas fa-edit me-2"></i>Редактировать
+                        </a>
+                        <a href="{% url 'catalog:vacancies' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-search me-2"></i>Найти работу
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Resume Card -->
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h3 class="fw-bold text-dark mb-2">{{ resume.title }}</h3>
+                                <p class="text-muted mb-3">{{ user.get_full_name }}</p>
+                                
+                                {% if resume.summary %}
+                                    <div class="mb-4">
+                                        <h5 class="fw-bold text-dark mb-2">О себе</h5>
+                                        <p class="text-muted">{{ resume.summary|linebreaks }}</p>
+                                    </div>
+                                {% endif %}
+                                
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-user-tie text-danger me-2"></i>
+                                            <span class="fw-medium">{{ resume.get_experience_level_display }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-graduation-cap text-danger me-2"></i>
+                                            <span class="fw-medium">{{ resume.get_education_level_display }}</span>
+                                        </div>
+                                    </div>
+                                    {% if resume.salary_expectation %}
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-ruble-sign text-danger me-2"></i>
+                                            <span class="fw-medium">{{ resume.salary_expectation|floatformat:0 }} ₽</span>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% if resume.is_remote %}
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-home text-danger me-2"></i>
+                                            <span class="fw-medium">Удаленная работа</span>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    {% if resume.is_relocation %}
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                                            <span class="fw-medium">Готов к переезду</span>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                {% if resume.skills %}
+                                <div class="mb-4">
+                                    <h5 class="fw-bold text-dark mb-2">Навыки</h5>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        {% for skill in resume.skills|split:"," %}
+                                            <span class="badge bg-light text-dark px-3 py-2">{{ skill|strip }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if resume.languages %}
+                                <div class="mb-4">
+                                    <h5 class="fw-bold text-dark mb-2">Языки</h5>
+                                    <p class="text-muted">{{ resume.languages }}</p>
+                                </div>
+                                {% endif %}
+                                
+                                {% if resume.university %}
+                                <div class="mb-4">
+                                    <h5 class="fw-bold text-dark mb-2">Образование</h5>
+                                    <p class="text-muted">
+                                        {{ resume.university }}
+                                        {% if resume.faculty %} • {{ resume.faculty }}{% endif %}
+                                        {% if resume.graduation_year %} • {{ resume.graduation_year }}{% endif %}
+                                    </p>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="text-center">
+                                    {% if resume.resume_file %}
+                                        <div class="mb-3">
+                                            <i class="fas fa-file-pdf fa-3x text-danger mb-2"></i>
+                                            <p class="text-muted small">Файл резюме прикреплен</p>
+                                            <a href="{{ resume.resume_file.url }}" target="_blank" class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-download me-1"></i>Скачать
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <div class="mb-3">
+                                        <span class="badge {% if resume.is_public %}bg-success{% else %}bg-secondary{% endif %} px-3 py-2">
+                                            {% if resume.is_public %}Публичное{% else %}Приватное{% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="text-muted small">
+                                        <i class="fas fa-clock me-1"></i>
+                                        Обновлено {{ resume.updated_at|date:"d.m.Y" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Work Experience -->
+                {% if resume.work_experiences.all %}
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-header bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold text-dark mb-0">Опыт работы</h5>
+                            <a href="{% url 'resumes:work_experience_create' %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-plus me-1"></i>Добавить
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% for work_exp in resume.work_experiences.all %}
+                            <div class="border-bottom pb-3 mb-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="fw-bold text-dark mb-1">{{ work_exp.position }}</h6>
+                                        <p class="text-danger fw-bold mb-1">{{ work_exp.company }}</p>
+                                        <p class="text-muted small mb-2">
+                                            {{ work_exp.start_date|date:"M Y" }} - 
+                                            {% if work_exp.is_current %}настоящее время{% else %}{{ work_exp.end_date|date:"M Y" }}{% endif %}
+                                        </p>
+                                        {% if work_exp.description %}
+                                            <p class="text-muted small">{{ work_exp.description|truncatewords:20 }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex gap-1">
+                                        <a href="{% url 'resumes:work_experience_update' work_exp.pk %}" class="btn btn-outline-secondary btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'resumes:work_experience_delete' work_exp.pk %}" class="btn btn-outline-danger btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
+                        <h5 class="fw-bold text-dark mb-2">Нет опыта работы</h5>
+                        <p class="text-muted mb-3">Добавьте информацию о своем опыте работы</p>
+                        <a href="{% url 'resumes:work_experience_create' %}" class="btn btn-danger">
+                            <i class="fas fa-plus me-2"></i>Добавить опыт работы
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Education -->
+                {% if resume.educations.all %}
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-header bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold text-dark mb-0">Образование</h5>
+                            <a href="{% url 'resumes:education_create' %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-plus me-1"></i>Добавить
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% for education in resume.educations.all %}
+                            <div class="border-bottom pb-3 mb-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="fw-bold text-dark mb-1">{{ education.degree }}</h6>
+                                        <p class="text-danger fw-bold mb-1">{{ education.institution }}</p>
+                                        <p class="text-muted small mb-2">
+                                            {{ education.start_date|date:"M Y" }} - 
+                                            {% if education.is_current %}настоящее время{% else %}{{ education.end_date|date:"M Y" }}{% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="d-flex gap-1">
+                                        <a href="{% url 'resumes:education_update' education.pk %}" class="btn btn-outline-secondary btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'resumes:education_delete' education.pk %}" class="btn btn-outline-danger btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-graduation-cap fa-3x text-muted mb-3"></i>
+                        <h5 class="fw-bold text-dark mb-2">Нет образования</h5>
+                        <p class="text-muted mb-3">Добавьте информацию о своем образовании</p>
+                        <a href="{% url 'resumes:education_create' %}" class="btn btn-danger">
+                            <i class="fas fa-plus me-2"></i>Добавить образование
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Applications -->
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-white">
+                        <h5 class="fw-bold text-dark mb-0">Мои отклики</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Здесь будут отображаться ваши отклики на вакансии</p>
+                        <a href="{% url 'catalog:vacancies' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-search me-2"></i>Найти вакансии
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

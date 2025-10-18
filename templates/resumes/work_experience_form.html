@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if work_experience %}Редактировать опыт работы{% else %}Добавить опыт работы{% endif %} - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'resumes:my_resume' %}" class="text-decoration-none">Мое резюме</a></li>
+                                <li class="breadcrumb-item active">{% if work_experience %}Редактировать опыт{% else %}Добавить опыт{% endif %}</li>
+                            </ol>
+                        </nav>
+                        <h2 class="fw-bold text-dark mb-2">{% if work_experience %}Редактировать опыт работы{% else %}Добавить опыт работы{% endif %}</h2>
+                        <p class="text-muted">Заполните информацию о вашем профессиональном опыте</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'resumes:my_resume' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Назад к резюме
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Form -->
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="{{ form.position.id_for_label }}" class="form-label">
+                                        <strong>Должность <span class="text-danger">*</span></strong>
+                                    </label>
+                                    {{ form.position }}
+                                    {% if form.position.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.position.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="{{ form.company.id_for_label }}" class="form-label">
+                                        <strong>Компания <span class="text-danger">*</span></strong>
+                                    </label>
+                                    {{ form.company }}
+                                    {% if form.company.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.company.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="{{ form.start_date.id_for_label }}" class="form-label">
+                                        <strong>Дата начала <span class="text-danger">*</span></strong>
+                                    </label>
+                                    {{ form.start_date }}
+                                    {% if form.start_date.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.start_date.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="{{ form.end_date.id_for_label }}" class="form-label">
+                                        <strong>Дата окончания</strong>
+                                    </label>
+                                    {{ form.end_date }}
+                                    {% if form.end_date.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.end_date.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    <div class="form-text">Оставьте пустым, если работаете в настоящее время</div>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="{{ form.description.id_for_label }}" class="form-label">
+                                        <strong>Описание обязанностей</strong>
+                                    </label>
+                                    {{ form.description }}
+                                    {% if form.description.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.description.errors %}{{ error }}{% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    <div class="form-text">Опишите ваши основные обязанности и достижения</div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <a href="{% url 'resumes:my_resume' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times me-2"></i>Отмена
+                                </a>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-save me-2"></i>{% if work_experience %}Сохранить{% else %}Добавить{% endif %}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize date pickers
+    const startDateInput = document.getElementById('{{ form.start_date.id_for_label }}');
+    const endDateInput = document.getElementById('{{ form.end_date.id_for_label }}');
+    
+    if (startDateInput) {
+        startDateInput.type = 'date';
+    }
+    
+    if (endDateInput) {
+        endDateInput.type = 'date';
+    }
+    
+    // Add form validation
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const startDate = new Date(startDateInput.value);
+            const endDate = endDateInput.value ? new Date(endDateInput.value) : null;
+            
+            if (endDate && endDate < startDate) {
+                e.preventDefault();
+                alert('Дата окончания не может быть раньше даты начала');
+                return false;
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

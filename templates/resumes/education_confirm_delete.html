@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Удалить образование - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <!-- Header -->
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold text-dark mb-2">Удалить образование</h2>
+                    <p class="text-muted">Вы уверены, что хотите удалить это образование?</p>
+                </div>
+                
+                <!-- Confirmation Card -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Внимание!</strong> Это действие нельзя отменить.
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h5 class="fw-bold text-dark mb-2">Информация об образовании:</h5>
+                            <div class="bg-light p-3 rounded">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <strong>Степень/Специальность:</strong><br>
+                                        <span class="text-muted">{{ education.degree }}</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <strong>Учебное заведение:</strong><br>
+                                        <span class="text-muted">{{ education.institution }}</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <strong>Период:</strong><br>
+                                        <span class="text-muted">
+                                            {{ education.start_date|date:"Y" }} - 
+                                            {% if education.end_date %}{{ education.end_date|date:"Y" }}{% else %}Настоящее время{% endif %}
+                                        </span>
+                                    </div>
+                                    {% if education.description %}
+                                    <div class="col-12">
+                                        <strong>Дополнительная информация:</strong><br>
+                                        <span class="text-muted">{{ education.description|truncatewords:20 }}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{% url 'resumes:my_resume' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Отмена
+                                </a>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash me-2"></i>Удалить
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

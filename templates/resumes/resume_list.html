@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}База резюме - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-2">База резюме</h2>
+                        <p class="text-muted">Найдите подходящих кандидатов для ваших вакансий</p>
+                    </div>
+                    <a href="{% url 'vacancies:my_vacancies' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-briefcase me-2"></i>Мои вакансии
+                    </a>
+                </div>
+                
+                <!-- Search and Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form method="get" class="row g-3">
+                            <div class="col-md-6">
+                                <label for="search" class="form-label fw-medium">Поиск</label>
+                                <input type="text" class="form-control" name="search" id="search" 
+                                       value="{{ request.GET.search }}" placeholder="Поиск по имени, должности, навыкам...">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="experience" class="form-label fw-medium">Опыт</label>
+                                <select class="form-select" name="experience" id="experience">
+                                    <option value="">Все уровни</option>
+                                    <option value="no_experience" {% if request.GET.experience == 'no_experience' %}selected{% endif %}>Без опыта</option>
+                                    <option value="junior" {% if request.GET.experience == 'junior' %}selected{% endif %}>Junior (1-3 года)</option>
+                                    <option value="middle" {% if request.GET.experience == 'middle' %}selected{% endif %}>Middle (3-5 лет)</option>
+                                    <option value="senior" {% if request.GET.experience == 'senior' %}selected{% endif %}>Senior (5+ лет)</option>
+                                    <option value="lead" {% if request.GET.experience == 'lead' %}selected{% endif %}>Lead/Team Lead</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="remote" class="form-label fw-medium">Удаленная работа</label>
+                                <select class="form-select" name="remote" id="remote">
+                                    <option value="">Все</option>
+                                    <option value="true" {% if request.GET.remote == 'true' %}selected{% endif %}>Готов к удаленной работе</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-search me-2"></i>Найти
+                                </button>
+                                <a href="{% url 'resumes:list' %}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times me-2"></i>Сбросить
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Resumes List -->
+                <div class="row g-4">
+                    {% for resume in resumes %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div class="flex-grow-1">
+                                            <h5 class="card-title fw-bold">{{ resume.user.get_full_name }}</h5>
+                                            <p class="text-danger fw-bold mb-1">{{ resume.title }}</p>
+                                        </div>
+                                        <span class="badge bg-success px-3 py-2">Активное</span>
+                                    </div>
+                                    
+                                    {% if resume.summary %}
+                                        <p class="card-text text-muted small mb-3">
+                                            {{ resume.summary|truncatewords:15 }}
+                                        </p>
+                                    {% endif %}
+                                    
+                                    <div class="row g-2 mb-3">
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-user-tie me-1"></i>{{ resume.get_experience_level_display }}
+                                            </small>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-graduation-cap me-1"></i>{{ resume.get_education_level_display }}
+                                            </small>
+                                        </div>
+                                        {% if resume.salary_expectation %}
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-ruble-sign me-1"></i>{{ resume.salary_expectation|floatformat:0 }}₽
+                                            </small>
+                                        </div>
+                                        {% endif %}
+                                        {% if resume.is_remote %}
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-home me-1"></i>Удаленно
+                                            </small>
+                                        </div>
+                                        {% endif %}
+                                        {% if resume.is_relocation %}
+                                        <div class="col-6">
+                                            <small class="text-muted">
+                                                <i class="fas fa-map-marker-alt me-1"></i>Переезд
+                                            </small>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    {% if resume.skills %}
+                                    <div class="mb-3">
+                                        <div class="d-flex flex-wrap gap-1">
+                                            {% for skill in resume.skills|slice:":100" %}
+                                                <span class="badge bg-light text-dark px-2 py-1 small">{{ skill }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="fas fa-clock me-1"></i>{{ resume.updated_at|date:"d.m.Y" }}
+                                        </small>
+                                        {% if resume.resume_file %}
+                                        <small class="text-success">
+                                            <i class="fas fa-file-pdf me-1"></i>Файл
+                                        </small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="card-footer bg-transparent border-0 p-3">
+                                    <div class="d-flex gap-2">
+                                        <a href="{% url 'resumes:detail' resume.pk %}" class="btn btn-outline-primary btn-sm flex-grow-1">
+                                            <i class="fas fa-eye me-1"></i>Просмотр
+                                        </a>
+                                        {% if resume.resume_file %}
+                                        <a href="{{ resume.resume_file.url }}" target="_blank" class="btn btn-outline-success btn-sm">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="col-12 text-center py-5">
+                            <div class="text-muted">
+                                <i class="fas fa-file-alt fa-3x mb-3"></i>
+                                <h4>Нет резюме</h4>
+                                <p>Попробуйте изменить параметры поиска</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                    <nav aria-label="Page navigation" class="mt-5">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                                </li>
+                            {% endif %}
+                            
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ num }}</span>
+                                    </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
