@@ -131,17 +131,24 @@ class ResumeDetailView(DetailView):
 
 
 @login_required
-def work_experience_create(request):
+def work_experience_create(request, pk=None):
     """Добавление опыта работы"""
     if not request.user.is_candidate:
         messages.error(request, 'Доступ запрещен.')
         return redirect('accounts:dashboard')
     
+    # Получаем резюме пользователя
+    try:
+        resume = Resume.objects.get(user=request.user)
+    except Resume.DoesNotExist:
+        messages.error(request, 'Сначала создайте резюме.')
+        return redirect('resumes:create')
+    
     if request.method == 'POST':
         form = WorkExperienceForm(request.POST)
         if form.is_valid():
             work_exp = form.save(commit=False)
-            work_exp.resume = request.user.resume
+            work_exp.resume = resume
             work_exp.save()
             messages.success(request, 'Опыт работы добавлен!')
             return redirect('resumes:my_resume')
@@ -190,17 +197,24 @@ def work_experience_delete(request, pk):
 
 
 @login_required
-def education_create(request):
+def education_create(request, pk=None):
     """Добавление образования"""
     if not request.user.is_candidate:
         messages.error(request, 'Доступ запрещен.')
         return redirect('accounts:dashboard')
     
+    # Получаем резюме пользователя
+    try:
+        resume = Resume.objects.get(user=request.user)
+    except Resume.DoesNotExist:
+        messages.error(request, 'Сначала создайте резюме.')
+        return redirect('resumes:create')
+    
     if request.method == 'POST':
         form = EducationForm(request.POST)
         if form.is_valid():
             education = form.save(commit=False)
-            education.resume = request.user.resume
+            education.resume = resume
             education.save()
             messages.success(request, 'Образование добавлено!')
             return redirect('resumes:my_resume')
