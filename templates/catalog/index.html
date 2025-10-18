@@ -4,129 +4,228 @@
 {% block title %}Главная - HR Платформа{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <div class="jumbotron bg-primary text-white p-5 rounded mb-4">
-            <h1 class="display-4">Добро пожаловать в HR Платформу</h1>
-            <p class="lead">ОЭЗ "Технополис Москва" - централизованная система управления карьерными сервисами</p>
-            <hr class="my-4">
-            <p>Найдите работу мечты или талантливых специалистов в технологической сфере</p>
-            <div class="d-flex gap-3">
-                <a class="btn btn-light btn-lg" href="{% url 'catalog:vacancies' %}" role="button">
-                    <i class="fas fa-search me-2"></i>Найти работу
-                </a>
-                <a class="btn btn-outline-light btn-lg" href="{% url 'catalog:internships' %}" role="button">
-                    <i class="fas fa-graduation-cap me-2"></i>Стажировки
-                </a>
+<!-- Hero Section -->
+<section class="hero-section-modern">
+    <div class="hero-background">
+        <div class="hero-grid"></div>
+    </div>
+    <div class="container">
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-8 mx-auto text-center text-white">
+                <h1 class="display-3 fw-bold mb-4">
+                    Карьера в технологическом
+                    <span class="hero-gradient-text">кластере Москвы</span>
+                </h1>
+                <p class="lead mb-5 text-blue-100">
+                    Платформа для поиска работы и стажировок в ОЭЗ «Технополис Москва»
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                    <a class="btn btn-light btn-lg px-5 py-3 rounded-pill shadow-lg" href="{% url 'catalog:vacancies' %}">
+                        <i class="fas fa-briefcase me-2"></i>
+                        Найти вакансию
+                    </a>
+                    <a class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill" href="{% url 'catalog:internships' %}">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Разместить стажировку
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="hero-wave">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="rgb(248 250 252)"/>
+        </svg>
+    </div>
+</section>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-header bg-success text-white">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-briefcase me-2"></i>Последние вакансии
-                </h5>
-            </div>
-            <div class="card-body">
-                {% if recent_vacancies %}
-                    {% for vacancy in recent_vacancies %}
-                        <div class="border-bottom pb-3 mb-3">
-                            <h6 class="card-title">
-                                <a href="{% url 'vacancies:detail' vacancy.pk %}" class="text-decoration-none">
-                                    {{ vacancy.title }}
-                                </a>
-                            </h6>
-                            <p class="card-text text-muted small">
-                                <i class="fas fa-building me-1"></i>{{ vacancy.company.company }}
-                                <span class="ms-3">
-                                    <i class="fas fa-clock me-1"></i>{{ vacancy.published_at|date:"d.m.Y" }}
-                                </span>
-                            </p>
-                        </div>
-                    {% endfor %}
-                    <div class="text-center">
-                        <a href="{% url 'catalog:vacancies' %}" class="btn btn-outline-success">
-                            Все вакансии <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
+<!-- Stats Section -->
+<section class="stats-section py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card">
+                    <div class="stats-icon bg-gradient-primary">
+                        <i class="fas fa-building"></i>
                     </div>
-                {% else %}
-                    <p class="text-muted">Нет доступных вакансий</p>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-6">
-        <div class="card h-100">
-            <div class="card-header bg-info text-white">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-graduation-cap me-2"></i>Последние стажировки
-                </h5>
-            </div>
-            <div class="card-body">
-                {% if recent_internships %}
-                    {% for internship in recent_internships %}
-                        <div class="border-bottom pb-3 mb-3">
-                            <h6 class="card-title">
-                                <a href="{% url 'internships:detail' internship.pk %}" class="text-decoration-none">
-                                    {{ internship.title }}
-                                </a>
-                            </h6>
-                            <p class="card-text text-muted small">
-                                <i class="fas fa-university me-1"></i>{{ internship.university.company }}
-                                <span class="ms-3">
-                                    <i class="fas fa-clock me-1"></i>{{ internship.published_at|date:"d.m.Y" }}
-                                </span>
-                            </p>
-                        </div>
-                    {% endfor %}
-                    <div class="text-center">
-                        <a href="{% url 'catalog:internships' %}" class="btn btn-outline-info">
-                            Все стажировки <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
+                    <div class="stats-content">
+                        <div class="stats-number">50+</div>
+                        <div class="stats-label">Компаний-резидентов</div>
                     </div>
-                {% else %}
-                    <p class="text-muted">Нет доступных стажировок</p>
-                {% endif %}
+                </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-5">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body text-center">
-                <h3 class="card-title">Преимущества платформы</h3>
-                <div class="row mt-4">
-                    <div class="col-md-4">
-                        <div class="text-center">
-                            <i class="fas fa-users fa-3x text-primary mb-3"></i>
-                            <h5>Централизованное управление</h5>
-                            <p class="text-muted">Единое пространство для всех резидентов ОЭЗ</p>
-                        </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card">
+                    <div class="stats-icon bg-gradient-info">
+                        <i class="fas fa-chart-line"></i>
                     </div>
-                    <div class="col-md-4">
-                        <div class="text-center">
-                            <i class="fas fa-cogs fa-3x text-success mb-3"></i>
-                            <h5>Автоматизация процессов</h5>
-                            <p class="text-muted">Координация между учебными заведениями и компаниями</p>
-                        </div>
+                    <div class="stats-content">
+                        <div class="stats-number">{{ recent_vacancies|length }}</div>
+                        <div class="stats-label">Активных вакансий</div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="text-center">
-                            <i class="fas fa-chart-bar fa-3x text-info mb-3"></i>
-                            <h5>Аналитика рынка труда</h5>
-                            <p class="text-muted">Сводная аналитика по технологическому кластеру</p>
-                        </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card">
+                    <div class="stats-icon bg-gradient-success">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stats-content">
+                        <div class="stats-number">{{ recent_internships|length }}</div>
+                        <div class="stats-label">Мест стажировки</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stats-card">
+                    <div class="stats-icon bg-gradient-warning">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stats-content">
+                        <div class="stats-number">1000+</div>
+                        <div class="stats-label">Успешных трудоустройств</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Catalog Section -->
+<section class="catalog-section py-5">
+    <div class="container">
+        <!-- Search Bar -->
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="form-control search-input" placeholder="Поиск по должности, компании, специальности...">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="catalog-tabs mb-5">
+            <div class="row">
+                <div class="col-lg-6 mx-auto">
+                    <div class="nav nav-pills nav-fill" id="catalog-tabs" role="tablist">
+                        <button class="nav-link active" id="vacancies-tab" data-bs-toggle="pill" data-bs-target="#vacancies" type="button" role="tab">
+                            <i class="fas fa-briefcase me-2"></i>
+                            Вакансии ({{ recent_vacancies|length }})
+                        </button>
+                        <button class="nav-link" id="internships-tab" data-bs-toggle="pill" data-bs-target="#internships" type="button" role="tab">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            Стажировки ({{ recent_internships|length }})
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="catalog-tabContent">
+            <!-- Vacancies Tab -->
+            <div class="tab-pane fade show active" id="vacancies" role="tabpanel">
+                {% if recent_vacancies %}
+                    <div class="row g-4">
+                        {% for vacancy in recent_vacancies %}
+                            <div class="col-lg-4 col-md-6">
+                                <div class="vacancy-card">
+                                    <div class="vacancy-header">
+                                        <div class="vacancy-icon">
+                                            <i class="fas fa-briefcase"></i>
+                                        </div>
+                                        <div class="vacancy-info">
+                                            <h5 class="vacancy-title">{{ vacancy.title }}</h5>
+                                            <div class="vacancy-company">
+                                                <i class="fas fa-building me-1"></i>
+                                                {{ vacancy.company.company }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="vacancy-badges">
+                                        <span class="badge bg-primary">Полная занятость</span>
+                                        <span class="badge bg-info">Средний уровень</span>
+                                    </div>
+                                    <p class="vacancy-description">{{ vacancy.description|truncatewords:20 }}</p>
+                                    <div class="vacancy-details">
+                                        <div class="vacancy-location">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            Москва
+                                        </div>
+                                        {% if vacancy.salary_min and vacancy.salary_max %}
+                                        <div class="vacancy-salary">
+                                            <i class="fas fa-ruble-sign"></i>
+                                            {{ vacancy.salary_min|floatformat:0 }} - {{ vacancy.salary_max|floatformat:0 }} ₽
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <button class="btn btn-primary w-100 vacancy-apply-btn">
+                                        Откликнуться
+                                    </button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">Вакансии не найдены</h4>
+                        <p class="text-muted">Попробуйте изменить параметры поиска</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Internships Tab -->
+            <div class="tab-pane fade" id="internships" role="tabpanel">
+                {% if recent_internships %}
+                    <div class="row g-4">
+                        {% for internship in recent_internships %}
+                            <div class="col-lg-4 col-md-6">
+                                <div class="internship-card">
+                                    <div class="internship-header">
+                                        <div class="internship-icon">
+                                            <i class="fas fa-graduation-cap"></i>
+                                        </div>
+                                        <div class="internship-info">
+                                            <h5 class="internship-title">{{ internship.specialization }}</h5>
+                                            <div class="internship-university">
+                                                <i class="fas fa-university me-1"></i>
+                                                {{ internship.university.university }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="internship-badges">
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-users me-1"></i>
+                                            {{ internship.students_count }} студентов
+                                        </span>
+                                    </div>
+                                    <p class="internship-description">{{ internship.description|truncatewords:20 }}</p>
+                                    <div class="internship-details">
+                                        <div class="internship-period">
+                                            <i class="fas fa-calendar"></i>
+                                            {{ internship.start_date|date:"d M" }} - {{ internship.end_date|date:"d M Y" }}
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-success w-100 internship-contact-btn">
+                                        Связаться
+                                    </button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-graduation-cap fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">Стажировки не найдены</h4>
+                        <p class="text-muted">Попробуйте изменить параметры поиска</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

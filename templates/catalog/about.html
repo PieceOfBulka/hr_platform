@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}О нас - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header -->
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold text-dark mb-3">О нас</h2>
+                    <p class="text-muted">HR Платформа для ОЭЗ "Технополис Москва"</p>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="row g-5">
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h3 class="fw-bold text-dark mb-3">Наша миссия</h3>
+                                <p class="text-muted mb-4">
+                                    Мы создаем единую экосистему для взаимодействия всех участников процесса трудоустройства 
+                                    в ОЭЗ "Технополис Москва". Наша платформа объединяет компании-резиденты, соискателей, 
+                                    учебные заведения и администрацию ОЭЗ для эффективного решения кадровых задач.
+                                </p>
+                                
+                                <h4 class="fw-bold text-dark mb-3">Ключевые преимущества</h4>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-start">
+                                            <div class="feature-icon me-3">
+                                                <i class="fas fa-users fa-2x text-danger"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="fw-bold text-dark mb-2">Централизованное управление</h5>
+                                                <p class="text-muted">Единая база вакансий и кандидатов для всего кластера</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-start">
+                                            <div class="feature-icon me-3">
+                                                <i class="fas fa-cogs fa-2x text-danger"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="fw-bold text-dark mb-2">Автоматизация процессов</h5>
+                                                <p class="text-muted">Автоматическая обработка заявок и уведомлений</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-start">
+                                            <div class="feature-icon me-3">
+                                                <i class="fas fa-graduation-cap fa-2x text-danger"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="fw-bold text-dark mb-2">Координация стажировок</h5>
+                                                <p class="text-muted">Инструменты для связи вузов и компаний</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-start">
+                                            <div class="feature-icon me-3">
+                                                <i class="fas fa-chart-bar fa-2x text-danger"></i>
+                                            </div>
+                                            <div>
+                                                <h5 class="fw-bold text-dark mb-2">Аналитика и отчеты</h5>
+                                                <p class="text-muted">Детальная статистика по трудоустройству</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="fw-bold text-dark mb-3">Как это работает</h3>
+                                <div class="row g-4">
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <div class="feature-number mb-3">1</div>
+                                            <h5 class="fw-bold text-dark mb-2">Регистрация</h5>
+                                            <p class="text-muted">Создайте аккаунт с соответствующей ролью</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <div class="feature-number mb-3">2</div>
+                                            <h5 class="fw-bold text-dark mb-2">Размещение</h5>
+                                            <p class="text-muted">Разместите вакансии или стажировки</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <div class="feature-number mb-3">3</div>
+                                            <h5 class="fw-bold text-dark mb-2">Взаимодействие</h5>
+                                            <p class="text-muted">Находите подходящих кандидатов и откликайтесь</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Статистика платформы</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3 text-center">
+                                    <div class="col-6">
+                                        <div class="border rounded p-2">
+                                            <div class="fw-bold text-danger fs-4">{{ total_users }}</div>
+                                            <div class="text-muted small">Пользователей</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="border rounded p-2">
+                                            <div class="fw-bold text-danger fs-4">{{ total_vacancies }}</div>
+                                            <div class="text-muted small">Вакансий</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="border rounded p-2">
+                                            <div class="fw-bold text-danger fs-4">{{ total_internships }}</div>
+                                            <div class="text-muted small">Стажировок</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="border rounded p-2">
+                                            <div class="fw-bold text-danger fs-4">{{ total_resumes }}</div>
+                                            <div class="text-muted small">Резюме</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Контакты</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <strong>Адрес:</strong><br>
+                                    <span class="text-muted">ОЭЗ "Технополис Москва"<br>Москва, Россия</span>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Email:</strong><br>
+                                    <a href="mailto:info@hr-platform.ru" class="text-decoration-none">info@hr-platform.ru</a>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Телефон:</strong><br>
+                                    <a href="tel:+7(495)123-45-67" class="text-decoration-none">+7 (495) 123-45-67</a>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Время работы:</strong><br>
+                                    <span class="text-muted">Пн-Пт: 9:00 - 18:00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}Стажировки - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-2">Стажировки</h2>
+                        <p class="text-muted">Найдите подходящие стажировки от учебных заведений</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'catalog:index' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>На главную
+                        </a>
+                        {% if user.is_authenticated and user.role == 'UNIVERSITY' %}
+                        <a href="{% url 'internships:create' %}" class="btn btn-danger">
+                            <i class="fas fa-plus me-2"></i>Создать стажировку
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form method="get" class="row g-3">
+                            <div class="col-md-4">
+                                <label for="search" class="form-label">Поиск</label>
+                                <input type="text" class="form-control" id="search" name="search" 
+                                       value="{{ request.GET.search }}" placeholder="Специальность, вуз...">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="university" class="form-label">Учебное заведение</label>
+                                <select class="form-select" id="university" name="university">
+                                    <option value="">Все</option>
+                                    {% for uni in universities %}
+                                    <option value="{{ uni.id }}" {% if request.GET.university == uni.id|stringformat:"s" %}selected{% endif %}>{{ uni.company }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="period" class="form-label">Период</label>
+                                <select class="form-select" id="period" name="period">
+                                    <option value="">Все</option>
+                                    <option value="current" {% if request.GET.period == 'current' %}selected{% endif %}>Текущие</option>
+                                    <option value="upcoming" {% if request.GET.period == 'upcoming' %}selected{% endif %}>Предстоящие</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">&nbsp;</label>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-search me-2"></i>Найти
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Results -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-dark mb-0">Найдено стажировок: {{ internships|length }}</h5>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="sortBy('created_at')">
+                                    <i class="fas fa-sort me-1"></i>По дате
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="sortBy('start_date')">
+                                    <i class="fas fa-sort me-1"></i>По периоду
+                                </button>
+                            </div>
+                        </div>
+                        
+                        {% if internships %}
+                        <div class="row g-4">
+                            {% for internship in internships %}
+                            <div class="col-lg-6">
+                                <div class="card h-100 job-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div class="flex-grow-1">
+                                                <h5 class="fw-bold text-dark mb-1">{{ internship.specialization }}</h5>
+                                                <p class="text-danger fw-bold mb-1">{{ internship.university.company }}</p>
+                                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                                    <span class="badge bg-light text-dark">{{ internship.students_count }} студентов</span>
+                                                    <span class="badge bg-light text-dark">
+                                                        {{ internship.start_date|date:"d.m.Y" }} - {{ internship.end_date|date:"d.m.Y" }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                <div class="text-muted small">{{ internship.created_at|date:"d.m.Y" }}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-muted mb-3">{{ internship.description|truncatewords:20 }}</p>
+                                        
+                                        <div class="row g-2 mb-3">
+                                            <div class="col-6">
+                                                <strong>Контакт:</strong><br>
+                                                <span class="text-muted">{{ internship.contact_person }}</span>
+                                            </div>
+                                            <div class="col-6">
+                                                <strong>Email:</strong><br>
+                                                <a href="mailto:{{ internship.contact_email }}" class="text-decoration-none">{{ internship.contact_email }}</a>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex gap-2">
+                                                <a href="{% url 'internships:detail' internship.pk %}" class="btn btn-outline-danger btn-sm">
+                                                    <i class="fas fa-eye me-1"></i>Подробнее
+                                                </a>
+                                                {% if user.is_authenticated and user.role == 'CANDIDATE' %}
+                                                <a href="{% url 'internships:apply' internship.pk %}" class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-paper-plane me-1"></i>Откликнуться
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                            <div class="text-muted small">
+                                                <i class="fas fa-users me-1"></i>{{ internship.applications.count }} откликов
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Pagination -->
+                        {% if is_paginated %}
+                        <nav aria-label="Page navigation" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}">Предыдущая</a>
+                                </li>
+                                {% endif %}
+                                
+                                {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                
+                                {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.university %}&university={{ request.GET.university }}{% endif %}{% if request.GET.period %}&period={{ request.GET.period }}{% endif %}">Следующая</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                        
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <h5 class="fw-bold text-dark mb-2">Стажировки не найдены</h5>
+                            <p class="text-muted">Попробуйте изменить параметры поиска</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function sortBy(field) {
+    const url = new URL(window.location);
+    url.searchParams.set('sort', field);
+    window.location = url.toString();
+}
+</script>
+{% endblock %}

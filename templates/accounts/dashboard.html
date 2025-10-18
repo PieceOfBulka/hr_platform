@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+
+{% block title %}Личный кабинет - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-2">Личный кабинет</h2>
+                        <p class="text-muted">Добро пожаловать, {{ user.get_full_name }}!</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'accounts:profile_update' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-user-edit me-2"></i>Редактировать профиль
+                        </a>
+                        <a href="{% url 'accounts:logout' %}" class="btn btn-outline-danger">
+                            <i class="fas fa-sign-out-alt me-2"></i>Выйти
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Role-specific content -->
+                {% if user.role == 'ADMIN' %}
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-users fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Пользователи</h5>
+                                <p class="text-muted mb-3">Управление пользователями системы</p>
+                                <a href="{% url 'moderation:users' %}" class="btn btn-danger btn-sm">Управлять</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-briefcase fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Вакансии</h5>
+                                <p class="text-muted mb-3">Модерация вакансий</p>
+                                <a href="{% url 'moderation:vacancy_list' %}" class="btn btn-danger btn-sm">Модерировать</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-graduation-cap fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Стажировки</h5>
+                                <p class="text-muted mb-3">Модерация стажировок</p>
+                                <a href="{% url 'moderation:internship_list' %}" class="btn btn-danger btn-sm">Модерировать</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-chart-bar fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Статистика</h5>
+                                <p class="text-muted mb-3">Аналитика и отчеты</p>
+                                <a href="{% url 'moderation:statistics' %}" class="btn btn-danger btn-sm">Просмотреть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% elif user.role == 'HR' %}
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-plus fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Создать вакансию</h5>
+                                <p class="text-muted mb-3">Разместить новую вакансию</p>
+                                <a href="{% url 'vacancies:create' %}" class="btn btn-danger btn-sm">Создать</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-briefcase fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Мои вакансии</h5>
+                                <p class="text-muted mb-3">Управление вакансиями</p>
+                                <a href="{% url 'vacancies:my_vacancies' %}" class="btn btn-danger btn-sm">Управлять</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-file-alt fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Резюме</h5>
+                                <p class="text-muted mb-3">Поиск кандидатов</p>
+                                <a href="{% url 'resumes:list' %}" class="btn btn-danger btn-sm">Найти</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% elif user.role == 'UNIVERSITY' %}
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-plus fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Создать стажировку</h5>
+                                <p class="text-muted mb-3">Подать заявку на стажировку</p>
+                                <a href="{% url 'internships:create' %}" class="btn btn-danger btn-sm">Создать</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-graduation-cap fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Мои стажировки</h5>
+                                <p class="text-muted mb-3">Управление стажировками</p>
+                                <a href="{% url 'internships:my_internships' %}" class="btn btn-danger btn-sm">Управлять</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-users fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Отклики</h5>
+                                <p class="text-muted mb-3">Просмотр откликов</p>
+                                <a href="{% url 'internships:my_internships' %}" class="btn btn-danger btn-sm">Просмотреть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% else %}
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-search fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Поиск работы</h5>
+                                <p class="text-muted mb-3">Найти подходящие вакансии</p>
+                                <a href="{% url 'catalog:vacancies' %}" class="btn btn-danger btn-sm">Искать</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-file-alt fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Мое резюме</h5>
+                                <p class="text-muted mb-3">Создать или редактировать резюме</p>
+                                <a href="{% url 'resumes:my_resume' %}" class="btn btn-danger btn-sm">Редактировать</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-graduation-cap fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Стажировки</h5>
+                                <p class="text-muted mb-3">Найти стажировки</p>
+                                <a href="{% url 'catalog:internships' %}" class="btn btn-danger btn-sm">Найти</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Recent Activity -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Последняя активность</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center py-4">
+                                    <i class="fas fa-clock fa-2x text-muted mb-3"></i>
+                                    <p class="text-muted">Активность будет отображаться здесь</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

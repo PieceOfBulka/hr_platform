@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% block title %}Вакансии - HR Платформа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-2">Вакансии</h2>
+                        <p class="text-muted">Найдите подходящую работу в компаниях ОЭЗ "Технополис Москва"</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'catalog:index' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>На главную
+                        </a>
+                        {% if user.is_authenticated and user.role == 'HR' %}
+                        <a href="{% url 'vacancies:create' %}" class="btn btn-danger">
+                            <i class="fas fa-plus me-2"></i>Создать вакансию
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form method="get" class="row g-3">
+                            <div class="col-md-4">
+                                <label for="search" class="form-label">Поиск</label>
+                                <input type="text" class="form-control" id="search" name="search" 
+                                       value="{{ request.GET.search }}" placeholder="Должность, компания...">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="experience" class="form-label">Опыт</label>
+                                <select class="form-select" id="experience" name="experience">
+                                    <option value="">Все</option>
+                                    <option value="no_experience" {% if request.GET.experience == 'no_experience' %}selected{% endif %}>Без опыта</option>
+                                    <option value="junior" {% if request.GET.experience == 'junior' %}selected{% endif %}>Junior</option>
+                                    <option value="middle" {% if request.GET.experience == 'middle' %}selected{% endif %}>Middle</option>
+                                    <option value="senior" {% if request.GET.experience == 'senior' %}selected{% endif %}>Senior</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="remote" class="form-label">Тип работы</label>
+                                <select class="form-select" id="remote" name="remote">
+                                    <option value="">Все</option>
+                                    <option value="true" {% if request.GET.remote == 'true' %}selected{% endif %}>Удаленная</option>
+                                    <option value="false" {% if request.GET.remote == 'false' %}selected{% endif %}>Офисная</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">&nbsp;</label>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-search me-2"></i>Найти
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Results -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold text-dark mb-0">Найдено вакансий: {{ vacancies|length }}</h5>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="sortBy('created_at')">
+                                    <i class="fas fa-sort me-1"></i>По дате
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="sortBy('salary')">
+                                    <i class="fas fa-sort me-1"></i>По зарплате
+                                </button>
+                            </div>
+                        </div>
+                        
+                        {% if vacancies %}
+                        <div class="row g-4">
+                            {% for vacancy in vacancies %}
+                            <div class="col-lg-6">
+                                <div class="card h-100 job-card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div class="flex-grow-1">
+                                                <h5 class="fw-bold text-dark mb-1">{{ vacancy.title }}</h5>
+                                                <p class="text-danger fw-bold mb-1">{{ vacancy.company.company }}</p>
+                                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                                    <span class="badge bg-light text-dark">{{ vacancy.get_experience_level_display }}</span>
+                                                    {% if vacancy.is_remote %}
+                                                    <span class="badge bg-light text-dark">Удаленная</span>
+                                                    {% else %}
+                                                    <span class="badge bg-light text-dark">Офисная</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                {% if vacancy.salary_min or vacancy.salary_max %}
+                                                <div class="fw-bold text-danger">
+                                                    {% if vacancy.salary_min and vacancy.salary_max %}
+                                                        {{ vacancy.salary_min|floatformat:0 }} - {{ vacancy.salary_max|floatformat:0 }} ₽
+                                                    {% elif vacancy.salary_min %}
+                                                        от {{ vacancy.salary_min|floatformat:0 }} ₽
+                                                    {% elif vacancy.salary_max %}
+                                                        до {{ vacancy.salary_max|floatformat:0 }} ₽
+                                                    {% endif %}
+                                                </div>
+                                                {% endif %}
+                                                <div class="text-muted small">{{ vacancy.created_at|date:"d.m.Y" }}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-muted mb-3">{{ vacancy.description|truncatewords:20 }}</p>
+                                        
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex gap-2">
+                                                <a href="{% url 'vacancies:detail' vacancy.pk %}" class="btn btn-outline-danger btn-sm">
+                                                    <i class="fas fa-eye me-1"></i>Подробнее
+                                                </a>
+                                                {% if user.is_authenticated and user.role == 'CANDIDATE' %}
+                                                <a href="{% url 'vacancies:apply' vacancy.pk %}" class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-paper-plane me-1"></i>Откликнуться
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                            <div class="text-muted small">
+                                                <i class="fas fa-users me-1"></i>{{ vacancy.applications.count }} откликов
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Pagination -->
+                        {% if is_paginated %}
+                        <nav aria-label="Page navigation" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.experience %}&experience={{ request.GET.experience }}{% endif %}{% if request.GET.remote %}&remote={{ request.GET.remote }}{% endif %}">Предыдущая</a>
+                                </li>
+                                {% endif %}
+                                
+                                {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.experience %}&experience={{ request.GET.experience }}{% endif %}{% if request.GET.remote %}&remote={{ request.GET.remote }}{% endif %}">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                
+                                {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.experience %}&experience={{ request.GET.experience }}{% endif %}{% if request.GET.remote %}&remote={{ request.GET.remote }}{% endif %}">Следующая</a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
+                        
+                        {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <h5 class="fw-bold text-dark mb-2">Вакансии не найдены</h5>
+                            <p class="text-muted">Попробуйте изменить параметры поиска</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function sortBy(field) {
+    const url = new URL(window.location);
+    url.searchParams.set('sort', field);
+    window.location = url.toString();
+}
+</script>
+{% endblock %}

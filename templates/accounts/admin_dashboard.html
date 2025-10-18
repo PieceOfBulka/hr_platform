@@ -3,131 +3,200 @@
 {% block title %}Панель администратора - HR Платформа{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <h2 class="mb-4">
-            <i class="fas fa-tachometer-alt me-2"></i>Панель администратора
-        </h2>
-    </div>
-</div>
-
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card bg-primary text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h4 class="card-title">{{ pending_vacancies }}</h4>
-                        <p class="card-text">Вакансии на модерации</p>
+                        <h2 class="fw-bold text-dark mb-2">Панель администратора</h2>
+                        <p class="text-muted">Управление системой и модерация контента</p>
                     </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-briefcase fa-2x"></i>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'moderation:statistics' %}" class="btn btn-outline-danger">
+                            <i class="fas fa-chart-bar me-2"></i>Статистика
+                        </a>
+                        <a href="{% url 'accounts:logout' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-sign-out-alt me-2"></i>Выйти
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Statistics Cards -->
+                <div class="row g-4 mb-5">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-users fa-2x text-danger"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark mb-2">{{ total_users }}</h3>
+                                <p class="text-muted mb-0">Пользователей</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-briefcase fa-2x text-danger"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark mb-2">{{ total_vacancies }}</h3>
+                                <p class="text-muted mb-0">Вакансий</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-graduation-cap fa-2x text-danger"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark mb-2">{{ total_internships }}</h3>
+                                <p class="text-muted mb-0">Стажировок</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-file-alt fa-2x text-danger"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark mb-2">{{ total_resumes }}</h3>
+                                <p class="text-muted mb-0">Резюме</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="row g-4 mb-5">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-users fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Пользователи</h5>
+                                <p class="text-muted mb-3">Управление пользователями системы</p>
+                                <a href="{% url 'moderation:users' %}" class="btn btn-danger btn-sm">Управлять</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-briefcase fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Модерация вакансий</h5>
+                                <p class="text-muted mb-3">Проверка и одобрение вакансий</p>
+                                <a href="{% url 'moderation:vacancy_list' %}" class="btn btn-danger btn-sm">Модерировать</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-graduation-cap fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Модерация стажировок</h5>
+                                <p class="text-muted mb-3">Проверка заявок на стажировки</p>
+                                <a href="{% url 'moderation:internship_list' %}" class="btn btn-danger btn-sm">Модерировать</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-chart-bar fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Статистика</h5>
+                                <p class="text-muted mb-3">Аналитика и отчеты</p>
+                                <a href="{% url 'moderation:statistics' %}" class="btn btn-danger btn-sm">Просмотреть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pending Moderation -->
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Вакансии на модерации</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if pending_vacancies %}
+                                <div class="list-group list-group-flush">
+                                    {% for vacancy in pending_vacancies %}
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-1">{{ vacancy.title }}</h6>
+                                            <p class="text-muted mb-0">{{ vacancy.company.company }}</p>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <a href="{% url 'moderation:vacancy_moderate' vacancy.pk %}" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <div class="text-center py-3">
+                                    <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                                    <p class="text-muted mb-0">Нет вакансий на модерации</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Стажировки на модерации</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if pending_internships %}
+                                <div class="list-group list-group-flush">
+                                    {% for internship in pending_internships %}
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-1">{{ internship.specialization }}</h6>
+                                            <p class="text-muted mb-0">{{ internship.university.company }}</p>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <a href="{% url 'moderation:internship_moderate' internship.pk %}" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <div class="text-center py-3">
+                                    <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                                    <p class="text-muted mb-0">Нет стажировок на модерации</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-3">
-        <div class="card bg-info text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title">{{ pending_internships }}</h4>
-                        <p class="card-text">Стажировки на модерации</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-graduation-cap fa-2x"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-3">
-        <div class="card bg-success text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title">{{ total_users }}</h4>
-                        <p class="card-text">Всего пользователей</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-users fa-2x"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-3">
-        <div class="card bg-warning text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title">{{ new_users_today }}</h4>
-                        <p class="card-text">Новых сегодня</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-user-plus fa-2x"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-cogs me-2"></i>Модерация
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="list-group list-group-flush">
-                    <a href="{% url 'moderation:vacancies' %}" class="list-group-item list-group-item-action">
-                        <i class="fas fa-briefcase me-2"></i>Модерация вакансий
-                        {% if pending_vacancies > 0 %}
-                            <span class="badge bg-primary rounded-pill ms-2">{{ pending_vacancies }}</span>
-                        {% endif %}
-                    </a>
-                    <a href="{% url 'moderation:internships' %}" class="list-group-item list-group-item-action">
-                        <i class="fas fa-graduation-cap me-2"></i>Модерация стажировок
-                        {% if pending_internships > 0 %}
-                            <span class="badge bg-info rounded-pill ms-2">{{ pending_internships }}</span>
-                        {% endif %}
-                    </a>
-                    <a href="{% url 'moderation:users' %}" class="list-group-item list-group-item-action">
-                        <i class="fas fa-users me-2"></i>Управление пользователями
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-chart-bar me-2"></i>Аналитика
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="list-group list-group-flush">
-                    <a href="{% url 'moderation:statistics' %}" class="list-group-item list-group-item-action">
-                        <i class="fas fa-chart-line me-2"></i>Общая статистика
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <i class="fas fa-download me-2"></i>Выгрузка данных
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action">
-                        <i class="fas fa-envelope me-2"></i>Рассылки
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 {% endblock %}

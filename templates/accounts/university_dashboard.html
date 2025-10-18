@@ -1,124 +1,195 @@
 {% extends 'base.html' %}
 
-{% block title %}Личный кабинет представителя вуза - HR Платформа{% endblock %}
+{% block title %}Панель университета - HR Платформа{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <h2 class="mb-4">
-            <i class="fas fa-graduation-cap me-2"></i>Личный кабинет представителя вуза
-        </h2>
-        <p class="text-muted">Добро пожаловать, {{ user.get_full_name }}! Управляйте стажировками и найдите партнеров для студентов.</p>
-    </div>
-</div>
-
-<div class="row mb-4">
-    <div class="col-md-4">
-        <div class="card bg-info text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h4 class="card-title">{{ user.internships.count }}</h4>
-                        <p class="card-text">Мои стажировки</p>
+                        <h2 class="fw-bold text-dark mb-2">Панель университета</h2>
+                        <p class="text-muted">Управление стажировками и откликами студентов</p>
                     </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-graduation-cap fa-2x"></i>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'internships:create' %}" class="btn btn-danger">
+                            <i class="fas fa-plus me-2"></i>Создать стажировку
+                        </a>
+                        <a href="{% url 'accounts:logout' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-sign-out-alt me-2"></i>Выйти
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Statistics Cards -->
+                <div class="row g-4 mb-5">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-graduation-cap fa-2x text-danger"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark mb-2">{{ my_internships_count }}</h3>
+                                <p class="text-muted mb-0">Мои стажировки</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-paper-plane fa-2x text-danger"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark mb-2">{{ total_applications }}</h3>
+                                <p class="text-muted mb-0">Откликов</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-users fa-2x text-danger"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark mb-2">{{ total_students }}</h3>
+                                <p class="text-muted mb-0">Студентов</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-check-circle fa-2x text-danger"></i>
+                                </div>
+                                <h3 class="fw-bold text-dark mb-2">{{ approved_internships }}</h3>
+                                <p class="text-muted mb-0">Одобренных</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="row g-4 mb-5">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-plus fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Создать стажировку</h5>
+                                <p class="text-muted mb-3">Подать заявку на стажировку</p>
+                                <a href="{% url 'internships:create' %}" class="btn btn-danger btn-sm">Создать</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-graduation-cap fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Мои стажировки</h5>
+                                <p class="text-muted mb-3">Управление стажировками</p>
+                                <a href="{% url 'internships:my_internships' %}" class="btn btn-danger btn-sm">Управлять</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-users fa-2x text-danger"></i>
+                                </div>
+                                <h5 class="fw-bold text-dark mb-2">Отклики студентов</h5>
+                                <p class="text-muted mb-3">Просмотр откликов</p>
+                                <a href="{% url 'internships:my_internships' %}" class="btn btn-danger btn-sm">Просмотреть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Последние стажировки</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if recent_internships %}
+                                <div class="list-group list-group-flush">
+                                    {% for internship in recent_internships %}
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-1">{{ internship.specialization }}</h6>
+                                            <p class="text-muted mb-0">{{ internship.created_at|date:"d.m.Y" }}</p>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <span class="badge {% if internship.status == 'approved' %}bg-success{% elif internship.status == 'pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {% if internship.status == 'approved' %}Одобрено{% elif internship.status == 'pending' %}На модерации{% else %}Отклонено{% endif %}
+                                            </span>
+                                            <a href="{% url 'internships:detail' internship.pk %}" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <div class="text-center py-3">
+                                    <i class="fas fa-graduation-cap fa-2x text-muted mb-2"></i>
+                                    <p class="text-muted mb-0">У вас пока нет стажировок</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header bg-white">
+                                <h5 class="fw-bold text-dark mb-0">Новые отклики</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if recent_applications %}
+                                <div class="list-group list-group-flush">
+                                    {% for application in recent_applications %}
+                                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-1">{{ application.internship.specialization }}</h6>
+                                            <p class="text-muted mb-0">{{ application.candidate.get_full_name }}</p>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <span class="badge {% if application.status == 'new' %}bg-primary{% elif application.status == 'reviewed' %}bg-warning{% else %}bg-success{% endif %}">
+                                                {% if application.status == 'new' %}Новый{% elif application.status == 'reviewed' %}Просмотрен{% else %}Одобрен{% endif %}
+                                            </span>
+                                            <a href="{% url 'internships:applications' application.internship.pk %}" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <div class="text-center py-3">
+                                    <i class="fas fa-paper-plane fa-2x text-muted mb-2"></i>
+                                    <p class="text-muted mb-0">Нет новых откликов</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-4">
-        <div class="card bg-success text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title">{{ user.internships.filter.status='published'|length }}</h4>
-                        <p class="card-text">Опубликованные</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-eye fa-2x"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-4">
-        <div class="card bg-warning text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <h4 class="card-title">{{ user.internships.filter.status='pending'|length }}</h4>
-                        <p class="card-text">На модерации</p>
-                    </div>
-                    <div class="align-self-center">
-                        <i class="fas fa-clock fa-2x"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-graduation-cap me-2"></i>Управление стажировками
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="d-grid gap-2">
-                    <a href="{% url 'internships:create' %}" class="btn btn-info">
-                        <i class="fas fa-plus me-2"></i>Создать стажировку
-                    </a>
-                    <a href="{% url 'internships:my_internships' %}" class="btn btn-outline-info">
-                        <i class="fas fa-list me-2"></i>Мои стажировки
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-search me-2"></i>Поиск партнеров
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="d-grid gap-2">
-                    <a href="{% url 'catalog:vacancies' %}" class="btn btn-success">
-                        <i class="fas fa-briefcase me-2"></i>Вакансии компаний
-                    </a>
-                    <a href="{% url 'catalog:internships' %}" class="btn btn-outline-success">
-                        <i class="fas fa-globe me-2"></i>Все стажировки
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-chart-line me-2"></i>Последние заявки
-                </h5>
-            </div>
-            <div class="card-body">
-                <p class="text-muted">Здесь будут отображаться последние заявки на ваши стажировки</p>
-                <a href="{% url 'internships:my_internships' %}" class="btn btn-outline-info">
-                    <i class="fas fa-arrow-right me-2"></i>Перейти к стажировкам
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 {% endblock %}
