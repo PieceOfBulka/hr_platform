@@ -12,13 +12,13 @@
       "email": "admin@technopolis.ru",
       "is_staff": true,
       "is_active": true,
-      "date_joined": "2024-01-01T00:00:00Z",
+      "date_joined": "2025-01-01T00:00:00Z",
       "role": "ADMIN",
       "phone": "+7 (495) 123-45-67",
       "company": "ОЭЗ Технополис Москва",
       "position": "Администратор",
       "is_verified": true,
-      "created_at": "2024-01-01T00:00:00Z"
+      "created_at": "2025-01-01T00:00:00Z"
     }
   },
   {
@@ -34,13 +34,13 @@
       "email": "hr@yandex.ru",
       "is_staff": false,
       "is_active": true,
-      "date_joined": "2024-01-15T00:00:00Z",
+      "date_joined": "2025-01-15T00:00:00Z",
       "role": "HR",
       "phone": "+7 (495) 234-56-78",
       "company": "Яндекс",
       "position": "HR-менеджер",
       "is_verified": true,
-      "created_at": "2024-01-15T00:00:00Z"
+      "created_at": "2025-01-15T00:00:00Z"
     }
   },
   {
@@ -56,13 +56,13 @@
       "email": "university@miet.ru",
       "is_staff": false,
       "is_active": true,
-      "date_joined": "2024-01-20T00:00:00Z",
+      "date_joined": "2025-01-20T00:00:00Z",
       "role": "UNIVERSITY",
       "phone": "+7 (495) 345-67-89",
       "company": "МИЭТ",
       "position": "Начальник отдела практик",
       "is_verified": true,
-      "created_at": "2024-01-20T00:00:00Z"
+      "created_at": "2025-01-20T00:00:00Z"
     }
   },
   {
@@ -78,13 +78,13 @@
       "email": "candidate@mail.ru",
       "is_staff": false,
       "is_active": true,
-      "date_joined": "2024-02-01T00:00:00Z",
+      "date_joined": "2025-02-01T00:00:00Z",
       "role": "CANDIDATE",
       "phone": "+7 (495) 456-78-90",
       "company": "",
       "position": "",
       "is_verified": false,
-      "created_at": "2024-02-01T00:00:00Z"
+      "created_at": "2025-02-01T00:00:00Z"
     }
   },
   {
@@ -102,9 +102,9 @@
       "contact_email": "hr@yandex.ru",
       "contact_phone": "+7 (495) 234-56-78",
       "status": "published",
-      "created_at": "2024-02-01T00:00:00Z",
-      "updated_at": "2024-02-01T00:00:00Z",
-      "published_at": "2024-02-01T00:00:00Z",
+      "created_at": "2025-02-01T00:00:00Z",
+      "updated_at": "2025-02-01T00:00:00Z",
+      "published_at": "2025-02-01T00:00:00Z",
       "company": 2
     }
   },
@@ -123,9 +123,9 @@
       "contact_email": "hr@yandex.ru",
       "contact_phone": "+7 (495) 234-56-78",
       "status": "published",
-      "created_at": "2024-02-02T00:00:00Z",
-      "updated_at": "2024-02-02T00:00:00Z",
-      "published_at": "2024-02-02T00:00:00Z",
+      "created_at": "2025-02-02T00:00:00Z",
+      "updated_at": "2025-02-02T00:00:00Z",
+      "published_at": "2025-02-02T00:00:00Z",
       "company": 2
     }
   },
@@ -144,9 +144,9 @@
       "contact_email": "hr@yandex.ru",
       "contact_phone": "+7 (495) 234-56-78",
       "status": "published",
-      "created_at": "2024-02-03T00:00:00Z",
-      "updated_at": "2024-02-03T00:00:00Z",
-      "published_at": "2024-02-03T00:00:00Z",
+      "created_at": "2025-02-03T00:00:00Z",
+      "updated_at": "2025-02-03T00:00:00Z",
+      "published_at": "2025-02-03T00:00:00Z",
       "company": 2
     }
   },
@@ -161,14 +161,14 @@
       "specialization": "Программирование на Python",
       "students_count": 5,
       "duration": "3",
-      "start_date": "2024-03-01",
-      "end_date": "2024-06-30",
+      "start_date": "2025-03-01",
+      "end_date": "2025-06-30",
       "contact_email": "university@miet.ru",
       "contact_phone": "+7 (495) 345-67-89",
       "status": "published",
-      "created_at": "2024-02-01T00:00:00Z",
-      "updated_at": "2024-02-01T00:00:00Z",
-      "published_at": "2024-02-01T00:00:00Z",
+      "created_at": "2025-02-01T00:00:00Z",
+      "updated_at": "2025-02-01T00:00:00Z",
+      "published_at": "2025-02-01T00:00:00Z",
       "university": 3
     }
   },
@@ -183,14 +183,14 @@
       "specialization": "Веб-разработка (Frontend)",
       "students_count": 8,
       "duration": "3",
-      "start_date": "2024-03-15",
-      "end_date": "2024-07-15",
+      "start_date": "2025-03-15",
+      "end_date": "2025-07-15",
       "contact_email": "university@miet.ru",
       "contact_phone": "+7 (495) 345-67-89",
       "status": "published",
-      "created_at": "2024-02-02T00:00:00Z",
-      "updated_at": "2024-02-02T00:00:00Z",
-      "published_at": "2024-02-02T00:00:00Z",
+      "created_at": "2025-02-02T00:00:00Z",
+      "updated_at": "2025-02-02T00:00:00Z",
+      "published_at": "2025-02-02T00:00:00Z",
       "university": 3
     }
   },
@@ -212,8 +212,8 @@
       "is_relocation": false,
       "resume_file": null,
       "is_public": true,
-      "created_at": "2024-02-01T00:00:00Z",
-      "updated_at": "2024-02-01T00:00:00Z",
+      "created_at": "2025-02-01T00:00:00Z",
+      "updated_at": "2025-02-01T00:00:00Z",
       "user": 4
     }
   }
