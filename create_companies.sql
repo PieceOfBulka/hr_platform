@@ -1,15 +1,16 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
-CREATE TABLE IF NOT EXISTS companies (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(255) NOT NULL UNIQUE,
-    description TEXT,
-    contact_person VARCHAR(150),
-    contact_email VARCHAR(255),
-    contact_phone VARCHAR(20),
-    user_id UUID REFERENCES users(id) ON DELETE SET NULL
+-- Создание таблицы companies
+CREATE TABLE companies (
+    id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    name NVARCHAR(500) NOT NULL,
+    description NVARCHAR(MAX),
+    contact_person NVARCHAR(500),
+    contact_email NVARCHAR(500),
+    contact_phone NVARCHAR(20),
+    user_id UNIQUEIDENTIFIER NULL,
+    CONSTRAINT FK_companies_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
+-- Вставка данных
 INSERT INTO companies (
     name,
     description,
@@ -122,5 +123,4 @@ VALUES
 ('ПрофиЛаб', 'Профессиональные лабораторные решения.', 'HR-менеджер', 'hr@profilab.ru', '+7 (495) 123-46-68'),
 ('Инновация', 'Управление инновационными проектами.', 'HR-менеджер', 'hr@innovatsiya.ru', '+7 (495) 123-46-69'),
 ('ВекторПлюс', 'Расширенные биомедицинские решения.', 'HR-менеджер', 'hr@vectorplus.ru', '+7 (495) 123-46-70'),
-('КвантумЛаб', 'Лаборатория квантовых технологий.', 'HR-менеджер', 'hr@quantumlabs.ru', '+7 (495) 123-46-71')
-ON CONFLICT (name) DO NOTHING;
+('КвантумЛаб', 'Лаборатория квантовых технологий.', 'HR-менеджер', 'hr@quantumlabs.ru', '+7 (495) 123-46-71');

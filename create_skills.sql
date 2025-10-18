@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 -- Таблица справочника навыков
 CREATE TABLE IF NOT EXISTS skills (
     id SERIAL PRIMARY KEY,
@@ -8,16 +6,16 @@ CREATE TABLE IF NOT EXISTS skills (
     created_at DATETIME NOT NULL -- время занесения данных в справочник
 );
 
---  Связующая таблица "вакансия - навык"
-CREATE TABLE IF NOT EXISTS vacancy_skills (
-    vacancy_id UUID NOT NULL,
-    skill_id INTEGER NOT NULL,
-    is_required BOOLEAN DEFAULT false,
-    priority SMALLINT DEFAULT 1 CHECK (priority BETWEEN 1 AND 5),
-    PRIMARY KEY (vacancy_id, skill_id),
-    FOREIGN KEY (vacancy_id) REFERENCES vacancies(id) ON DELETE CASCADE,
-    FOREIGN KEY (skill_id) REFERENCES skills(id) ON DELETE CASCADE
-);
+    --  Связующая таблица "вакансия - навык"
+    CREATE TABLE IF NOT EXISTS vacancy_skills (
+        vacancy_id UUID NOT NULL,
+        skill_id INTEGER NOT NULL,
+        is_required BOOLEAN DEFAULT false,
+        priority SMALLINT DEFAULT 1 CHECK (priority BETWEEN 1 AND 5),
+        PRIMARY KEY (vacancy_id, skill_id),
+        FOREIGN KEY (vacancy_id) REFERENCES vacancies(id) ON DELETE CASCADE,
+        FOREIGN KEY (skill_id) REFERENCES skills(id) ON DELETE CASCADE
+    );
 
 -- Вставка 200 технического навыков --
 INSERT INTO skills (name, category) VALUES
