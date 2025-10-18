@@ -100,6 +100,7 @@ class InternshipFormTest(TestCase):
             'contact_email': 'university@test.com',
             'contact_phone': '+7 (999) 123-45-67',
             'is_remote': False,
+            'status': Internship.Status.DRAFT,
         }
         
         form = InternshipForm(data=form_data)

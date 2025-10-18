@@ -11,7 +11,7 @@ class InternshipForm(forms.ModelForm):
         fields = [
             'title', 'description', 'requirements', 'tasks',
             'specialization', 'students_count', 'duration',
-            'start_date', 'end_date', 'contact_email', 'contact_phone', 'is_remote'
+            'start_date', 'end_date', 'contact_email', 'contact_phone', 'is_remote', 'status'
         ]
         widgets = {
             'description': forms.Textarea(attrs={'rows': 5}),
@@ -19,6 +19,7 @@ class InternshipForm(forms.ModelForm):
             'tasks': forms.Textarea(attrs={'rows': 5}),
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),
+            'status': forms.Select(choices=Internship.Status.choices),
         }
     
     def __init__(self, *args, **kwargs):

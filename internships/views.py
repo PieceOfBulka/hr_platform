@@ -131,8 +131,8 @@ class InternshipCreateView(CreateView):
     
     def form_valid(self, form):
         form.instance.university = self.request.user
-        form.instance.status = 'pending'  # Отправляем на модерацию
-        messages.success(self.request, 'Стажировка создана и отправлена на модерацию.')
+        form.instance.status = 'draft'  # Создаем как черновик
+        messages.success(self.request, 'Стажировка создана как черновик.')
         return super().form_valid(form)
 
 
