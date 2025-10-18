@@ -1,0 +1,384 @@
+/* Дополнительные стили для специфических компонентов HR платформы */
+
+/* Дашборды */
+.dashboard-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--accent-1);
+  transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(32,32,32,0.1);
+}
+
+.dashboard-stat {
+  text-align: center;
+  padding: 1rem;
+}
+
+.dashboard-stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-1);
+  line-height: 1;
+}
+
+.dashboard-stat-label {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+/* Модерация */
+.moderation-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--neutral-4);
+  margin-bottom: 1rem;
+}
+
+.moderation-card.pending {
+  border-left: 4px solid var(--accent-4);
+}
+
+.moderation-card.approved {
+  border-left: 4px solid var(--accent-2);
+}
+
+.moderation-card.rejected {
+  border-left: 4px solid var(--accent-1);
+}
+
+.moderation-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* Резюме */
+.resume-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--neutral-4);
+  transition: all 0.3s ease;
+}
+
+.resume-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(32,32,32,0.1);
+}
+
+.resume-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.resume-avatar {
+  width: 4rem;
+  height: 4rem;
+  background: var(--accent-1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.resume-info h5 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+
+.resume-info p {
+  color: var(--muted);
+  margin: 0;
+}
+
+.resume-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.skill-tag {
+  background: var(--accent-3);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Заявки */
+.application-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--neutral-4);
+  margin-bottom: 1rem;
+}
+
+.application-status {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.application-status.pending {
+  background: rgba(138,75,75,0.1);
+  color: var(--accent-4);
+}
+
+.application-status.approved {
+  background: rgba(143,69,61,0.1);
+  color: var(--accent-2);
+}
+
+.application-status.rejected {
+  background: rgba(214,51,68,0.1);
+  color: var(--accent-1);
+}
+
+/* Формы */
+.form-section {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+
+.form-section h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent-1);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Таблицы */
+.table-modern {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.table-modern th {
+  background: var(--neutral-6);
+  color: var(--text);
+  font-weight: 600;
+  border: none;
+  padding: 1rem;
+}
+
+.table-modern td {
+  border: none;
+  padding: 1rem;
+  border-bottom: 1px solid var(--neutral-4);
+}
+
+.table-modern tbody tr:hover {
+  background: var(--neutral-6);
+}
+
+/* Пагинация */
+.pagination-modern .page-link {
+  color: var(--accent-1);
+  border: 1px solid var(--neutral-4);
+  padding: 0.5rem 0.75rem;
+  margin: 0 0.125rem;
+  border-radius: var(--radius);
+}
+
+.pagination-modern .page-link:hover {
+  background: var(--accent-1);
+  color: white;
+  border-color: var(--accent-1);
+}
+
+.pagination-modern .page-item.active .page-link {
+  background: var(--accent-1);
+  border-color: var(--accent-1);
+  color: white;
+}
+
+/* Уведомления */
+.notification-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--accent-1);
+  margin-bottom: 1rem;
+}
+
+.notification-card.info {
+  border-left-color: var(--accent-3);
+}
+
+.notification-card.success {
+  border-left-color: var(--accent-2);
+}
+
+.notification-card.warning {
+  border-left-color: var(--accent-4);
+}
+
+.notification-card.error {
+  border-left-color: var(--accent-1);
+}
+
+/* Загрузка */
+.loading-spinner {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 0.25rem solid var(--neutral-4);
+  border-top: 0.25rem solid var(--accent-1);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Прогресс-бары */
+.progress-modern {
+  height: 0.5rem;
+  background: var(--neutral-4);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.progress-modern .progress-bar {
+  background: var(--accent-1);
+  border-radius: var(--radius);
+}
+
+/* Тултипы */
+.tooltip-modern {
+  background: var(--neutral-3);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  box-shadow: var(--shadow);
+}
+
+/* Модальные окна */
+.modal-modern .modal-content {
+  border-radius: var(--radius);
+  border: none;
+  box-shadow: 0 20px 40px rgba(32,32,32,0.15);
+}
+
+.modal-modern .modal-header {
+  border-bottom: 1px solid var(--neutral-4);
+  padding: 1.5rem;
+}
+
+.modal-modern .modal-body {
+  padding: 1.5rem;
+}
+
+.modal-modern .modal-footer {
+  border-top: 1px solid var(--neutral-4);
+  padding: 1.5rem;
+}
+
+/* Анимации появления */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide-in-up {
+  animation: slideInUp 0.5s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Утилиты */
+.text-accent-1 { color: var(--accent-1) !important; }
+.text-accent-2 { color: var(--accent-2) !important; }
+.text-accent-3 { color: var(--accent-3) !important; }
+.text-accent-4 { color: var(--accent-4) !important; }
+
+.bg-accent-1 { background-color: var(--accent-1) !important; }
+.bg-accent-2 { background-color: var(--accent-2) !important; }
+.bg-accent-3 { background-color: var(--accent-3) !important; }
+.bg-accent-4 { background-color: var(--accent-4) !important; }
+
+.border-accent-1 { border-color: var(--accent-1) !important; }
+.border-accent-2 { border-color: var(--accent-2) !important; }
+.border-accent-3 { border-color: var(--accent-3) !important; }
+.border-accent-4 { border-color: var(--accent-4) !important; }
+
+/* Темная тема (опционально) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: var(--neutral-3);
+    --text: var(--neutral-6);
+    --muted: var(--neutral-1);
+  }
+  
+  .card, .dashboard-card, .moderation-card, .resume-card, .application-card, .form-section, .table-modern, .notification-card {
+    background: var(--neutral-2);
+    color: var(--neutral-6);
+  }
+  
+  .navbar {
+    background: var(--neutral-2) !important;
+    border-bottom-color: var(--accent-1);
+  }
+  
+  footer {
+    background-color: var(--neutral-2) !important;
+  }
+}

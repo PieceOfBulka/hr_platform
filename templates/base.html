@@ -14,12 +14,13 @@
     
     {% load static %}
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/components.css' %}" rel="stylesheet">
 </head>
 <body>
     <!-- Навигация -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <div class="container">
-            <a class="navbar-brand fw-bold text-dark" href="{% url 'catalog:index' %}">
+            <a class="navbar-brand fw-bold" href="{% url 'catalog:index' %}">
                 <span class="text-danger">HR</span> Платформа
             </a>
             
@@ -30,23 +31,23 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-dark fw-medium" href="{% url 'catalog:index' %}">Главная</a>
+                        <a class="nav-link" href="{% url 'catalog:index' %}">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark fw-medium" href="{% url 'catalog:vacancies' %}">Вакансии</a>
+                        <a class="nav-link" href="{% url 'catalog:vacancies' %}">Вакансии</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark fw-medium" href="{% url 'catalog:internships' %}">Стажировки</a>
+                        <a class="nav-link" href="{% url 'catalog:internships' %}">Стажировки</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark fw-medium" href="{% url 'catalog:about' %}">О платформе</a>
+                        <a class="nav-link" href="{% url 'catalog:about' %}">О платформе</a>
                     </li>
                 </ul>
                 
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark fw-medium" href="#" role="button" data-bs-toggle="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-user me-1"></i>
                                 {{ user.get_full_name|default:user.username }}
                             </a>
@@ -87,7 +88,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link text-dark fw-medium" href="{% url 'accounts:login' %}">Вход</a>
+                            <a class="nav-link" href="{% url 'accounts:login' %}">Вход</a>
                         </li>
                         <li class="nav-item">
                             <a class="btn btn-danger rounded-pill px-4 ms-2" href="{% url 'accounts:signup' %}">Регистрация</a>
@@ -114,11 +115,11 @@
     </main>
 
     <!-- Футер -->
-    <footer class="bg-light border-top py-5 mt-5">
+    <footer class="bg-light py-5 mt-5">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5 class="fw-bold text-dark">HR Платформа ОЭЗ "Технополис Москва"</h5>
+                    <h5 class="fw-bold">HR Платформа ОЭЗ "Технополис Москва"</h5>
                     <p class="text-muted mb-0">Централизованная система управления карьерными сервисами</p>
                 </div>
                 <div class="col-md-6 text-md-end">
