@@ -1,0 +1,295 @@
+[
+  {
+    "model": "accounts.user",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "hr2@mail.ru",
+      "first_name": "",
+      "last_name": "",
+      "email": "hr2@mail.ru",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-15T10:00:00Z",
+      "role": "HR",
+      "phone": "+7 (495) 123-45-68",
+      "company": "Mail.ru Group",
+      "position": "Senior HR Manager",
+      "is_verified": true,
+      "created_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "hr3@sber.ru",
+      "first_name": "",
+      "last_name": "",
+      "email": "hr3@sber.ru",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-16T10:00:00Z",
+      "role": "HR",
+      "phone": "+7 (495) 123-45-69",
+      "company": "Сбербанк",
+      "position": "HR Director",
+      "is_verified": true,
+      "created_at": "2024-01-16T10:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "university2@hse.ru",
+      "first_name": "",
+      "last_name": "",
+      "email": "university2@hse.ru",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-17T10:00:00Z",
+      "role": "UNIVERSITY",
+      "phone": "+7 (495) 123-45-70",
+      "company": "НИУ ВШЭ",
+      "position": "Заместитель декана",
+      "is_verified": true,
+      "created_at": "2024-01-17T10:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "candidate2@example.com",
+      "first_name": "Анна",
+      "last_name": "Петрова",
+      "email": "candidate2@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-18T10:00:00Z",
+      "role": "CANDIDATE",
+      "phone": "+7 (999) 123-45-71",
+      "company": "",
+      "position": "",
+      "is_verified": false,
+      "created_at": "2024-01-18T10:00:00Z"
+    }
+  },
+  {
+    "model": "accounts.user",
+    "pk": 13,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$test$test",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "candidate3@example.com",
+      "first_name": "Михаил",
+      "last_name": "Сидоров",
+      "email": "candidate3@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-19T10:00:00Z",
+      "role": "CANDIDATE",
+      "phone": "+7 (999) 123-45-72",
+      "company": "",
+      "position": "",
+      "is_verified": false,
+      "created_at": "2024-01-19T10:00:00Z"
+    }
+  },
+  {
+    "model": "vacancies.vacancy",
+    "pk": 5,
+    "fields": {
+      "title": "Frontend разработчик React",
+      "description": "Разработка пользовательских интерфейсов на React.js. Работа в команде над современными веб-приложениями.",
+      "requirements": "Опыт работы с React.js от 2 лет, знание TypeScript, опыт работы с Redux, понимание принципов REST API",
+      "responsibilities": "Разработка компонентов интерфейса, оптимизация производительности, работа с дизайнерами",
+      "salary_min": 120000,
+      "salary_max": 200000,
+      "experience_level": "middle",
+      "contact_email": "hr2@mail.ru",
+      "contact_phone": "+7 (495) 123-45-68",
+      "is_remote": true,
+      "auto_close_date": null,
+      "status": "published",
+      "company": 9,
+      "created_at": "2024-01-20T10:00:00Z",
+      "updated_at": "2024-01-20T10:00:00Z",
+      "published_at": "2024-01-20T10:00:00Z"
+    }
+  },
+  {
+    "model": "vacancies.vacancy",
+    "pk": 6,
+    "fields": {
+      "title": "DevOps инженер",
+      "description": "Настройка и поддержка инфраструктуры, автоматизация процессов развертывания, мониторинг систем.",
+      "requirements": "Опыт работы с Docker, Kubernetes, AWS/Azure, знание CI/CD, опыт с мониторингом (Prometheus, Grafana)",
+      "responsibilities": "Настройка инфраструктуры, автоматизация деплоя, мониторинг и алертинг",
+      "salary_min": 150000,
+      "salary_max": 250000,
+      "experience_level": "senior",
+      "contact_email": "hr3@sber.ru",
+      "contact_phone": "+7 (495) 123-45-69",
+      "is_remote": false,
+      "auto_close_date": null,
+      "status": "published",
+      "company": 10,
+      "created_at": "2024-01-21T10:00:00Z",
+      "updated_at": "2024-01-21T10:00:00Z",
+      "published_at": "2024-01-21T10:00:00Z"
+    }
+  },
+  {
+    "model": "vacancies.vacancy",
+    "pk": 7,
+    "fields": {
+      "title": "Data Scientist",
+      "description": "Анализ больших данных, построение ML-моделей, работа с алгоритмами машинного обучения.",
+      "requirements": "Опыт работы с Python, pandas, scikit-learn, TensorFlow/PyTorch, знание SQL, опыт работы с данными",
+      "responsibilities": "Анализ данных, построение моделей, создание отчетов и презентаций",
+      "salary_min": 180000,
+      "salary_max": 300000,
+      "experience_level": "senior",
+      "contact_email": "hr@yandex.ru",
+      "contact_phone": "+7 (495) 123-45-67",
+      "is_remote": true,
+      "auto_close_date": null,
+      "status": "published",
+      "company": 2,
+      "created_at": "2024-01-22T10:00:00Z",
+      "updated_at": "2024-01-22T10:00:00Z",
+      "published_at": "2024-01-22T10:00:00Z"
+    }
+  },
+  {
+    "model": "vacancies.vacancy",
+    "pk": 8,
+    "fields": {
+      "title": "QA Automation Engineer",
+      "description": "Автоматизация тестирования, написание тестовых сценариев, работа с инструментами тестирования.",
+      "requirements": "Опыт работы с Selenium, pytest, знание Python/Java, опыт работы с API тестированием",
+      "responsibilities": "Написание автотестов, поддержка тестовой инфраструктуры, анализ результатов тестирования",
+      "salary_min": 100000,
+      "salary_max": 180000,
+      "experience_level": "middle",
+      "contact_email": "hr2@mail.ru",
+      "contact_phone": "+7 (495) 123-45-68",
+      "is_remote": false,
+      "auto_close_date": null,
+      "status": "published",
+      "company": 9,
+      "created_at": "2024-01-23T10:00:00Z",
+      "updated_at": "2024-01-23T10:00:00Z",
+      "published_at": "2024-01-23T10:00:00Z"
+    }
+  },
+  {
+    "model": "internships.internship",
+    "pk": 3,
+    "fields": {
+      "title": "Стажировка по Data Science",
+      "description": "Практическое изучение методов анализа данных и машинного обучения на реальных проектах.",
+      "requirements": "Базовые знания Python, математики и статистики, желание изучать ML",
+      "tasks": "Анализ данных, построение простых моделей, участие в исследовательских проектах",
+      "specialization": "Data Science",
+      "students_count": 8,
+      "duration": "3",
+      "start_date": "2024-03-01",
+      "end_date": "2024-05-31",
+      "contact_email": "university2@hse.ru",
+      "contact_phone": "+7 (495) 123-45-70",
+      "is_remote": false,
+      "status": "published",
+      "university": 11,
+      "created_at": "2024-01-24T10:00:00Z",
+      "updated_at": "2024-01-24T10:00:00Z",
+      "published_at": "2024-01-24T10:00:00Z"
+    }
+  },
+  {
+    "model": "internships.internship",
+    "pk": 4,
+    "fields": {
+      "title": "Стажировка по DevOps",
+      "description": "Изучение современных подходов к DevOps, работа с облачными технологиями и автоматизацией.",
+      "requirements": "Базовые знания Linux, интерес к системному администрированию",
+      "tasks": "Настройка серверов, работа с Docker, изучение CI/CD процессов",
+      "specialization": "DevOps",
+      "students_count": 6,
+      "duration": "6",
+      "start_date": "2024-04-01",
+      "end_date": "2024-09-30",
+      "contact_email": "university@miem.edu.ru",
+      "contact_phone": "+7 (495) 123-45-66",
+      "is_remote": true,
+      "status": "published",
+      "university": 3,
+      "created_at": "2024-01-25T10:00:00Z",
+      "updated_at": "2024-01-25T10:00:00Z",
+      "published_at": "2024-01-25T10:00:00Z"
+    }
+  },
+  {
+    "model": "internships.internship",
+    "pk": 5,
+    "fields": {
+      "title": "Стажировка по Frontend разработке",
+      "description": "Изучение современных технологий веб-разработки, работа над реальными проектами.",
+      "requirements": "Базовые знания HTML, CSS, JavaScript, желание изучать React",
+      "tasks": "Создание компонентов, работа с API, участие в разработке интерфейсов",
+      "specialization": "Frontend разработка",
+      "students_count": 10,
+      "duration": "3",
+      "start_date": "2024-02-15",
+      "end_date": "2024-05-15",
+      "contact_email": "university2@hse.ru",
+      "contact_phone": "+7 (495) 123-45-70",
+      "is_remote": false,
+      "status": "published",
+      "university": 11,
+      "created_at": "2024-01-26T10:00:00Z",
+      "updated_at": "2024-01-26T10:00:00Z",
+      "published_at": "2024-01-26T10:00:00Z"
+    }
+  },
+  {
+    "model": "resumes.resume",
+    "pk": 3,
+    "fields": {
+      "title": "Frontend разработчик",
+      "summary": "Опытный Frontend разработчик с 3 годами опыта работы с React и современными технологиями веб-разработки.",
+      "skills": "React, TypeScript, Redux, HTML5, CSS3, JavaScript ES6+, Webpack, Git",
+      "is_public": true,
+      "user": 12,
+      "created_at": "2024-01-27T10:00:00Z",
+      "updated_at": "2024-01-27T10:00:00Z"
+    }
+  },
+  {
+    "model": "resumes.resume",
+    "pk": 4,
+    "fields": {
+      "title": "DevOps инженер",
+      "summary": "Специалист по DevOps с опытом работы с облачными технологиями и автоматизацией процессов.",
+      "skills": "Docker, Kubernetes, AWS, Linux, Python, Bash, CI/CD, Terraform",
+      "is_public": true,
+      "user": 13,
+      "created_at": "2024-01-28T10:00:00Z",
+      "updated_at": "2024-01-28T10:00:00Z"
+    }
+  }
+]
