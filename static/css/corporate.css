@@ -3,9 +3,9 @@
 /* Корпоративная цветовая схема */
 :root {
   /* Основные корпоративные цвета */
-  --corporate-primary: #0066cc;     /* Основной синий */
-  --corporate-secondary: #004499;   /* Темно-синий */
-  --corporate-accent: #3399ff;      /* Светло-синий */
+  --corporate-primary: #cc0000;     /* Основной красный */
+  --corporate-secondary: #990000;   /* Темно-красный */
+  --corporate-accent: #ff3333;      /* Светло-красный */
   --corporate-red: #cc0000;         /* Корпоративный красный */
   --corporate-green: #00cc66;       /* Корпоративный зеленый */
   --corporate-orange: #ff6600;      /* Корпоративный оранжевый */
@@ -210,7 +210,7 @@
 
 .corporate-form .form-control:focus {
   border-color: var(--corporate-primary);
-  box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+  box-shadow: 0 0 0 3px rgba(204,0,0,0.1);
 }
 
 .corporate-form label {
@@ -242,7 +242,7 @@
 }
 
 .corporate-table tbody tr:hover {
-  background: rgba(0,102,204,0.05);
+  background: rgba(204,0,0,0.05);
 }
 
 /* Корпоративные уведомления */
@@ -254,7 +254,7 @@
 }
 
 .corporate-alert-primary {
-  background: rgba(0,102,204,0.1);
+  background: rgba(204,0,0,0.1);
   color: var(--corporate-primary);
   border-left: 4px solid var(--corporate-primary);
 }
@@ -350,11 +350,11 @@
 
 /* Корпоративные тени */
 .shadow-corporate {
-  box-shadow: 0 8px 32px rgba(0,102,204,0.15) !important;
+  box-shadow: 0 8px 32px rgba(204,0,0,0.15) !important;
 }
 
 .shadow-corporate-lg {
-  box-shadow: 0 16px 48px rgba(0,102,204,0.2) !important;
+  box-shadow: 0 16px 48px rgba(204,0,0,0.2) !important;
 }
 
 /* Корпоративные градиенты */

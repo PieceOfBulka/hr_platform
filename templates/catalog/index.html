@@ -9,10 +9,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
     .animate-gradient {
-        background: linear-gradient(90deg, #ff416c, #ff4b2b, #ffbb00);
+        background: linear-gradient(90deg, #cc0000, #ff3333, #ff6600);
         background-size: 200% auto;
         animation: gradient-move 4s ease infinite;
         -webkit-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent;
     }
     @keyframes gradient-move {
@@ -32,7 +33,7 @@
         bottom: -4px;
         width: 0;
         height: 3px;
-        background: linear-gradient(90deg, #ff416c, #ffbb00);
+        background: linear-gradient(90deg, #cc0000, #ff6600);
         transition: width 0.6s ease;
     }
     .underline-slide:hover::after {
@@ -69,7 +70,7 @@
     .hero-section-modern {
         position: relative;
         overflow: hidden;
-        background: #1e293b;
+        background: #cc0000;
         color: white;
     }
     .hero-wave svg {
@@ -119,7 +120,7 @@
 
             <!-- Основной заголовок -->
             <h1 style="font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 2rem; color: white;">
-                Карьера в инновационном <span style="background: var(--corporate-gradient-accent); background-size: 200% auto; animation: gradient-move 4s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">кластере</span>
+                Карьера в инновационном <span style="background: linear-gradient(90deg, #cc0000, #ff3333); background-size: 200% auto; animation: gradient-move 4s ease infinite; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">кластере</span>
             </h1>
 
             <!-- Описание -->
@@ -129,7 +130,7 @@
 
             <!-- Кнопка действия -->
             <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-                <a href="/catalog/vacancies/" class="btn-corporate" style="padding: 0.75rem 1.5rem; border-radius: 9999px;">
+                <a href="{% url 'catalog:vacancies' %}" class="btn-corporate" style="padding: 0.75rem 1.5rem; border-radius: 9999px; background: #cc0000; color: white;">
                     <i class="fas fa-briefcase" style="margin-right: 0.5rem;"></i>
                     Найти вакансию
                 </a>
@@ -340,9 +341,9 @@
                                         </div>
                                         {% endif %}
                                     </div>
-                                    <button class="btn btn-primary w-100 vacancy-apply-btn">
+                                    <a href="{% url 'vacancies:apply' vacancy.pk %}" class="btn btn-primary w-100 vacancy-apply-btn">
                                         Откликнуться
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         {% endfor %}
@@ -388,9 +389,9 @@
                                             {{ internship.start_date|date:"d M" }} - {{ internship.end_date|date:"d M Y" }}
                                         </div>
                                     </div>
-                                    <button class="btn btn-success w-100 internship-contact-btn">
+                                    <a href="{% url 'internships:apply' internship.pk %}" class="btn btn-success w-100 internship-contact-btn">
                                         Связаться
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         {% endfor %}

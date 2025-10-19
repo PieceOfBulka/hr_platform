@@ -3,11 +3,11 @@
 
 :root{
   /* Корпоративная палитра ОЭЗ "Технополис Москва" */
-  --primary-blue: #0066cc;      /* Основной синий */
+  --primary-blue: #cc0000;      /* Основной красный */
   --primary-red: #cc0000;       /* Основной красный */
-  --secondary-blue: #004499;    /* Темно-синий */
+  --secondary-blue: #990000;    /* Темно-красный */
   --secondary-red: #990000;     /* Темно-красный */
-  --accent-blue: #3399ff;       /* Светло-синий */
+  --accent-blue: #ff3333;       /* Светло-красный */
   --accent-red: #ff3333;        /* Светло-красный */
   
   /* Дополнительные корпоративные цвета */
@@ -15,13 +15,13 @@
   --tech-orange: #ff6600;       /* Технологический оранжевый */
   --tech-purple: #6633cc;       /* Технологический фиолетовый */
   
-  /* Акцентная палитра (из technopolis.css) */
-  --accent-1: #d63344;    /* RAL 3026 */
-  --accent-2: #8f453d;    /* RAL 3000 */
-  --accent-3: #c68487;    /* RAL 3014 */
-  --accent-4: #8a4b4b;    /* RAL 3027 */
-  --accent-5: #4b2624;    /* RAL 3032 */
-  --accent-6: #2a1c1b;    /* RAL 3007 */
+  /* Акцентная палитра (красные оттенки) */
+  --accent-1: #cc0000;    /* Основной красный */
+  --accent-2: #990000;    /* Темно-красный */
+  --accent-3: #ff3333;    /* Светло-красный */
+  --accent-4: #cc3333;    /* Средне-красный */
+  --accent-5: #660000;    /* Очень темно-красный */
+  --accent-6: #330000;    /* Самый темно-красный */
   
   /* Нейтральная палитра */
   --neutral-dark: #1a1a1a;      /* Очень темный */
@@ -70,7 +70,7 @@ body{
 /* Хедер */
 .site-header{
   background: var(--neutral-white);
-  border-bottom: 4px solid var(--primary-blue);
+  border-bottom: 4px solid var(--primary-red);
   box-shadow: var(--shadow);
 }
 .site-header .container{
@@ -90,7 +90,7 @@ body{
 .site-brand .title{
   font-size:28px;
   font-weight:700;
-  color:var(--primary-blue);
+  color:var(--primary-red);
   letter-spacing:1px;
 }
 .site-nav{ margin-left:auto; display:flex; gap:18px; align-items:center; }
@@ -101,19 +101,19 @@ body{
   border-radius:4px;
   transition: all 0.3s ease;
 }
-.site-nav a:hover{ color:var(--primary-blue); background:rgba(0,102,204,0.1); }
+.site-nav a:hover{ color:var(--primary-red); background:rgba(204,0,0,0.1); }
 
 /* Навигация Bootstrap */
 .navbar {
   background: var(--neutral-white) !important;
-  border-bottom: 4px solid var(--primary-blue);
+  border-bottom: 4px solid var(--primary-red);
   box-shadow: var(--shadow);
 }
 
 .navbar-brand {
     font-weight: 700;
     font-size: 1.5rem;
-  color: var(--primary-blue) !important;
+  color: var(--primary-red) !important;
 }
 
 .nav-link {
@@ -125,13 +125,13 @@ body{
 }
 
 .nav-link:hover {
-  color: var(--primary-blue) !important;
-  background: rgba(0,102,204,0.1);
+  color: var(--primary-red) !important;
+  background: rgba(204,0,0,0.1);
 }
 
 /* Герой для страниц */
 .page-hero{
-  background: linear-gradient(90deg, rgba(0,102,204,0.08), rgba(0,102,204,0.02));
+  background: linear-gradient(90deg, rgba(204,0,0,0.08), rgba(204,0,0,0.02));
   padding:24px;
   border-radius:var(--radius);
   margin:18px 0;
@@ -140,7 +140,7 @@ body{
 /* Современный Hero Section */
 .hero-section-modern {
     position: relative;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--tech-purple) 100%);
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 50%, var(--tech-purple) 100%);
   color: var(--neutral-white);
     overflow: hidden;
     min-height: 70vh;
@@ -154,7 +154,7 @@ body{
     left: 0;
     right: 0;
     bottom: 0;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--tech-purple) 100%);
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 50%, var(--tech-purple) 100%);
 }
 
 .hero-grid {
@@ -170,7 +170,7 @@ body{
 }
 
 .hero-gradient-text {
-  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--tech-green) 100%);
+  background: linear-gradient(135deg, var(--accent-red) 0%, var(--tech-green) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -200,25 +200,25 @@ body{
   border: none;
 }
 .btn-primary{
-  background:var(--primary-blue);
+  background:var(--primary-red);
   color:var(--neutral-white);
-  border: 1px solid var(--primary-blue);
+  border: 1px solid var(--primary-red);
   box-shadow: var(--shadow);
 }
 .btn-primary:hover {
-  background: var(--secondary-blue);
-  border-color: var(--secondary-blue);
+  background: var(--secondary-red);
+  border-color: var(--secondary-red);
   transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
 }
 .btn-outline{
   background:transparent;
-  border:2px solid var(--primary-blue);
-  color:var(--primary-blue);
+  border:2px solid var(--primary-red);
+  color:var(--primary-red);
 }
 .btn-outline:hover {
-  background: var(--primary-blue);
-  border-color: var(--primary-blue);
+  background: var(--primary-red);
+  border-color: var(--primary-red);
   color: var(--neutral-white);
 }
 .btn-danger {
@@ -270,7 +270,7 @@ body{
 .vacancy-card:hover, .internship-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-hover);
-  border-color: var(--primary-blue);
+  border-color: var(--primary-red);
 }
 
 .vacancy-header, .internship-header {
@@ -293,7 +293,7 @@ body{
 }
 
 .vacancy-icon {
-  background: var(--primary-blue);
+  background: var(--primary-red);
 }
 
 .internship-icon {
@@ -371,11 +371,11 @@ body{
 }
 
 .badge.bg-primary {
-  background-color: var(--primary-blue) !important;
+  background-color: var(--primary-red) !important;
 }
 
 .badge.bg-info {
-  background-color: var(--accent-blue) !important;
+  background-color: var(--accent-red) !important;
 }
 
 .badge.bg-success {
@@ -478,7 +478,7 @@ body{
 .feature-icon {
   width: 4rem;
   height: 4rem;
-  background: var(--primary-blue);
+  background: var(--primary-red);
   border-radius: var(--radius);
   display: flex;
   align-items: center;
@@ -486,6 +486,10 @@ body{
   color: var(--neutral-white);
   font-size: 1.5rem;
   margin: 0 auto 1.5rem;
+}
+
+.feature-icon i {
+  color: var(--neutral-white) !important;
 }
 
 .feature-title {
@@ -601,8 +605,8 @@ body{
 }
 
 .search-input:focus {
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(204,0,0,0.1);
 }
 
 /* Вкладки каталога */
@@ -641,8 +645,8 @@ body{
 }
 
 .form-control:focus {
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 0.2rem rgba(0,102,204,0.25);
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 0.2rem rgba(204,0,0,0.25);
 }
 
 /* Алерты */
@@ -862,21 +866,21 @@ label{
 }
 
 .text-primary {
-  color: var(--primary-blue) !important;
+  color: var(--primary-red) !important;
 }
 
 .bg-primary {
-  background-color: var(--primary-blue) !important;
+  background-color: var(--primary-red) !important;
 }
 
 /* Hover эффекты для интерактивных элементов */
 .nav-link:hover {
-  color: var(--primary-blue) !important;
+  color: var(--primary-red) !important;
 }
 
 .dropdown-item:hover {
   background-color: var(--neutral-bg);
-  color: var(--primary-blue);
+  color: var(--primary-red);
 }
 
 /* Брендинг ОЭЗ "Технополис Москва" */
@@ -894,14 +898,14 @@ label{
 
 .technopolis-logo h1 {
   font-size: 2rem;
-  color: var(--primary-blue);
+  color: var(--primary-red);
   margin: 0;
   text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .technopolis-logo h2 {
   font-size: 1.5rem;
-  color: var(--primary-blue);
+  color: var(--primary-red);
   margin: 0;
 }
 
@@ -913,7 +917,7 @@ label{
 }
 
 .technopolis-badge {
-  background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+  background: linear-gradient(135deg, var(--primary-red), var(--secondary-red));
   color: var(--neutral-white);
   padding: 0.5rem 1rem;
   border-radius: 20px;
@@ -924,15 +928,15 @@ label{
 }
 
 .corporate-gradient {
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--tech-purple) 100%);
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--tech-purple) 100%);
 }
 
 .corporate-accent {
-  color: var(--primary-blue);
+  color: var(--primary-red);
 }
 
 .corporate-bg {
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red);
 }
 
 /* Адаптивность */
