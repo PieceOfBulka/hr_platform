@@ -62,6 +62,10 @@
         50% { transform: translateY(-15px); }
     }
 
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
     .hero-section-modern {
         position: relative;
         overflow: hidden;
@@ -101,27 +105,27 @@
             </div>
         </div>
     </div>
-    <div class="container mx-auto px-4 position-relative" style="z-index: 10; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
-      <div class="text-center" style="max-width: 48rem;">
-        <div class="mb-5 fade-in-up">
-          <h2 class="display-4 fw-bold text-white mb-4">ТЕХНОПОЛИС МОСКВА</h2>
-          <div class="d-inline-flex align-items-center bg-white bg-opacity-20 text-white px-4 py-2 rounded-pill mt-4 fade-in-up" style="transition-delay: 0.2s;">
-            <i class="fas fa-star me-2"></i>
+    <div class="container mx-auto px-4 relative z-10 flex items-center justify-center min-h-screen">
+      <div class="text-center max-w-3xl">
+        <div class="mb-6 fade-in-up">
+          <h2 class="text-3xl font-bold text-white">ТЕХНОПОЛИС МОСКВА</h2>
+          <div class="inline-flex items-center bg-white/20 text-white px-4 py-2 rounded-full mt-4 fade-in-up" style="transition-delay: 0.2s;">
+            <i class="fas fa-star mr-2"></i>
             Твой помощник в поиске работы
           </div>
         </div>
 
-        <h1 class="display-1 fw-bold mb-5 fade-in-up" style="transition-delay: 0.4s;">
+        <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6 fade-in-up text-white" style="transition-delay: 0.4s;">
           Карьера в инновационном <span class="animate-gradient underline-slide">кластере</span>
         </h1>
 
-        <p class="lead text-white mb-5 fade-in-up" style="transition-delay: 0.6s; opacity: 0.8;">
+        <p class="text-lg md:text-xl text-white/60 mb-8 fade-in-up" style="transition-delay: 0.6s;">
           Платформа для поиска вакансий и стажировок в ОЭЗ «Технополис Москва»
         </p>
 
-        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3 mb-5 fade-in-up" style="transition-delay: 0.8s;">
-          <a href="{% url 'catalog:vacancies' %}" class="btn btn-light btn-lg px-4 py-3 rounded-pill d-flex align-items-center justify-content-center shadow">
-            <i class="fas fa-briefcase me-2"></i>
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-10 fade-in-up" style="transition-delay: 0.8s;">
+          <a href="{% url 'catalog:vacancies' %}" class="bg-white text-gray-900 font-semibold px-6 py-3 rounded-full flex items-center hover:bg-gray-100 transition shadow-lg">
+            <i class="fas fa-briefcase mr-2"></i>
             Найти вакансию
           </a>
         </div>
