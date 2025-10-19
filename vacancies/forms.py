@@ -33,7 +33,7 @@ class VacancyForm(forms.ModelForm):
 
 
 class ApplicationForm(forms.ModelForm):
-    """Форма отклика на вакансию"""
+    """Форма отклика на вакансию для авторизованных пользователей"""
     
     add_to_public_bank = forms.BooleanField(
         required=False,
@@ -61,4 +61,33 @@ class ApplicationForm(forms.ModelForm):
         
         self.fields['add_to_public_bank'].widget.attrs.update({
             'class': 'form-check-input'
+        })
+
+
+class AnonymousApplicationForm(forms.ModelForm):
+    """Форма отклика на вакансию для неавторизованных пользователей"""
+    
+    class Meta:
+        model = Application
+        fields = ['candidate_name', 'candidate_email', 'candidate_phone', 'cover_letter', 'resume_file']
+        widgets = {
+            'candidate_name': forms.TextInput(attrs={'placeholder': 'Ваше имя и фамилия'}),
+            'candidate_email': forms.EmailInput(attrs={'placeholder': 'your.email@example.com'}),
+            'candidate_phone': forms.TextInput(attrs={'placeholder': '+7 (999) 123-45-67'}),
+            'cover_letter': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Расскажите о себе и почему вы подходите для этой позиции...'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            if field.widget.__class__.__name__ != 'CheckboxInput':
+                field.widget.attrs.update({'class': 'form-control'})
+        
+        # Делаем поля обязательными
+        self.fields['candidate_name'].required = True
+        self.fields['candidate_email'].required = True
+        self.fields['candidate_phone'].required = True
+        
+        self.fields['resume_file'].widget.attrs.update({
+            'accept': '.pdf,.doc,.docx'
         })

@@ -368,20 +368,145 @@ class Command(BaseCommand):
                 'salary_max': 80000,
                 'is_remote': False,
             },
+            {
+                'title': 'Менеджер по продажам',
+                'description': 'Поиск и привлечение новых клиентов, работа с существующей клиентской базой.',
+                'requirements': 'Опыт работы в продажах. Коммуникативные навыки.',
+                'experience_level': 'middle',
+                'salary_min': 50000,
+                'salary_max': 80000,
+                'is_remote': False,
+            },
+            {
+                'title': 'Специалист по закупкам',
+                'description': 'Планирование и осуществление закупок материалов и оборудования.',
+                'requirements': 'Опыт работы в закупках. Знание рынка поставщиков.',
+                'experience_level': 'middle',
+                'salary_min': 55000,
+                'salary_max': 85000,
+                'is_remote': False,
+            },
+            {
+                'title': 'Инженер по охране труда',
+                'description': 'Обеспечение безопасности труда на производстве.',
+                'requirements': 'Образование в области охраны труда. Знание нормативных требований.',
+                'experience_level': 'middle',
+                'salary_min': 60000,
+                'salary_max': 90000,
+                'is_remote': False,
+            },
+            {
+                'title': 'Технолог',
+                'description': 'Разработка и внедрение новых технологических процессов.',
+                'requirements': 'Высшее техническое образование. Опыт в области технологий.',
+                'experience_level': 'senior',
+                'salary_min': 75000,
+                'salary_max': 110000,
+                'is_remote': False,
+            },
+            {
+                'title': 'Механик',
+                'description': 'Обслуживание и ремонт механического оборудования.',
+                'requirements': 'Среднее специальное образование. Опыт работы с механизмами.',
+                'experience_level': 'middle',
+                'salary_min': 50000,
+                'salary_max': 75000,
+                'is_remote': False,
+            },
+            {
+                'title': 'Оператор производственной линии',
+                'description': 'Управление производственной линией и контроль качества продукции.',
+                'requirements': 'Опыт работы на производстве. Внимательность к деталям.',
+                'experience_level': 'junior',
+                'salary_min': 40000,
+                'salary_max': 60000,
+                'is_remote': False,
+            },
+            {
+                'title': 'Упаковщик',
+                'description': 'Упаковка готовой продукции согласно стандартам.',
+                'requirements': 'Опыт работы на производстве. Аккуратность.',
+                'experience_level': 'junior',
+                'salary_min': 35000,
+                'salary_max': 50000,
+                'is_remote': False,
+            },
+            {
+                'title': 'Грузчик',
+                'description': 'Погрузка и разгрузка материалов и готовой продукции.',
+                'requirements': 'Физическая выносливость. Опыт работы грузчиком.',
+                'experience_level': 'junior',
+                'salary_min': 30000,
+                'salary_max': 45000,
+                'is_remote': False,
+            },
+            {
+                'title': 'Водитель погрузчика',
+                'description': 'Управление погрузчиком для перемещения грузов на складе.',
+                'requirements': 'Права на управление погрузчиком. Опыт работы.',
+                'experience_level': 'middle',
+                'salary_min': 45000,
+                'salary_max': 65000,
+                'is_remote': False,
+            },
+            {
+                'title': 'Складской работник',
+                'description': 'Учет и хранение товаров на складе.',
+                'requirements': 'Опыт работы на складе. Знание складского учета.',
+                'experience_level': 'junior',
+                'salary_min': 35000,
+                'salary_max': 50000,
+                'is_remote': False,
+            },
+            {
+                'title': 'Приемщик товара',
+                'description': 'Прием и проверка поступающих товаров.',
+                'requirements': 'Внимательность. Опыт работы с товарами.',
+                'experience_level': 'junior',
+                'salary_min': 35000,
+                'salary_max': 50000,
+                'is_remote': False,
+            },
+            {
+                'title': 'Комплектовщик',
+                'description': 'Комплектация заказов согласно накладным.',
+                'requirements': 'Внимательность. Опыт работы на складе.',
+                'experience_level': 'junior',
+                'salary_min': 35000,
+                'salary_max': 50000,
+                'is_remote': False,
+            },
         ]
 
         # Объединяем все вакансии
         vacancies_data = it_vacancies + production_vacancies
 
-        for vacancy_data in vacancies_data:
+        # Статусы для вакансий
+        statuses = ['published', 'published', 'published', 'published', 'published', 'draft', 'pending', 'closed']
+        
+        for i, vacancy_data in enumerate(vacancies_data):
             company = random.choice(hr_users)
+            status = random.choice(statuses)
+            
+            # Определяем дату публикации в зависимости от статуса
+            if status == 'published':
+                published_at = timezone.now() - timedelta(days=random.randint(1, 30))
+            elif status == 'draft':
+                published_at = None
+            elif status == 'pending':
+                published_at = None
+            elif status == 'closed':
+                published_at = timezone.now() - timedelta(days=random.randint(1, 30))
+            else:
+                published_at = None
+            
             Vacancy.objects.get_or_create(
                 title=vacancy_data['title'],
                 company=company,
                 defaults={
                     **vacancy_data,
-                    'status': 'published',
-                    'published_at': timezone.now() - timedelta(days=random.randint(1, 30)),
+                    'status': status,
+                    'published_at': published_at,
                 }
             )
 
@@ -442,6 +567,116 @@ class Command(BaseCommand):
                 'requirements': 'Образование в области маркетинга или экономики.',
                 'tasks': 'Анализ рынка, разработка маркетинговых кампаний, работа с клиентами.',
                 'specialization': 'Маркетинг',
+                'duration': '3',
+                'is_remote': True,
+            },
+            {
+                'type': 'internship',
+                'title': 'Стажировка сварщика',
+                'description': 'Обучение сварочным работам различных видов металлов.',
+                'requirements': 'Среднее специальное образование. Физическая выносливость.',
+                'tasks': 'Изучение сварочных технологий, практические работы, получение удостоверения.',
+                'specialization': 'Сварочные работы',
+                'duration': '2',
+                'is_remote': False,
+            },
+            {
+                'type': 'internship',
+                'title': 'Стажировка токаря',
+                'description': 'Обучение работе на токарных станках.',
+                'requirements': 'Среднее специальное образование. Точность и аккуратность.',
+                'tasks': 'Изучение токарных работ, обработка деталей по чертежам.',
+                'specialization': 'Токарные работы',
+                'duration': '2',
+                'is_remote': False,
+            },
+            {
+                'type': 'internship',
+                'title': 'Стажировка фрезеровщика',
+                'description': 'Обучение работе на фрезерных станках.',
+                'requirements': 'Среднее специальное образование. Знание чертежей.',
+                'tasks': 'Изучение фрезерных работ, обработка деталей.',
+                'specialization': 'Фрезерные работы',
+                'duration': '2',
+                'is_remote': False,
+            },
+            {
+                'type': 'internship',
+                'title': 'Стажировка слесаря-сборщика',
+                'description': 'Обучение слесарным и сборочным работам.',
+                'requirements': 'Среднее специальное образование. Опыт работы с инструментами.',
+                'tasks': 'Сборка узлов, слесарные работы, чтение чертежей.',
+                'specialization': 'Слесарные работы',
+                'duration': '2',
+                'is_remote': False,
+            },
+            {
+                'type': 'internship',
+                'title': 'Стажировка электромонтера',
+                'description': 'Обучение электромонтажным работам.',
+                'requirements': 'Образование по специальности "Электромонтер".',
+                'tasks': 'Монтаж электрооборудования, изучение схем, получение группы допуска.',
+                'specialization': 'Электромонтаж',
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'type': 'internship',
+                'title': 'Стажировка наладчика оборудования',
+                'description': 'Обучение наладке и регулировке оборудования.',
+                'requirements': 'Техническое образование. Опыт работы с оборудованием.',
+                'tasks': 'Наладка станков, диагностика неисправностей, регулировка.',
+                'specialization': 'Наладка оборудования',
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'type': 'internship',
+                'title': 'Стажировка мастера смены',
+                'description': 'Обучение управлению производственной сменой.',
+                'requirements': 'Высшее техническое образование. Лидерские качества.',
+                'tasks': 'Управление персоналом, планирование работ, контроль качества.',
+                'specialization': 'Управление производством',
+                'duration': '6',
+                'is_remote': False,
+            },
+            {
+                'type': 'internship',
+                'title': 'Стажировка логиста',
+                'description': 'Обучение логистическим процессам.',
+                'requirements': 'Образование в области логистики или экономики.',
+                'tasks': 'Планирование поставок, работа с поставщиками, оптимизация процессов.',
+                'specialization': 'Логистика',
+                'duration': '3',
+                'is_remote': True,
+            },
+            {
+                'type': 'internship',
+                'title': 'Стажировка экономиста',
+                'description': 'Обучение экономическому анализу производства.',
+                'requirements': 'Экономическое образование. Знание математики.',
+                'tasks': 'Анализ показателей, планирование, составление отчетов.',
+                'specialization': 'Экономика',
+                'duration': '3',
+                'is_remote': True,
+            },
+            {
+                'type': 'internship',
+                'title': 'Стажировка бухгалтера',
+                'description': 'Обучение ведению бухгалтерского учета.',
+                'requirements': 'Экономическое образование. Внимательность к деталям.',
+                'tasks': 'Ведение учета, составление отчетности, работа с документами.',
+                'specialization': 'Бухгалтерский учет',
+                'duration': '3',
+                'is_remote': True,
+            },
+            {
+                'type': 'internship',
+                'title': 'Стажировка менеджера по продажам',
+                'description': 'Обучение продажам в производственной сфере.',
+                'requirements': 'Образование в области продаж или маркетинга.',
+                'tasks': 'Работа с клиентами, поиск новых клиентов, ведение переговоров.',
+                'specialization': 'Продажи',
                 'duration': '3',
                 'is_remote': True,
             },
@@ -509,13 +744,163 @@ class Command(BaseCommand):
                 'duration': '2',
                 'is_remote': True,
             },
+            {
+                'type': 'practice',
+                'title': 'Практика по сварочным работам',
+                'description': 'Производственная практика по сварочным технологиям.',
+                'requirements': 'Студенты сварочных специальностей.',
+                'tasks': 'Изучение сварочных технологий, практические работы, получение навыков.',
+                'specialization': 'Сварочные работы',
+                'duration': '4',
+                'is_remote': False,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по токарным работам',
+                'description': 'Изучение токарных работ на производстве.',
+                'requirements': 'Студенты токарных специальностей.',
+                'tasks': 'Работа на токарных станках, изучение технологий, обработка деталей.',
+                'specialization': 'Токарные работы',
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по фрезерным работам',
+                'description': 'Изучение фрезерных работ на производстве.',
+                'requirements': 'Студенты фрезерных специальностей.',
+                'tasks': 'Работа на фрезерных станках, изучение технологий, обработка деталей.',
+                'specialization': 'Фрезерные работы',
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по слесарным работам',
+                'description': 'Изучение слесарных и сборочных работ.',
+                'requirements': 'Студенты слесарных специальностей.',
+                'tasks': 'Слесарные работы, сборка узлов, изучение инструментов.',
+                'specialization': 'Слесарные работы',
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по электромонтажу',
+                'description': 'Изучение электромонтажных работ.',
+                'requirements': 'Студенты электромонтажных специальностей.',
+                'tasks': 'Монтаж электрооборудования, изучение схем, работа с приборами.',
+                'specialization': 'Электромонтаж',
+                'duration': '4',
+                'is_remote': False,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по контролю качества',
+                'description': 'Изучение методов контроля качества продукции.',
+                'requirements': 'Студенты специальностей по контролю качества.',
+                'tasks': 'Контроль качества, работа с приборами, ведение документации.',
+                'specialization': 'Контроль качества',
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по наладке оборудования',
+                'description': 'Изучение наладки и регулировки оборудования.',
+                'requirements': 'Студенты специальностей по наладке оборудования.',
+                'tasks': 'Наладка станков, диагностика, регулировка оборудования.',
+                'specialization': 'Наладка оборудования',
+                'duration': '4',
+                'is_remote': False,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по управлению производством',
+                'description': 'Изучение управления производственными процессами.',
+                'requirements': 'Студенты специальностей по управлению производством.',
+                'tasks': 'Планирование производства, управление персоналом, контроль качества.',
+                'specialization': 'Управление производством',
+                'duration': '4',
+                'is_remote': False,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по логистике',
+                'description': 'Изучение логистических процессов на предприятии.',
+                'requirements': 'Студенты логистических специальностей.',
+                'tasks': 'Планирование поставок, работа со складами, оптимизация процессов.',
+                'specialization': 'Логистика',
+                'duration': '3',
+                'is_remote': True,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по бухгалтерскому учету',
+                'description': 'Изучение ведения бухгалтерского учета на предприятии.',
+                'requirements': 'Студенты бухгалтерских специальностей.',
+                'tasks': 'Ведение учета, составление отчетности, работа с документами.',
+                'specialization': 'Бухгалтерский учет',
+                'duration': '3',
+                'is_remote': True,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по продажам',
+                'description': 'Изучение продаж в производственной сфере.',
+                'requirements': 'Студенты специальностей по продажам.',
+                'tasks': 'Работа с клиентами, изучение продуктов, ведение переговоров.',
+                'specialization': 'Продажи',
+                'duration': '3',
+                'is_remote': True,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по охране труда',
+                'description': 'Изучение охраны труда на производстве.',
+                'requirements': 'Студенты специальностей по охране труда.',
+                'tasks': 'Изучение требований безопасности, проведение инструктажей, контроль соблюдения.',
+                'specialization': 'Охрана труда',
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по материаловедению',
+                'description': 'Изучение свойств и применения материалов.',
+                'requirements': 'Студенты материаловедческих специальностей.',
+                'tasks': 'Изучение материалов, проведение испытаний, анализ свойств.',
+                'specialization': 'Материаловедение',
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'type': 'practice',
+                'title': 'Практика по метрологии',
+                'description': 'Изучение измерительных приборов и методов измерений.',
+                'requirements': 'Студенты метрологических специальностей.',
+                'tasks': 'Работа с приборами, проведение измерений, калибровка оборудования.',
+                'specialization': 'Метрология',
+                'duration': '3',
+                'is_remote': False,
+            },
         ]
 
+        # Статусы для стажировок и практик
+        internship_statuses = ['published', 'published', 'published', 'published', 'draft', 'pending']
+        
         # Создаем стажировки от HR
         for internship_data in internships_data:
             company = random.choice(hr_users)
             start_date = timezone.now().date() + timedelta(days=random.randint(7, 30))
             end_date = start_date + timedelta(days=int(internship_data['duration']) * 30)
+            status = random.choice(internship_statuses)
+            
+            # Определяем дату публикации в зависимости от статуса
+            if status == 'published':
+                published_at = timezone.now() - timedelta(days=random.randint(1, 15))
+            else:
+                published_at = None
             
             Internship.objects.get_or_create(
                 title=internship_data['title'],
@@ -526,8 +911,8 @@ class Command(BaseCommand):
                     'end_date': end_date,
                     'contact_email': company.email,
                     'contact_phone': company.phone,
-                    'status': 'published',
-                    'published_at': timezone.now() - timedelta(days=random.randint(1, 15)),
+                    'status': status,
+                    'published_at': published_at,
                 }
             )
 
@@ -536,6 +921,13 @@ class Command(BaseCommand):
             university = random.choice(university_users)
             start_date = timezone.now().date() + timedelta(days=random.randint(7, 30))
             end_date = start_date + timedelta(days=int(practice_data['duration']) * 30)
+            status = random.choice(internship_statuses)
+            
+            # Определяем дату публикации в зависимости от статуса
+            if status == 'published':
+                published_at = timezone.now() - timedelta(days=random.randint(1, 15))
+            else:
+                published_at = None
             
             Internship.objects.get_or_create(
                 title=practice_data['title'],
@@ -546,8 +938,8 @@ class Command(BaseCommand):
                     'end_date': end_date,
                     'contact_email': university.email,
                     'contact_phone': university.phone,
-                    'status': 'published',
-                    'published_at': timezone.now() - timedelta(days=random.randint(1, 15)),
+                    'status': status,
+                    'published_at': published_at,
                 }
             )
 

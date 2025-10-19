@@ -142,7 +142,27 @@ class Application(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='applications',
+        null=True,
+        blank=True,
         verbose_name=_('Кандидат')
+    )
+    
+    # Поля для анонимных откликов
+    candidate_name = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name=_('Имя кандидата')
+    )
+    
+    candidate_email = models.EmailField(
+        blank=True,
+        verbose_name=_('Email кандидата')
+    )
+    
+    candidate_phone = models.CharField(
+        max_length=20,
+        blank=True,
+        verbose_name=_('Телефон кандидата')
     )
     
     cover_letter = models.TextField(
@@ -179,7 +199,10 @@ class Application(models.Model):
         verbose_name = _('Отклик')
         verbose_name_plural = _('Отклики')
         ordering = ['-created_at']
-        unique_together = ['vacancy', 'candidate']
+        # unique_together убран, так как анонимные пользователи не имеют candidate
     
     def __str__(self):
-        return f"{self.candidate.get_full_name()} -> {self.vacancy.title}"
+        if self.candidate:
+            return f"{self.candidate.get_full_name()} -> {self.vacancy.title}"
+        else:
+            return f"{self.candidate_name} -> {self.vacancy.title}"
