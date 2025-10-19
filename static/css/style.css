@@ -2,15 +2,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root{
-  /* Основная акцентная палитра (приблизительные hex для RAL цветов) */
+  /* Корпоративная палитра ОЭЗ "Технополис Москва" */
+  --primary-blue: #0066cc;      /* Основной синий */
+  --primary-red: #cc0000;       /* Основной красный */
+  --secondary-blue: #004499;    /* Темно-синий */
+  --secondary-red: #990000;     /* Темно-красный */
+  --accent-blue: #3399ff;       /* Светло-синий */
+  --accent-red: #ff3333;        /* Светло-красный */
+  
+  /* Дополнительные корпоративные цвета */
+  --tech-green: #00cc66;        /* Технологический зеленый */
+  --tech-orange: #ff6600;       /* Технологический оранжевый */
+  --tech-purple: #6633cc;       /* Технологический фиолетовый */
+  
+  /* Акцентная палитра (из technopolis.css) */
   --accent-1: #d63344;    /* RAL 3026 */
   --accent-2: #8f453d;    /* RAL 3000 */
   --accent-3: #c68487;    /* RAL 3014 */
   --accent-4: #8a4b4b;    /* RAL 3027 */
   --accent-5: #4b2624;    /* RAL 3032 */
   --accent-6: #2a1c1b;    /* RAL 3007 */
-
+  
   /* Нейтральная палитра */
+  --neutral-dark: #1a1a1a;      /* Очень темный */
+  --neutral-gray: #333333;      /* Темно-серый */
+  --neutral-medium: #666666;    /* Средне-серый */
+  --neutral-light: #999999;     /* Светло-серый */
+  --neutral-pale: #cccccc;      /* Бледно-серый */
+  --neutral-white: #ffffff;     /* Белый */
+  --neutral-bg: #f8f9fa;       /* Фоновый */
+  
+  /* Дополнительные нейтральные цвета */
   --neutral-1: #9fa1a3;   /* RAL 7004 */
   --neutral-2: #3f3f3f;   /* RAL 7022 */
   --neutral-3: #3a3f44;   /* RAL 7024 / тёмный серый */
@@ -18,12 +40,14 @@
   --neutral-5: #e6e5dd;   /* RAL 9002 */
   --neutral-6: #fbfdf4;   /* RAL 9010 */
 
-  --bg: var(--neutral-6);
-  --text: #222;
-  --muted: #666;
-  --radius: 6px;
-  --container-width: 1100px;
-  --shadow: 0 6px 18px rgba(32,32,32,0.08);
+  /* Основные переменные */
+  --bg: var(--neutral-bg);
+  --text: var(--neutral-dark);
+  --muted: var(--neutral-medium);
+  --radius: 8px;
+  --container-width: 1200px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.1);
+  --shadow-hover: 0 8px 30px rgba(0,0,0,0.15);
 }
 
 /* Базовая типографика */
@@ -45,8 +69,8 @@ body{
 
 /* Хедер */
 .site-header{
-  background: white;
-  border-bottom: 4px solid var(--accent-1);
+  background: var(--neutral-white);
+  border-bottom: 4px solid var(--primary-blue);
   box-shadow: var(--shadow);
 }
 .site-header .container{
@@ -66,7 +90,7 @@ body{
 .site-brand .title{
   font-size:28px;
   font-weight:700;
-  color:var(--accent-1);
+  color:var(--primary-blue);
   letter-spacing:1px;
 }
 .site-nav{ margin-left:auto; display:flex; gap:18px; align-items:center; }
@@ -75,20 +99,21 @@ body{
   text-decoration:none;
   padding:8px 12px;
   border-radius:4px;
+  transition: all 0.3s ease;
 }
-.site-nav a:hover{ color:var(--accent-1); background:rgba(214,51,68,0.04); }
+.site-nav a:hover{ color:var(--primary-blue); background:rgba(0,102,204,0.1); }
 
 /* Навигация Bootstrap */
 .navbar {
-  background: white !important;
-  border-bottom: 4px solid var(--accent-1);
+  background: var(--neutral-white) !important;
+  border-bottom: 4px solid var(--primary-blue);
   box-shadow: var(--shadow);
 }
 
 .navbar-brand {
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: var(--accent-1) !important;
+    font-weight: 700;
+    font-size: 1.5rem;
+  color: var(--primary-blue) !important;
 }
 
 .nav-link {
@@ -100,13 +125,13 @@ body{
 }
 
 .nav-link:hover {
-  color: var(--accent-1) !important;
-  background: rgba(214,51,68,0.04);
+  color: var(--primary-blue) !important;
+  background: rgba(0,102,204,0.1);
 }
 
 /* Герой для страниц */
 .page-hero{
-  background: linear-gradient(90deg, rgba(214,51,68,0.04), rgba(214,51,68,0.01));
+  background: linear-gradient(90deg, rgba(0,102,204,0.08), rgba(0,102,204,0.02));
   padding:24px;
   border-radius:var(--radius);
   margin:18px 0;
@@ -114,118 +139,129 @@ body{
 
 /* Современный Hero Section */
 .hero-section-modern {
-  position: relative;
-  background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 50%, var(--accent-3) 100%);
-  color: white;
-  overflow: hidden;
-  min-height: 70vh;
-  display: flex;
-  align-items: center;
+    position: relative;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--tech-purple) 100%);
+  color: var(--neutral-white);
+    overflow: hidden;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
 }
 
 .hero-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, var(--accent-1) 0%, var(--accent-2) 50%, var(--accent-3) 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--tech-purple) 100%);
 }
 
 .hero-grid {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-  background-size: 20px 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
 }
 
 .hero-gradient-text {
-  background: linear-gradient(135deg, var(--accent-3) 0%, var(--accent-1) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background: linear-gradient(135deg, var(--accent-blue) 0%, var(--tech-green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .hero-wave {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
 }
 
 .min-vh-50 {
-  min-height: 50vh;
+    min-height: 50vh;
 }
 
 /* Кнопки */
 .btn{
   display:inline-block;
-  padding:8px 14px;
-  border-radius:6px;
+  padding:10px 20px;
+  border-radius:var(--radius);
   text-decoration:none;
   font-weight:600;
   cursor:pointer;
   transition: all 0.3s ease;
+  border: none;
 }
 .btn-primary{
-  background:var(--accent-1);
-  color:white;
-  border: 1px solid var(--accent-1);
-  box-shadow: 0 6px 12px rgba(214,51,68,0.12);
+  background:var(--primary-blue);
+  color:var(--neutral-white);
+  border: 1px solid var(--primary-blue);
+  box-shadow: var(--shadow);
 }
 .btn-primary:hover {
-  background: var(--accent-2);
-  border-color: var(--accent-2);
+  background: var(--secondary-blue);
+  border-color: var(--secondary-blue);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(214,51,68,0.2);
+  box-shadow: var(--shadow-hover);
 }
 .btn-outline{
   background:transparent;
-  border:1px solid var(--neutral-4);
-  color:var(--text);
+  border:2px solid var(--primary-blue);
+  color:var(--primary-blue);
 }
 .btn-outline:hover {
-  background: var(--accent-1);
-  border-color: var(--accent-1);
-  color: white;
+  background: var(--primary-blue);
+  border-color: var(--primary-blue);
+  color: var(--neutral-white);
 }
 .btn-danger {
-  background-color: var(--accent-1);
-  border-color: var(--accent-1);
+  background-color: var(--primary-red);
+  border-color: var(--primary-red);
+  color: var(--neutral-white);
 }
 .btn-danger:hover {
-  background-color: var(--accent-2);
-  border-color: var(--accent-2);
+  background-color: var(--secondary-red);
+  border-color: var(--secondary-red);
+}
+.btn-success {
+  background-color: var(--tech-green);
+  border-color: var(--tech-green);
+  color: var(--neutral-white);
+}
+.btn-success:hover {
+  background-color: #00aa55;
+  border-color: #00aa55;
 }
 
 /* Карточки */
 .card{
-  background:white;
+  background:var(--neutral-white);
   border-radius:var(--radius);
-  padding:16px;
+  padding:20px;
   box-shadow: var(--shadow);
   border: none;
   transition: all 0.3s ease;
 }
 .card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(32,32,32,0.12);
+  box-shadow: var(--shadow-hover);
 }
 
 /* Современные карточки вакансий и стажировок */
 .vacancy-card, .internship-card {
-  background: white;
+  background: var(--neutral-white);
   border-radius: var(--radius);
   padding: 1.5rem;
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
-  border: 1px solid var(--neutral-4);
+  border: 1px solid var(--neutral-pale);
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -233,8 +269,8 @@ body{
 
 .vacancy-card:hover, .internship-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(32,32,32,0.1);
-  border-color: var(--accent-1);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--primary-blue);
 }
 
 .vacancy-header, .internship-header {
@@ -251,17 +287,17 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--neutral-white);
   font-size: 1.25rem;
   flex-shrink: 0;
 }
 
 .vacancy-icon {
-  background: var(--accent-1);
+  background: var(--primary-blue);
 }
 
 .internship-icon {
-  background: var(--accent-2);
+  background: var(--tech-green);
 }
 
 .vacancy-title, .internship-title {
@@ -280,50 +316,51 @@ body{
 }
 
 .vacancy-badges, .internship-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .vacancy-description, .internship-description {
   color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
-  flex-grow: 1;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex-grow: 1;
 }
 
 .vacancy-details, .internship-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
   color: var(--muted);
 }
 
 .vacancy-location, .vacancy-salary, .internship-period {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .vacancy-apply-btn, .internship-contact-btn {
-  margin-top: auto;
+    margin-top: auto;
   border-radius: var(--radius);
-  font-weight: 600;
-  padding: 0.75rem 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
 }
 
 /* Акцентные элементы (статусы / теги) */
 .tag{
   display:inline-block;
-  background:var(--accent-3);
-  color:white;
-  padding:6px 10px;
+  background:var(--primary-blue);
+  color:var(--neutral-white);
+  padding:6px 12px;
   border-radius:20px;
   font-size:13px;
+  font-weight:500;
 }
 
 .badge {
@@ -334,15 +371,23 @@ body{
 }
 
 .badge.bg-primary {
-  background-color: var(--accent-1) !important;
+  background-color: var(--primary-blue) !important;
 }
 
 .badge.bg-info {
-  background-color: var(--accent-3) !important;
+  background-color: var(--accent-blue) !important;
 }
 
 .badge.bg-success {
-  background-color: var(--accent-2) !important;
+  background-color: var(--tech-green) !important;
+}
+
+.badge.bg-warning {
+  background-color: var(--tech-orange) !important;
+}
+
+.badge.bg-danger {
+  background-color: var(--primary-red) !important;
 }
 
 /* Статистика */
@@ -353,7 +398,7 @@ body{
 }
 
 .stats-card {
-  background: white;
+  background: var(--neutral-white);
   border-radius: var(--radius);
   padding: 1.5rem;
   box-shadow: var(--shadow);
@@ -366,7 +411,7 @@ body{
 
 .stats-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(32,32,32,0.15);
+  box-shadow: var(--shadow-hover);
 }
 
 .stats-icon {
@@ -376,24 +421,24 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--neutral-white);
   font-size: 1.25rem;
 }
 
 .bg-gradient-primary {
-  background: var(--accent-1);
+  background: var(--primary-blue);
 }
 
 .bg-gradient-info {
-  background: var(--accent-3);
+  background: var(--accent-blue);
 }
 
 .bg-gradient-success {
-  background: var(--accent-2);
+  background: var(--tech-green);
 }
 
 .bg-gradient-warning {
-  background: var(--accent-4);
+  background: var(--tech-orange);
 }
 
 .stats-number {
@@ -411,34 +456,34 @@ body{
 
 /* Секция функций */
 .features-section {
-  background: linear-gradient(135deg, var(--neutral-6) 0%, var(--neutral-5) 100%);
+  background: linear-gradient(135deg, var(--neutral-bg) 0%, var(--neutral-pale) 100%);
 }
 
 .feature-card {
-  background: white;
+  background: var(--neutral-white);
   border-radius: var(--radius);
   padding: 2rem;
   text-align: center;
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
-  border: 1px solid var(--neutral-4);
+  border: 1px solid var(--neutral-pale);
   height: 100%;
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(32,32,32,0.1);
+  box-shadow: var(--shadow-hover);
 }
 
 .feature-icon {
   width: 4rem;
   height: 4rem;
-  background: var(--accent-1);
+  background: var(--primary-blue);
   border-radius: var(--radius);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--neutral-white);
   font-size: 1.5rem;
   margin: 0 auto 1.5rem;
 }
@@ -457,13 +502,13 @@ body{
 
 /* Секция отзывов */
 .testimonials-section {
-  background: linear-gradient(135deg, var(--neutral-3) 0%, var(--neutral-2) 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--neutral-gray) 0%, var(--neutral-dark) 100%);
+  color: var(--neutral-white);
 }
 
 .testimonials-section h2,
 .testimonials-section p {
-  color: white;
+  color: var(--neutral-white);
 }
 
 .testimonial-card {
@@ -510,7 +555,7 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--neutral-white);
   font-size: 1.2rem;
 }
 
@@ -518,7 +563,7 @@ body{
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
-  color: white;
+  color: var(--neutral-white);
 }
 
 .author-position {
@@ -550,14 +595,14 @@ body{
   padding-right: 1rem;
   height: 3.5rem;
   border-radius: var(--radius);
-  border: 2px solid var(--neutral-4);
+  border: 2px solid var(--neutral-pale);
   font-size: 1.125rem;
   transition: all 0.3s ease;
 }
 
 .search-input:focus {
-  border-color: var(--accent-1);
-  box-shadow: 0 0 0 3px rgba(214,51,68,0.1);
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
 }
 
 /* Вкладки каталога */
@@ -591,13 +636,13 @@ body{
 /* Формы */
 .form-control {
   border-radius: var(--radius);
-  border: 1px solid var(--neutral-4);
+  border: 1px solid var(--neutral-pale);
   transition: all 0.3s ease;
 }
 
 .form-control:focus {
-  border-color: var(--accent-1);
-  box-shadow: 0 0 0 0.2rem rgba(214,51,68,0.25);
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 0.2rem rgba(0,102,204,0.25);
 }
 
 /* Алерты */
@@ -610,15 +655,15 @@ body{
 .site-footer{
   margin-top:36px;
   padding:28px;
-  background:#fff;
-  border-top:1px solid rgba(0,0,0,0.04);
+  background:var(--neutral-white);
+  border-top:1px solid var(--neutral-pale);
   color:var(--muted);
   text-align:center;
 }
 
 footer {
-  background-color: var(--neutral-6) !important;
-  border-top: 1px solid var(--neutral-4);
+  background-color: var(--neutral-bg) !important;
+  border-top: 1px solid var(--neutral-pale);
 }
 
 /* Таблицы */
@@ -700,12 +745,12 @@ label{
 
 /* Рекомендации */
 .recommendation-card {
-  background: white;
+    background: white;
   border-radius: var(--radius);
-  padding: 1.5rem;
+    padding: 1.5rem;
   box-shadow: var(--shadow);
   border-left: 4px solid var(--accent-1);
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 .recommendation-card.high-priority {
@@ -721,26 +766,26 @@ label{
 }
 
 .recommendation-title {
-  font-size: 1.1rem;
-  font-weight: 600;
+    font-size: 1.1rem;
+    font-weight: 600;
   color: var(--text);
-  margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .recommendation-description {
   color: var(--muted);
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 .recommendation-actions {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
 }
 
 .priority-badge {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
   border-radius: var(--radius);
 }
 
@@ -761,41 +806,41 @@ label{
 
 /* Тесты навыков */
 .skill-test-card {
-  background: white;
+    background: white;
   border-radius: var(--radius);
-  padding: 2rem;
+    padding: 2rem;
   box-shadow: var(--shadow);
   border: 1px solid var(--neutral-4);
-  transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .skill-test-card:hover {
-  transform: translateY(-2px);
+    transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(32,32,32,0.1);
 }
 
 .skill-test-title {
-  font-size: 1.25rem;
-  font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 600;
   color: var(--text);
-  margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .skill-test-description {
   color: var(--muted);
-  margin-bottom: 1rem;
+    margin-bottom: 1rem;
 }
 
 .skill-test-meta {
-  display: flex;
-  gap: 1rem;
-  font-size: 0.875rem;
+    display: flex;
+    gap: 1rem;
+    font-size: 0.875rem;
   color: var(--muted);
 }
 
 .skill-test-score {
-  font-size: 1.5rem;
-  font-weight: 700;
+    font-size: 1.5rem;
+    font-weight: 700;
   color: var(--accent-1);
 }
 
@@ -809,21 +854,85 @@ label{
 
 /* Утилиты */
 .text-danger {
-  color: var(--accent-1) !important;
+  color: var(--primary-red) !important;
 }
 
 .bg-danger {
-  background-color: var(--accent-1) !important;
+  background-color: var(--primary-red) !important;
+}
+
+.text-primary {
+  color: var(--primary-blue) !important;
+}
+
+.bg-primary {
+  background-color: var(--primary-blue) !important;
 }
 
 /* Hover эффекты для интерактивных элементов */
 .nav-link:hover {
-  color: var(--accent-1) !important;
+  color: var(--primary-blue) !important;
 }
 
 .dropdown-item:hover {
-  background-color: var(--neutral-6);
-  color: var(--accent-1);
+  background-color: var(--neutral-bg);
+  color: var(--primary-blue);
+}
+
+/* Брендинг ОЭЗ "Технополис Москва" */
+.technopolis-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.technopolis-logo {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.technopolis-logo h1 {
+  font-size: 2rem;
+  color: var(--primary-blue);
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.technopolis-logo h2 {
+  font-size: 1.5rem;
+  color: var(--primary-blue);
+  margin: 0;
+}
+
+.technopolis-subtitle {
+  font-size: 0.875rem;
+  color: var(--muted);
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+.technopolis-badge {
+  background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+  color: var(--neutral-white);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.corporate-gradient {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--tech-purple) 100%);
+}
+
+.corporate-accent {
+  color: var(--primary-blue);
+}
+
+.corporate-bg {
+  background-color: var(--primary-blue);
 }
 
 /* Адаптивность */
