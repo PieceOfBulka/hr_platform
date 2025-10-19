@@ -16,7 +16,6 @@
                                 <p class="text-danger fw-bold mb-1">{{ internship.university.company }}</p>
                                 <div class="d-flex align-items-center gap-3 text-muted small">
                                     <span><i class="fas fa-graduation-cap me-1"></i>{{ internship.specialization }}</span>
-                                    <span><i class="fas fa-users me-1"></i>{{ internship.students_count }} студентов</span>
                                     <span><i class="fas fa-clock me-1"></i>{{ internship.get_duration_display }}</span>
                                     {% if internship.is_remote %}
                                     <span><i class="fas fa-home me-1"></i>Удаленно</span>
@@ -83,16 +82,6 @@
                             </div>
                             
                             <div class="mb-4">
-                                <label for="{{ form.students_count.id_for_label }}" class="form-label fw-medium">Количество студентов, которых можете принять *</label>
-                                {{ form.students_count }}
-                                {% if form.students_count.errors %}
-                                    <div class="text-danger small mt-1">
-                                        {% for error in form.students_count.errors %}
-                                            {{ error }}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                                <div class="form-text">Укажите максимальное количество студентов для стажировки</div>
                             </div>
                             
                             {% if form.non_field_errors %}

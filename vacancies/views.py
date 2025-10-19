@@ -56,11 +56,6 @@ def apply_to_vacancy(request, pk):
     """Отклик на вакансию"""
     vacancy = get_object_or_404(Vacancy, pk=pk, status='published')
     
-    # Проверяем, что пользователь - соискатель
-    if not request.user.is_candidate:
-        messages.error(request, 'Только соискатели могут откликаться на вакансии.')
-        return redirect('vacancies:detail', pk=pk)
-    
     # Проверяем, что пользователь еще не откликался
     if Application.objects.filter(vacancy=vacancy, candidate=request.user).exists():
         messages.warning(request, 'Вы уже откликались на эту вакансию.')

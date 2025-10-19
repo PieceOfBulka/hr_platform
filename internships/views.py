@@ -62,14 +62,9 @@ def apply_to_internship(request, pk):
     """Заявка на стажировку"""
     internship = get_object_or_404(Internship, pk=pk, status='published')
     
-    # Проверяем, что пользователь - HR компании
-    if not request.user.is_hr:
-        messages.error(request, 'Только представители компаний могут подавать заявки на стажировки.')
-        return redirect('internships:detail', pk=pk)
-    
-    # Проверяем, что компания еще не подавала заявку
+    # Проверяем, что пользователь еще не подавал заявку
     if InternshipApplication.objects.filter(internship=internship, company=request.user).exists():
-        messages.warning(request, 'Ваша компания уже подавала заявку на эту стажировку.')
+        messages.warning(request, 'Вы уже подавали заявку на эту стажировку.')
         return redirect('internships:detail', pk=pk)
     
     if request.method == 'POST':
@@ -78,6 +73,7 @@ def apply_to_internship(request, pk):
             application = form.save(commit=False)
             application.internship = internship
             application.company = request.user
+            application.students_count = 1  # Устанавливаем значение по умолчанию
             application.save()
             messages.success(request, 'Ваша заявка успешно отправлена!')
             return redirect('internships:detail', pk=pk)

@@ -6,7 +6,11 @@ User = get_user_model()
 
 
 class Internship(models.Model):
-    """Модель стажировки"""
+    """Модель стажировки/практики"""
+    
+    class Type(models.TextChoices):
+        INTERNSHIP = 'internship', _('Стажировка')
+        PRACTICE = 'practice', _('Практика')
     
     class Status(models.TextChoices):
         DRAFT = 'draft', _('Черновик')
@@ -22,9 +26,16 @@ class Internship(models.Model):
         SIX_MONTHS = '6', _('6 месяцев')
         ONE_YEAR = '12', _('1 год')
     
+    type = models.CharField(
+        max_length=20,
+        choices=Type.choices,
+        default=Type.INTERNSHIP,
+        verbose_name=_('Тип')
+    )
+    
     title = models.CharField(
         max_length=200,
-        verbose_name=_('Название стажировки')
+        verbose_name=_('Название')
     )
     
     description = models.TextField(
@@ -32,12 +43,12 @@ class Internship(models.Model):
     )
     
     requirements = models.TextField(
-        verbose_name=_('Требования к стажерам')
+        verbose_name=_('Требования')
     )
     
     tasks = models.TextField(
         blank=True,
-        verbose_name=_('Задачи стажеров')
+        verbose_name=_('Задачи')
     )
     
     specialization = models.CharField(
@@ -64,11 +75,11 @@ class Internship(models.Model):
         verbose_name=_('Дата окончания')
     )
     
-    university = models.ForeignKey(
+    organization = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='internships',
-        verbose_name=_('Университет')
+        verbose_name=_('Организация')
     )
     
     status = models.CharField(
@@ -115,7 +126,7 @@ class Internship(models.Model):
         ordering = ['-created_at']
     
     def __str__(self):
-        return f"{self.title} - {self.university.company}"
+        return f"{self.title} - {self.organization.company}"
     
     @property
     def is_published(self):

@@ -9,8 +9,8 @@ class InternshipForm(forms.ModelForm):
     class Meta:
         model = Internship
         fields = [
-            'title', 'description', 'requirements', 'tasks',
-            'specialization', 'students_count', 'duration',
+            'type', 'title', 'description', 'requirements', 'tasks',
+            'specialization', 'duration',
             'start_date', 'end_date', 'contact_email', 'contact_phone', 'is_remote', 'status'
         ]
         widgets = {
@@ -43,7 +43,7 @@ class InternshipApplicationForm(forms.ModelForm):
     
     class Meta:
         model = InternshipApplication
-        fields = ['message', 'students_count']
+        fields = ['message']
         widgets = {
             'message': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Расскажите о вашей компании и возможностях для стажеров...'}),
         }
@@ -53,7 +53,3 @@ class InternshipApplicationForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
         
-        self.fields['students_count'].widget.attrs.update({
-            'min': '1',
-            'max': '50'
-        })
