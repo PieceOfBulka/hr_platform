@@ -51,44 +51,58 @@ class VacancyDetailView(DetailView):
         return Vacancy.objects.filter(status='published')
 
 
-@login_required
 def apply_to_vacancy(request, pk):
     """Отклик на вакансию"""
     vacancy = get_object_or_404(Vacancy, pk=pk, status='published')
     
-    # Проверяем, что пользователь еще не откликался
-    if Application.objects.filter(vacancy=vacancy, candidate=request.user).exists():
-        messages.warning(request, 'Вы уже откликались на эту вакансию.')
-        return redirect('vacancies:detail', pk=pk)
-    
-    if request.method == 'POST':
-        form = ApplicationForm(request.POST, request.FILES)
-        if form.is_valid():
-            application = form.save(commit=False)
-            application.vacancy = vacancy
-            application.candidate = request.user
-            application.save()
-            
-            # Если пользователь выбрал размещение в общем банке
-            if form.cleaned_data.get('add_to_public_bank'):
-                # Создаем или обновляем резюме пользователя
-                from resumes.models import Resume
-                resume, created = Resume.objects.get_or_create(
-                    user=request.user,
-                    defaults={
-                        'title': f'Резюме {request.user.get_full_name() or request.user.email}',
-                        'summary': application.cover_letter,
-                        'is_public': True
-                    }
-                )
-                if not created:
-                    resume.is_public = True
-                    resume.save()
-            
-            messages.success(request, 'Ваш отклик успешно отправлен!')
+    if request.user.is_authenticated:
+        # Проверяем, что пользователь еще не откликался
+        if Application.objects.filter(vacancy=vacancy, candidate=request.user).exists():
+            messages.warning(request, 'Вы уже откликались на эту вакансию.')
             return redirect('vacancies:detail', pk=pk)
+        
+        if request.method == 'POST':
+            form = ApplicationForm(request.POST, request.FILES)
+            if form.is_valid():
+                application = form.save(commit=False)
+                application.vacancy = vacancy
+                application.candidate = request.user
+                application.save()
+                
+                # Если пользователь выбрал размещение в общем банке
+                if form.cleaned_data.get('add_to_public_bank'):
+                    # Создаем или обновляем резюме пользователя
+                    from resumes.models import Resume
+                    resume, created = Resume.objects.get_or_create(
+                        user=request.user,
+                        defaults={
+                            'title': f'Резюме {request.user.get_full_name() or request.user.email}',
+                            'summary': application.cover_letter,
+                            'is_public': True
+                        }
+                    )
+                    if not created:
+                        resume.is_public = True
+                        resume.save()
+                
+                messages.success(request, 'Ваш отклик успешно отправлен!')
+                return redirect('vacancies:detail', pk=pk)
+        else:
+            form = ApplicationForm()
     else:
-        form = ApplicationForm()
+        # Анонимный отклик
+        if request.method == 'POST':
+            from .forms import AnonymousApplicationForm
+            form = AnonymousApplicationForm(request.POST, request.FILES)
+            if form.is_valid():
+                application = form.save(commit=False)
+                application.vacancy = vacancy
+                application.save()
+                messages.success(request, 'Ваш отклик успешно отправлен!')
+                return redirect('vacancies:detail', pk=pk)
+        else:
+            from .forms import AnonymousApplicationForm
+            form = AnonymousApplicationForm()
     
     return render(request, 'vacancies/apply.html', {
         'form': form,

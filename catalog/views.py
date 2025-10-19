@@ -3,7 +3,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.views.generic import ListView
 from vacancies.models import Vacancy
-from internships.models import Internship
+from internships.models import Internship, PracticeRequest
 
 
 class IndexView(ListView):
@@ -17,13 +17,14 @@ class IndexView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['recent_internships'] = Internship.objects.filter(status='published').order_by('-published_at')[:6]
+        context['recent_practice_requests'] = PracticeRequest.objects.filter(status='published').order_by('-published_at')[:6]
         return context
 
 
 class PublicVacancyListView(ListView):
     """Публичный список вакансий"""
     model = Vacancy
-    template_name = 'catalog/vacancy_list.html'
+    template_name = 'catalog/vacancies.html'
     context_object_name = 'vacancies'
     paginate_by = 10
     
@@ -55,12 +56,50 @@ class PublicVacancyListView(ListView):
 class PublicInternshipListView(ListView):
     """Публичный список стажировок"""
     model = Internship
-    template_name = 'catalog/internship_list.html'
+    template_name = 'catalog/internships.html'
     context_object_name = 'internships'
     paginate_by = 10
     
     def get_queryset(self):
         queryset = Internship.objects.filter(status='published')
+        
+        # Фильтрация по поиску
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(description__icontains=search) |
+                Q(specialization__icontains=search) |
+                Q(company__company__icontains=search)
+            )
+        
+        # Фильтрация по специальности
+        specialization = self.request.GET.get('specialization')
+        if specialization:
+            queryset = queryset.filter(specialization__icontains=specialization)
+        
+        # Фильтрация по продолжительности
+        duration = self.request.GET.get('duration')
+        if duration:
+            queryset = queryset.filter(duration=duration)
+        
+        # Фильтрация по удаленной работе
+        remote = self.request.GET.get('remote')
+        if remote == 'true':
+            queryset = queryset.filter(is_remote=True)
+        
+        return queryset.order_by('-published_at')
+
+
+class PublicPracticeRequestListView(ListView):
+    """Публичный список заявок на практику"""
+    model = PracticeRequest
+    template_name = 'catalog/practice_requests.html'
+    context_object_name = 'practice_requests'
+    paginate_by = 10
+    
+    def get_queryset(self):
+        queryset = PracticeRequest.objects.filter(status='published')
         
         # Фильтрация по поиску
         search = self.request.GET.get('search')
