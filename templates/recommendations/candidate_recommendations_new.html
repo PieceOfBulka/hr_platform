@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Рекомендации вакансий - HR Платформа{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold text-dark mb-2">Персональные рекомендации</h2>
+                    <p class="text-muted">Вакансии, подобранные специально для вас с помощью ИИ</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'catalog:vacancies' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-search me-2"></i>Все вакансии
+                    </a>
+                </div>
+            </div>
+            
+            {% if error_message %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {{ error_message }}
+                </div>
+            {% endif %}
+            
+            {% if has_recommendations %}
+                <div class="alert alert-info">
+                    <i class="fas fa-robot me-2"></i>
+                    Найдено {{ total_recommendations }} рекомендаций с помощью локальной модели Gemma
+                </div>
+                
+                <div class="row">
+                    {% for recommendation in recommendations %}
+                    <div class="col-lg-6 col-xl-4 mb-4">
+                        <div class="card h-100 shadow-sm border-0">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h5 class="card-title fw-bold text-dark mb-0">{{ recommendation.vacancy.title }}</h5>
+                                    <span class="badge bg-danger text-white">{{ recommendation.score|floatformat:0 }}%</span>
+                                </div>
+                                
+                                <p class="text-muted small mb-3">{{ recommendation.vacancy.company.name }}</p>
+                                
+                                <div class="mb-3">
+                                    <h6 class="fw-bold text-dark mb-2">Почему подходит:</h6>
+                                    <ul class="list-unstyled">
+                                        {% for reason in recommendation.match_reasons %}
+                                        <li class="mb-1">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            {{ reason }}
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-map-marker-alt me-1"></i>
+                                        {% if recommendation.vacancy.is_remote %}
+                                            Удаленно
+                                        {% else %}
+                                            {{ recommendation.vacancy.location }}
+                                        {% endif %}
+                                    </small>
+                                    <a href="{% url 'vacancies:detail' recommendation.vacancy.pk %}" class="btn btn-danger btn-sm">
+                                        Подробнее
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Пагинация -->
+                {% if recommendations.has_other_pages %}
+                <nav aria-label="Пагинация рекомендаций">
+                    <ul class="pagination justify-content-center mt-4">
+                        {% if recommendations.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ recommendations.previous_page_number }}">Предыдущая</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in recommendations.paginator.page_range %}
+                        {% if recommendations.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if recommendations.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ recommendations.next_page_number }}">Следующая</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                
+            {% else %}
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-search fa-3x text-muted"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-3">Рекомендации не найдены</h4>
+                    <p class="text-muted mb-4">Пока что нет подходящих вакансий для вас. Попробуйте обновить свое резюме или посмотрите все доступные вакансии.</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <a href="{% url 'resumes:my_resume' %}" class="btn btn-primary">
+                            <i class="fas fa-edit me-2"></i>Обновить резюме
+                        </a>
+                        <a href="{% url 'catalog:vacancies' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-search me-2"></i>Все вакансии
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

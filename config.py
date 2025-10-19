@@ -19,13 +19,13 @@ DATABASE_CONFIG = {
     'PORT': config('DB_PORT', default='5432'),
 }
 
-# Настройки для Gemma API
+# Настройки для локальной Gemma модели
 GEMMA_CONFIG = {
     'MODEL_NAME': 'google/gemma-2-2b-it',
-    'API_URL': 'https://api-inference.huggingface.co/models/google/gemma-2-2b-it',
-    'MAX_TOKENS': 512,
+    'MAX_TOKENS': 256,
     'TEMPERATURE': 0.7,
-    'TIMEOUT': 30,
+    'DEVICE': 'auto',  # auto, cuda, cpu
+    'TORCH_DTYPE': 'bfloat16',
 }
 
 # Настройки рекомендаций

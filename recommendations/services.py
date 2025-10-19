@@ -1,8 +1,6 @@
 from django.db.models import Q
 from django.core.cache import cache
 from django.conf import settings
-import requests
-import json
 import logging
 from typing import List, Dict, Tuple, Optional, Any
 from vacancies.models import Vacancy, Application
@@ -10,23 +8,44 @@ from resumes.models import Resume
 from .models import RecommendationRule, ResumeRecommendation, HRRecommendation
 from .resume_parser import ResumeAnalyzer
 
+# Импорт для локальной модели
+try:
+    import torch
+    from transformers import pipeline
+    TRANSFORMERS_AVAILABLE = True
+except ImportError:
+    TRANSFORMERS_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 
 class GemmaRecommendationService:
-    """Сервис рекомендаций на основе Gemma LLM"""
+    """Сервис рекомендаций на основе локальной Gemma LLM"""
     
     def __init__(self):
-        self.api_token = getattr(settings, 'HUGGINGFACE_API_TOKEN', None)
-        self.api_url = "https://api-inference.huggingface.co/models/google/gemma-2-2b-it"
-        self.headers = {
-            "Authorization": f"Bearer {self.api_token}",
-            "Content-Type": "application/json"
-        }
+        self.model = None
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        
+        if TRANSFORMERS_AVAILABLE:
+            try:
+                # Инициализируем локальную модель
+                self.model = pipeline(
+                    "text-generation",
+                    model="google/gemma-2-2b-it",
+                    model_kwargs={"torch_dtype": torch.bfloat16},
+                    device=self.device,
+                )
+                logger.info(f"Gemma модель загружена на {self.device}")
+            except Exception as e:
+                logger.error(f"Ошибка загрузки модели: {e}")
+                self.model = None
     
     def analyze_resume_vacancy_match(self, resume: Resume, vacancy: Vacancy) -> Dict:
-        """Анализирует соответствие резюме и вакансии с помощью LLM"""
+        """Анализирует соответствие резюме и вакансии с помощью локальной LLM"""
         try:
+            if not self.model:
+                return self._fallback_analysis(resume, vacancy)
+            
             # Подготавливаем данные для анализа
             resume_data = {
                 'title': resume.title,
@@ -51,8 +70,8 @@ class GemmaRecommendationService:
             # Формируем промпт для LLM
             prompt = self._create_analysis_prompt(resume_data, vacancy_data)
             
-            # Отправляем запрос к API
-            response = self._call_gemma_api(prompt)
+            # Используем локальную модель
+            response = self._call_local_model(prompt)
             
             if response:
                 return self._parse_llm_response(response)
@@ -94,42 +113,39 @@ class GemmaRecommendationService:
 }}
 """
     
-    def _call_gemma_api(self, prompt: str) -> Optional[Dict]:
-        """Вызывает API Gemma"""
+    def _call_local_model(self, prompt: str) -> Optional[str]:
+        """Вызывает локальную модель Gemma для анализа"""
         try:
-            payload = {
-                "inputs": prompt,
-                "parameters": {
-                    "max_new_tokens": 512,
-                    "temperature": 0.7,
-                    "return_full_text": False
-                }
-            }
+            if not self.model:
+                return None
             
-            response = requests.post(
-                self.api_url,
-                headers=self.headers,
-                json=payload,
-                timeout=30
+            # Формируем сообщения для модели
+            messages = [
+                {"role": "user", "content": prompt}
+            ]
+            
+            # Генерируем ответ
+            outputs = self.model(
+                messages, 
+                max_new_tokens=256,
+                temperature=0.7,
+                do_sample=True
             )
             
-            if response.status_code == 200:
-                return response.json()
-            else:
-                logger.error(f"Ошибка API: {response.status_code} - {response.text}")
-                return None
-                
+            if outputs and len(outputs) > 0:
+                assistant_response = outputs[0]["generated_text"][-1]["content"].strip()
+                return assistant_response
+            
+            return None
+            
         except Exception as e:
-            logger.error(f"Ошибка при вызове API: {e}")
+            logger.error(f"Ошибка локальной модели: {e}")
             return None
     
-    def _parse_llm_response(self, response: Dict) -> Dict:
+    def _parse_llm_response(self, response: str) -> Dict:
         """Парсит ответ от LLM"""
         try:
-            if isinstance(response, list) and len(response) > 0:
-                text = response[0].get('generated_text', '')
-            else:
-                text = str(response)
+            text = str(response)
             
             # Пытаемся извлечь JSON из ответа
             import re
