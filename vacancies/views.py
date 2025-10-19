@@ -7,13 +7,17 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from .models import Vacancy, Application
 from .forms import VacancyForm, ApplicationForm
+from django.apps import apps
+from django.utils import timezone
 
+Vacancy = apps.get_model('vacancies', 'Vacancy')
 
 class VacancyListView(ListView):
     """Список вакансий"""
     model = Vacancy
-    template_name = 'vacancies/vacancy_list.html'
+    template_name = 'vacancies/list.html'
     context_object_name = 'vacancies'
+    queryset = Vacancy.objects.filter(published_at__lte=timezone.now())  # убедитесь, что это условие выполняется
     paginate_by = 10
     
     def get_queryset(self):
@@ -220,3 +224,14 @@ def update_application_status(request, pk):
             messages.success(request, 'Статус отклика обновлен.')
     
     return redirect('vacancies:applications', pk=application.vacancy.pk)
+
+
+def homepage(request):
+    Vacancy = apps.get_model('vacancies', 'Vacancy')
+    Internship = apps.get_model('internships', 'Internship')
+
+    # Временно показываем все записи (для диагностики)
+    vacancies = Vacancy.objects.all().order_by('-published_at')[:30]
+    internships = Internship.objects.all().order_by('-published_at')[:30]
+
+    return render(request, 'home.html', {'vacancies': vacancies, 'internships': internships})
