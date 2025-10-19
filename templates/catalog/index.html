@@ -3,6 +3,84 @@
 
 {% block title %}Главная - HR Платформа{% endblock %}
 
+{% block extra_head %}
+<!-- Подключаем Tailwind и Font Awesome -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+    .animate-gradient {
+        background: linear-gradient(90deg, #ff416c, #ff4b2b, #ffbb00);
+        background-size: 200% auto;
+        animation: gradient-move 4s ease infinite;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    @keyframes gradient-move {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .underline-slide {
+        position: relative;
+        display: inline-block;
+    }
+    .underline-slide::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        width: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #ff416c, #ffbb00);
+        transition: width 0.6s ease;
+    }
+    .underline-slide:hover::after {
+        width: 100%;
+    }
+
+    .fade-in-up {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 1s forwards;
+    }
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .floating-icon {
+        position: absolute;
+        font-size: 2rem;
+        color: #ffffffaa;
+        animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    .hero-section-modern {
+        position: relative;
+        overflow: hidden;
+        background: #1e293b;
+        color: white;
+    }
+    .hero-wave svg {
+        display: block;
+        width: 100%;
+        height: 120px;
+    }
+    .hero-background {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 <section class="hero-section-modern">
@@ -23,110 +101,36 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="row align-items-center min-vh-50">
-            <div class="col-lg-8 mx-auto text-center text-white">
-                <div class="hero-badge mb-4">
-                    <div class="technopolis-logo mb-3">
-                        <h2 class="text-white fw-bold mb-0">ТЕХНОПОЛИС МОСКВА</h2>
-                        <div class="logo-subtitle text-white-50">Официальная платформа ОЭЗ</div>
-                    </div>
-                    <span class="badge bg-white bg-opacity-20 px-3 py-2 rounded-pill">
-                        <i class="fas fa-star me-2"></i>Платформа для карьеры в IT
-                    </span>
-                </div>
-                <h1 class="display-3 fw-bold mb-4">
-                    Карьера в технологическом
-                    <span class="hero-gradient-text">кластере Москвы</span>
-                </h1>
-                <p class="lead mb-5 text-white-50">
-                    Платформа для поиска работы и стажировок в ОЭЗ «Технополис Москва»
-                </p>
-                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mb-5">
-                    <a class="btn btn-light btn-lg px-5 py-3 rounded-pill shadow-lg" href="{% url 'catalog:vacancies' %}">
-                        <i class="fas fa-briefcase me-2"></i>
-                        Найти вакансию
-                    </a>
-                    <a class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill" href="{% url 'catalog:internships' %}">
-                        <i class="fas fa-graduation-cap me-2"></i>
-                        Разместить стажировку
-                    </a>
-                </div>
-                <div class="hero-stats">
-                    <div class="row text-center">
-                        <div class="col-4">
-                            <div class="stat-number text-white fw-bold">500+</div>
-                            <div class="stat-label text-white-50 small">Компаний</div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-number text-white fw-bold">1000+</div>
-                            <div class="stat-label text-white-50 small">Вакансий</div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stat-number text-white fw-bold">200+</div>
-                            <div class="stat-label text-white-50 small">Стажировок</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="container mx-auto px-4 relative z-10 flex items-center justify-center min-h-screen">
+      <div class="text-center max-w-3xl">
+        <div class="mb-6 fade-in-up">
+          <h2 class="text-3xl font-bold">ТЕХНОПОЛИС МОСКВА</h2>
+          <div class="inline-flex items-center bg-white/20 text-white px-4 py-2 rounded-full mt-4 fade-in-up" style="transition-delay: 0.2s;">
+            <i class="fas fa-star mr-2"></i>
+            Твой помощник в поиске работы
+          </div>
         </div>
+
+        <h1 class="text-5xl md:text-6xl font-extrabold leading-tight mb-6 fade-in-up" style="transition-delay: 0.4s;">
+          Карьера в инновационном <span class="animate-gradient underline-slide">кластере</span>
+        </h1>
+
+        <p class="text-lg md:text-xl text-white/60 mb-8 fade-in-up" style="transition-delay: 0.6s;">
+          Платформа для поиска вакансий и стажировок в ОЭЗ «Технополис Москва»
+        </p>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-10 fade-in-up" style="transition-delay: 0.8s;">
+          <a href="{% url 'catalog:vacancies' %}" class="bg-white text-gray-900 font-semibold px-6 py-3 rounded-full flex items-center hover:bg-gray-100 transition shadow-lg">
+            <i class="fas fa-briefcase mr-2"></i>
+            Найти вакансию
+          </a>
+        </div>
+      </div>
     </div>
     <div class="hero-wave">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="rgb(248 250 252)"/>
         </svg>
-    </div>
-</section>
-
-<!-- Stats Section -->
-<section class="stats-section py-5">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-lg-3 col-md-6">
-                <div class="stats-card">
-                    <div class="stats-icon bg-gradient-primary">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <div class="stats-content">
-                        <div class="stats-number">50+</div>
-                        <div class="stats-label">Компаний-резидентов</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="stats-card">
-                    <div class="stats-icon bg-gradient-info">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="stats-content">
-                        <div class="stats-number">{{ recent_vacancies|length }}</div>
-                        <div class="stats-label">Активных вакансий</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="stats-card">
-                    <div class="stats-icon bg-gradient-success">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stats-content">
-                        <div class="stats-number">{{ recent_internships|length }}</div>
-                        <div class="stats-label">Мест стажировки</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="stats-card">
-                    <div class="stats-icon bg-gradient-warning">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div class="stats-content">
-                        <div class="stats-number">1000+</div>
-                        <div class="stats-label">Успешных трудоустройств</div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </section>
 
@@ -136,7 +140,7 @@
         <div class="row text-center mb-5">
             <div class="col-lg-8 mx-auto">
                 <h2 class="display-5 fw-bold mb-4">Почему выбирают нас?</h2>
-                <p class="lead text-muted">Мы создаем экосистему для успешного трудоустройства в технологическом кластере</p>
+                <p class="lead text-muted">Мы создаем экосистему для успешного трудоустройства в производственно-технологическом кластере</p>
             </div>
         </div>
         <div class="row g-4">
@@ -167,33 +171,6 @@
                     <p class="feature-description">Уникальная возможность получить практический опыт в ведущих IT-компаниях.</p>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-card h-100">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h4 class="feature-title">Аналитика рынка</h4>
-                    <p class="feature-description">Получайте актуальную информацию о трендах рынка труда и зарплатах.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-card h-100">
-                    <div class="feature-icon">
-                        <i class="fas fa-handshake"></i>
-                    </div>
-                    <h4 class="feature-title">Прямое общение</h4>
-                    <p class="feature-description">Связывайтесь напрямую с HR-менеджерами без посредников.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="feature-card h-100">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h4 class="feature-title">Мобильная версия</h4>
-                    <p class="feature-description">Удобный интерфейс на всех устройствах. Ищите работу где угодно.</p>
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -203,8 +180,8 @@
     <div class="container">
         <div class="row text-center mb-5">
             <div class="col-lg-8 mx-auto">
-                <h2 class="display-5 fw-bold mb-4">Отзывы наших пользователей</h2>
-                <p class="lead text-muted">Истории успеха от тех, кто уже нашел работу через нашу платформу</p>
+                <h2 class="display-5 fw-bold mb-4" style="color: #ffffff;">Отзывы наших пользователей</h2>
+                <p class="lead text-muted" style="color: #ffffff;">Истории успеха от тех, кто уже нашел работу через нашу платформу</p>
             </div>
         </div>
         <div class="row g-4">
@@ -346,9 +323,9 @@
                                             Москва
                                         </div>
                                         {% if vacancy.salary_min and vacancy.salary_max %}
-                                        <div class="vacancy-salary">
-                                            <i class="fas fa-ruble-sign"></i>
-                                            {{ vacancy.salary_min|floatformat:0 }} - {{ vacancy.salary_max|floatformat:0 }} ₽
+                                        <div class="vacancy-salary text-success">
+                                            <i class="fas fa-ruble-sign me-1"></i>
+                                            {{ vacancy.salary_min|floatformat:0 }} – {{ vacancy.salary_max|floatformat:0 }} ₽
                                         </div>
                                         {% endif %}
                                     </div>
