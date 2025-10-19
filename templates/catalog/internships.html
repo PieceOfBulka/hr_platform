@@ -29,7 +29,7 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <form method="get" class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="search" class="form-label">Поиск</label>
                                 <input type="text" class="form-control" id="search" name="search" 
                                        value="{{ request.GET.search }}" placeholder="Специальность, вуз...">
@@ -44,6 +44,20 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
+                                <label for="specialization" class="form-label">Сфера деятельности</label>
+                                <select class="form-select" id="specialization" name="specialization">
+                                    <option value="">Все</option>
+                                    <option value="IT" {% if request.GET.specialization == 'IT' %}selected{% endif %}>IT и программирование</option>
+                                    <option value="engineering" {% if request.GET.specialization == 'engineering' %}selected{% endif %}>Инженерия</option>
+                                    <option value="manufacturing" {% if request.GET.specialization == 'manufacturing' %}selected{% endif %}>Производство</option>
+                                    <option value="marketing" {% if request.GET.specialization == 'marketing' %}selected{% endif %}>Маркетинг</option>
+                                    <option value="finance" {% if request.GET.specialization == 'finance' %}selected{% endif %}>Финансы</option>
+                                    <option value="hr" {% if request.GET.specialization == 'hr' %}selected{% endif %}>HR и управление</option>
+                                    <option value="design" {% if request.GET.specialization == 'design' %}selected{% endif %}>Дизайн</option>
+                                    <option value="research" {% if request.GET.specialization == 'research' %}selected{% endif %}>Исследования</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
                                 <label for="period" class="form-label">Период</label>
                                 <select class="form-select" id="period" name="period">
                                     <option value="">Все</option>
@@ -51,12 +65,14 @@
                                     <option value="upcoming" {% if request.GET.period == 'upcoming' %}selected{% endif %}>Предстоящие</option>
                                 </select>
                             </div>
-                            <div class="col-md-2">
-                                <label class="form-label">&nbsp;</label>
-                                <div class="d-grid">
+                            <div class="col-12">
+                                <div class="d-flex gap-2">
                                     <button type="submit" class="btn btn-danger">
                                         <i class="fas fa-search me-2"></i>Найти
                                     </button>
+                                    <a href="{% url 'catalog:internships' %}" class="btn btn-outline-secondary">
+                                        <i class="fas fa-times me-2"></i>Сбросить
+                                    </a>
                                 </div>
                             </div>
                         </form>

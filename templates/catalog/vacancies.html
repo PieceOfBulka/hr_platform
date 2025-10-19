@@ -29,7 +29,7 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <form method="get" class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="search" class="form-label">Поиск</label>
                                 <input type="text" class="form-control" id="search" name="search" 
                                        value="{{ request.GET.search }}" placeholder="Должность, компания...">
@@ -45,6 +45,20 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
+                                <label for="specialization" class="form-label">Сфера деятельности</label>
+                                <select class="form-select" id="specialization" name="specialization">
+                                    <option value="">Все</option>
+                                    <option value="IT" {% if request.GET.specialization == 'IT' %}selected{% endif %}>IT и программирование</option>
+                                    <option value="engineering" {% if request.GET.specialization == 'engineering' %}selected{% endif %}>Инженерия</option>
+                                    <option value="manufacturing" {% if request.GET.specialization == 'manufacturing' %}selected{% endif %}>Производство</option>
+                                    <option value="marketing" {% if request.GET.specialization == 'marketing' %}selected{% endif %}>Маркетинг</option>
+                                    <option value="finance" {% if request.GET.specialization == 'finance' %}selected{% endif %}>Финансы</option>
+                                    <option value="hr" {% if request.GET.specialization == 'hr' %}selected{% endif %}>HR и управление</option>
+                                    <option value="design" {% if request.GET.specialization == 'design' %}selected{% endif %}>Дизайн</option>
+                                    <option value="research" {% if request.GET.specialization == 'research' %}selected{% endif %}>Исследования</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
                                 <label for="remote" class="form-label">Тип работы</label>
                                 <select class="form-select" id="remote" name="remote">
                                     <option value="">Все</option>
@@ -52,12 +66,14 @@
                                     <option value="false" {% if request.GET.remote == 'false' %}selected{% endif %}>Офисная</option>
                                 </select>
                             </div>
-                            <div class="col-md-2">
-                                <label class="form-label">&nbsp;</label>
-                                <div class="d-grid">
+                            <div class="col-12">
+                                <div class="d-flex gap-2">
                                     <button type="submit" class="btn btn-danger">
                                         <i class="fas fa-search me-2"></i>Найти
                                     </button>
+                                    <a href="{% url 'catalog:vacancies' %}" class="btn btn-outline-secondary">
+                                        <i class="fas fa-times me-2"></i>Сбросить
+                                    </a>
                                 </div>
                             </div>
                         </form>
@@ -82,54 +98,72 @@
                         {% if vacancies %}
                         <div class="row g-4">
                             {% for vacancy in vacancies %}
-                            <div class="col-lg-6">
-                                <div class="card h-100 job-card">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                            <div class="flex-grow-1">
-                                                <h5 class="fw-bold mb-1">{{ vacancy.title }}</h5>
-                                                <p class="text-danger fw-bold mb-1">{{ vacancy.company.company }}</p>
-                                                <div class="d-flex flex-wrap gap-2 mb-2">
-                                                    <span class="badge bg-light text-dark">{{ vacancy.get_experience_level_display }}</span>
-                                                    {% if vacancy.is_remote %}
-                                                    <span class="badge bg-light text-dark">Удаленная</span>
-                                                    {% else %}
-                                                    <span class="badge bg-light text-dark">Офисная</span>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                            <div class="text-end">
-                                                {% if vacancy.salary_min or vacancy.salary_max %}
-                                                <div class="fw-bold text-danger">
-                                                    {% if vacancy.salary_min and vacancy.salary_max %}
-                                                        {{ vacancy.salary_min|floatformat:0 }} - {{ vacancy.salary_max|floatformat:0 }} ₽
-                                                    {% elif vacancy.salary_min %}
-                                                        от {{ vacancy.salary_min|floatformat:0 }} ₽
-                                                    {% elif vacancy.salary_max %}
-                                                        до {{ vacancy.salary_max|floatformat:0 }} ₽
-                                                    {% endif %}
-                                                </div>
-                                                {% endif %}
-                                                <div class="text-muted small">{{ vacancy.created_at|date:"d.m.Y" }}</div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="vacancy-card">
+                                    <div class="vacancy-header">
+                                        <div class="vacancy-icon">
+                                            <i class="fas fa-briefcase"></i>
+                                        </div>
+                                        <div class="vacancy-info">
+                                            <h5 class="vacancy-title">{{ vacancy.title }}</h5>
+                                            <div class="vacancy-company">
+                                                <i class="fas fa-building me-1"></i>
+                                                {{ vacancy.company.company }}
                                             </div>
                                         </div>
-                                        
-                                        <p class="text-muted mb-3">{{ vacancy.description|truncatewords:20 }}</p>
-                                        
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="d-flex gap-2">
-                                                <a href="{% url 'vacancies:detail' vacancy.pk %}" class="btn btn-outline-danger btn-sm">
-                                                    <i class="fas fa-eye me-1"></i>Подробнее
-                                                </a>
-                                                {% if user.is_authenticated and user.role == 'CANDIDATE' %}
-                                                <a href="{% url 'vacancies:apply' vacancy.pk %}" class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-paper-plane me-1"></i>Откликнуться
-                                                </a>
-                                                {% endif %}
-                                            </div>
-                                            <div class="text-muted small">
-                                                <i class="fas fa-users me-1"></i>{{ vacancy.applications.count }} откликов
-                                            </div>
+                                    </div>
+                                    
+                                    <div class="vacancy-badges">
+                                        <span class="badge bg-primary">{{ vacancy.get_experience_level_display }}</span>
+                                        {% if vacancy.is_remote %}
+                                        <span class="badge bg-info">Удаленная</span>
+                                        {% else %}
+                                        <span class="badge bg-info">Офисная</span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <p class="vacancy-description">{{ vacancy.description|truncatewords:20 }}</p>
+                                    
+                                    <div class="vacancy-details">
+                                        <div class="vacancy-location">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            Москва
+                                        </div>
+                                        {% if vacancy.salary_min and vacancy.salary_max %}
+                                        <div class="vacancy-salary text-success">
+                                            <i class="fas fa-ruble-sign me-1"></i>
+                                            {{ vacancy.salary_min|floatformat:0 }} – {{ vacancy.salary_max|floatformat:0 }} ₽
+                                        </div>
+                                        {% elif vacancy.salary_min %}
+                                        <div class="vacancy-salary text-success">
+                                            <i class="fas fa-ruble-sign me-1"></i>
+                                            от {{ vacancy.salary_min|floatformat:0 }} ₽
+                                        </div>
+                                        {% elif vacancy.salary_max %}
+                                        <div class="vacancy-salary text-success">
+                                            <i class="fas fa-ruble-sign me-1"></i>
+                                            до {{ vacancy.salary_max|floatformat:0 }} ₽
+                                        </div>
+                                        {% endif %}
+                                        <div class="vacancy-date">
+                                            <i class="fas fa-calendar me-1"></i>
+                                            {{ vacancy.created_at|date:"d.m.Y" }}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <div class="d-flex gap-2">
+                                            <a href="{% url 'vacancies:detail' vacancy.pk %}" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-eye me-1"></i>Подробнее
+                                            </a>
+                                            {% if user.is_authenticated and user.role == 'CANDIDATE' %}
+                                            <a href="{% url 'vacancies:apply' vacancy.pk %}" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-paper-plane me-1"></i>Откликнуться
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                        <div class="text-muted small">
+                                            <i class="fas fa-users me-1"></i>{{ vacancy.applications.count }} откликов
                                         </div>
                                     </div>
                                 </div>

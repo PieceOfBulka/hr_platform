@@ -339,7 +339,7 @@ body{
   color: var(--muted);
 }
 
-.vacancy-location, .vacancy-salary, .internship-period {
+.vacancy-location, .vacancy-salary, .vacancy-date, .internship-period {
     display: flex;
     align-items: center;
     gap: 0.5rem;

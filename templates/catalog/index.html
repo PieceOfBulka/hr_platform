@@ -294,10 +294,12 @@
                             <i class="fas fa-briefcase me-2"></i>
                             Вакансии ({{ recent_vacancies|length }})
                         </button>
+                        {% if not user.is_authenticated or user.role != 'CANDIDATE' %}
                         <button class="nav-link" id="internships-tab" data-bs-toggle="pill" data-bs-target="#internships" type="button" role="tab">
                             <i class="fas fa-graduation-cap me-2"></i>
                             Стажировки ({{ recent_internships|length }})
                         </button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -358,6 +360,7 @@
             </div>
 
             <!-- Internships Tab -->
+            {% if not user.is_authenticated or user.role != 'CANDIDATE' %}
             <div class="tab-pane fade" id="internships" role="tabpanel">
                 {% if recent_internships %}
                     <div class="row g-4">
@@ -377,10 +380,7 @@
                                         </div>
                                     </div>
                                     <div class="internship-badges">
-                                        <span class="badge bg-success">
-                                            <i class="fas fa-users me-1"></i>
-                                            {{ internship.students_count }} студентов
-                                        </span>
+                                        <span class="badge bg-primary">Стажировка</span>
                                     </div>
                                     <p class="internship-description">{{ internship.description|truncatewords:20 }}</p>
                                     <div class="internship-details">
@@ -389,7 +389,7 @@
                                             {{ internship.start_date|date:"d M" }} - {{ internship.end_date|date:"d M Y" }}
                                         </div>
                                     </div>
-                                    <a href="{% url 'internships:apply' internship.pk %}" class="btn btn-success w-100 internship-contact-btn">
+                                    <a href="{% url 'internships:apply' internship.pk %}" class="btn btn-primary w-100 internship-contact-btn">
                                         Связаться
                                     </a>
                                 </div>
@@ -404,6 +404,7 @@
                     </div>
                 {% endif %}
             </div>
+            {% endif %}
         </div>
     </div>
 </section>
