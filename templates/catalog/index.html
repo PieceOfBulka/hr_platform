@@ -89,13 +89,18 @@
         bottom: 0;
         left: 0;
         right: 0;
-        height: 200px;
+        height: 300px;
         background: linear-gradient(to bottom, 
             transparent 0%, 
-            rgba(248,249,250,0.1) 20%, 
-            rgba(248,249,250,0.3) 40%, 
-            rgba(248,249,250,0.6) 60%, 
-            rgba(248,249,250,0.8) 80%, 
+            rgba(248,249,250,0.1) 10%, 
+            rgba(248,249,250,0.2) 20%, 
+            rgba(248,249,250,0.4) 30%, 
+            rgba(248,249,250,0.6) 40%, 
+            rgba(248,249,250,0.8) 50%, 
+            rgba(248,249,250,0.9) 60%, 
+            rgba(248,249,250,0.95) 70%, 
+            rgba(248,249,250,0.98) 80%, 
+            rgba(248,249,250,0.99) 90%, 
             #f8f9fa 100%
         );
         z-index: 5;
@@ -159,7 +164,7 @@
 
             <!-- Кнопка действия -->
             <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-                <a href="{% url 'catalog:vacancies' %}" class="btn-corporate" style="padding: 0.75rem 1.5rem; border-radius: 9999px; background: #cc0000; color: white;">
+                <a href="{% url 'catalog:vacancies' %}" class="btn-corporate" style="padding: 0.75rem 1.5rem; border-radius: 9999px; background: #cc0000; color: white; text-decoration: none;">
                     <i class="fas fa-briefcase" style="margin-right: 0.5rem;"></i>
                     Найти вакансию
                 </a>
@@ -433,4 +438,65 @@
         </div>
     </div>
 </section>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector('.search-input');
+    const vacancyCards = document.querySelectorAll('.vacancy-card');
+    const internshipCards = document.querySelectorAll('.internship-card');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            // Поиск по вакансиям
+            vacancyCards.forEach(card => {
+                const title = card.querySelector('.vacancy-title')?.textContent.toLowerCase() || '';
+                const company = card.querySelector('.vacancy-company')?.textContent.toLowerCase() || '';
+                const description = card.querySelector('.vacancy-description')?.textContent.toLowerCase() || '';
+                
+                if (title.includes(searchTerm) || company.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Поиск по стажировкам
+            internshipCards.forEach(card => {
+                const title = card.querySelector('.internship-title')?.textContent.toLowerCase() || '';
+                const university = card.querySelector('.internship-university')?.textContent.toLowerCase() || '';
+                const description = card.querySelector('.internship-description')?.textContent.toLowerCase() || '';
+                
+                if (title.includes(searchTerm) || university.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Обновляем счетчики в табах
+            updateTabCounts();
+        });
+    }
+    
+    function updateTabCounts() {
+        const visibleVacancies = document.querySelectorAll('.vacancy-card[style*="block"], .vacancy-card:not([style*="none"])').length;
+        const visibleInternships = document.querySelectorAll('.internship-card[style*="block"], .internship-card:not([style*="none"])').length;
+        
+        const vacancyTab = document.querySelector('#vacancies-tab');
+        const internshipTab = document.querySelector('#internships-tab');
+        
+        if (vacancyTab) {
+            vacancyTab.innerHTML = `<i class="fas fa-briefcase me-2"></i>Вакансии (${visibleVacancies})`;
+        }
+        
+        if (internshipTab) {
+            internshipTab.innerHTML = `<i class="fas fa-graduation-cap me-2"></i>Стажировки (${visibleInternships})`;
+        }
+    }
+});
+</script>
+{% endblock %}
 {% endblock %}

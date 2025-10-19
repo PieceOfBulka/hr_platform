@@ -44,7 +44,7 @@ class ApplicationForm(forms.ModelForm):
     
     class Meta:
         model = Application
-        fields = ['cover_letter', 'resume_file']
+        fields = ['cover_letter', 'resume_file', 'add_to_public_bank']
         widgets = {
             'cover_letter': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Расскажите о себе и почему вы подходите для этой позиции...'}),
         }
@@ -67,9 +67,16 @@ class ApplicationForm(forms.ModelForm):
 class AnonymousApplicationForm(forms.ModelForm):
     """Форма отклика на вакансию для неавторизованных пользователей"""
     
+    add_to_public_bank = forms.BooleanField(
+        required=False,
+        initial=True,
+        label='Разместить резюме в общем банке',
+        help_text='Позволит другим HR-менеджерам увидеть ваше резюме'
+    )
+    
     class Meta:
         model = Application
-        fields = ['candidate_name', 'candidate_email', 'candidate_phone', 'cover_letter', 'resume_file']
+        fields = ['candidate_name', 'candidate_email', 'candidate_phone', 'cover_letter', 'resume_file', 'add_to_public_bank']
         widgets = {
             'candidate_name': forms.TextInput(attrs={'placeholder': 'Ваше имя и фамилия'}),
             'candidate_email': forms.EmailInput(attrs={'placeholder': 'your.email@example.com'}),
@@ -90,4 +97,8 @@ class AnonymousApplicationForm(forms.ModelForm):
         
         self.fields['resume_file'].widget.attrs.update({
             'accept': '.pdf,.doc,.docx'
+        })
+        
+        self.fields['add_to_public_bank'].widget.attrs.update({
+            'class': 'form-check-input'
         })

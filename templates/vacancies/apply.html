@@ -104,6 +104,25 @@
                                 <div class="form-text">Загрузите файл резюме в формате PDF, DOC или DOCX</div>
                             </div>
                             
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    {{ form.add_to_public_bank }}
+                                    <label class="form-check-label fw-medium" for="{{ form.add_to_public_bank.id_for_label }}">
+                                        {{ form.add_to_public_bank.label }}
+                                    </label>
+                                    {% if form.add_to_public_bank.help_text %}
+                                        <div class="form-text">{{ form.add_to_public_bank.help_text }}</div>
+                                    {% endif %}
+                                </div>
+                                {% if form.add_to_public_bank.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {% for error in form.add_to_public_bank.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
                             {% if form.non_field_errors %}
                                 <div class="alert alert-danger">
                                     {% for error in form.non_field_errors %}

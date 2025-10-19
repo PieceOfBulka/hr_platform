@@ -177,6 +177,11 @@ class Application(models.Model):
         verbose_name=_('Файл резюме')
     )
     
+    add_to_public_bank = models.BooleanField(
+        default=False,
+        verbose_name=_('Добавить в общий банк резюме')
+    )
+    
     status = models.CharField(
         max_length=20,
         choices=[

@@ -297,7 +297,7 @@ body{
 }
 
 .internship-icon {
-  background: var(--tech-green);
+  background: var(--primary-red);
 }
 
 .vacancy-title, .internship-title {

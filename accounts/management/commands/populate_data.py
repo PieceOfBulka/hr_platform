@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import random
 
 from vacancies.models import Vacancy
-from internships.models import Internship
+from internships.models import Internship, PracticeRequest
 from resumes.models import Resume, WorkExperience, Education
 from skills.models import Skill
 
@@ -27,6 +27,7 @@ class Command(BaseCommand):
             self.stdout.write('Очистка существующих данных...')
             Vacancy.objects.all().delete()
             Internship.objects.all().delete()
+            PracticeRequest.objects.all().delete()
             Resume.objects.all().delete()
             WorkExperience.objects.all().delete()
             Education.objects.all().delete()
@@ -41,8 +42,11 @@ class Command(BaseCommand):
         self.stdout.write('Создание вакансий...')
         self.create_vacancies()
         
-        self.stdout.write('Создание стажировок и практик...')
+        self.stdout.write('Создание стажировок...')
         self.create_internships()
+        
+        self.stdout.write('Создание практик...')
+        self.create_practices()
         
         self.stdout.write('Создание резюме...')
         self.create_resumes()
@@ -511,17 +515,15 @@ class Command(BaseCommand):
             )
 
     def create_internships(self):
-        """Создание стажировок и практик"""
+        """Создание стажировок от HR компаний"""
         hr_users = User.objects.filter(role='hr')
-        university_users = User.objects.filter(role='university')
         
-        if not hr_users.exists() or not university_users.exists():
+        if not hr_users.exists():
             return
 
-        # Стажировки от HR (5% IT, 95% производственные)
+        # Стажировки от HR компаний
         internships_data = [
             {
-                'type': 'internship',
                 'title': 'Стажировка Frontend разработчика',
                 'description': 'Практическое изучение разработки пользовательских интерфейсов.',
                 'requirements': 'Базовые знания HTML, CSS, JavaScript. Желание изучать React.',
@@ -531,7 +533,6 @@ class Command(BaseCommand):
                 'is_remote': True,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка инженера-технолога',
                 'description': 'Изучение технологических процессов производства.',
                 'requirements': 'Техническое образование. Интерес к производственным процессам.',
@@ -541,7 +542,6 @@ class Command(BaseCommand):
                 'is_remote': False,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка оператора станков ЧПУ',
                 'description': 'Обучение работе на станках с числовым программным управлением.',
                 'requirements': 'Среднее специальное образование. Базовые знания математики.',
@@ -551,7 +551,6 @@ class Command(BaseCommand):
                 'is_remote': False,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка контролера качества',
                 'description': 'Изучение методов контроля качества продукции.',
                 'requirements': 'Техническое образование. Внимательность к деталям.',
@@ -561,7 +560,6 @@ class Command(BaseCommand):
                 'is_remote': False,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка маркетолога',
                 'description': 'Изучение маркетинговых стратегий в производственной сфере.',
                 'requirements': 'Образование в области маркетинга или экономики.',
@@ -571,7 +569,6 @@ class Command(BaseCommand):
                 'is_remote': True,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка сварщика',
                 'description': 'Обучение сварочным работам различных видов металлов.',
                 'requirements': 'Среднее специальное образование. Физическая выносливость.',
@@ -581,7 +578,6 @@ class Command(BaseCommand):
                 'is_remote': False,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка токаря',
                 'description': 'Обучение работе на токарных станках.',
                 'requirements': 'Среднее специальное образование. Точность и аккуратность.',
@@ -591,7 +587,6 @@ class Command(BaseCommand):
                 'is_remote': False,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка фрезеровщика',
                 'description': 'Обучение работе на фрезерных станках.',
                 'requirements': 'Среднее специальное образование. Знание чертежей.',
@@ -601,7 +596,6 @@ class Command(BaseCommand):
                 'is_remote': False,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка слесаря-сборщика',
                 'description': 'Обучение слесарным и сборочным работам.',
                 'requirements': 'Среднее специальное образование. Опыт работы с инструментами.',
@@ -611,7 +605,6 @@ class Command(BaseCommand):
                 'is_remote': False,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка электромонтера',
                 'description': 'Обучение электромонтажным работам.',
                 'requirements': 'Образование по специальности "Электромонтер".',
@@ -621,7 +614,6 @@ class Command(BaseCommand):
                 'is_remote': False,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка наладчика оборудования',
                 'description': 'Обучение наладке и регулировке оборудования.',
                 'requirements': 'Техническое образование. Опыт работы с оборудованием.',
@@ -631,7 +623,6 @@ class Command(BaseCommand):
                 'is_remote': False,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка мастера смены',
                 'description': 'Обучение управлению производственной сменой.',
                 'requirements': 'Высшее техническое образование. Лидерские качества.',
@@ -641,7 +632,6 @@ class Command(BaseCommand):
                 'is_remote': False,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка логиста',
                 'description': 'Обучение логистическим процессам.',
                 'requirements': 'Образование в области логистики или экономики.',
@@ -651,7 +641,6 @@ class Command(BaseCommand):
                 'is_remote': True,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка экономиста',
                 'description': 'Обучение экономическому анализу производства.',
                 'requirements': 'Экономическое образование. Знание математики.',
@@ -661,7 +650,6 @@ class Command(BaseCommand):
                 'is_remote': True,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка бухгалтера',
                 'description': 'Обучение ведению бухгалтерского учета.',
                 'requirements': 'Экономическое образование. Внимательность к деталям.',
@@ -671,7 +659,6 @@ class Command(BaseCommand):
                 'is_remote': True,
             },
             {
-                'type': 'internship',
                 'title': 'Стажировка менеджера по продажам',
                 'description': 'Обучение продажам в производственной сфере.',
                 'requirements': 'Образование в области продаж или маркетинга.',
@@ -682,211 +669,7 @@ class Command(BaseCommand):
             },
         ]
 
-        # Практики от университетов (5% IT, 95% производственные)
-        practices_data = [
-            {
-                'type': 'practice',
-                'title': 'Практика по программированию',
-                'description': 'Практическое изучение основ программирования и разработки ПО.',
-                'requirements': 'Знание основ программирования, математики.',
-                'tasks': 'Изучение алгоритмов, разработка простых приложений, работа в команде.',
-                'specialization': 'Программирование',
-                'duration': '2',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по машиностроению',
-                'description': 'Изучение основ машиностроения и производственных процессов.',
-                'requirements': 'Знание математики, физики. Интерес к техническим дисциплинам.',
-                'tasks': 'Изучение оборудования, работа с чертежами, участие в производственном процессе.',
-                'specialization': 'Машиностроение',
-                'duration': '3',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по технологии производства',
-                'description': 'Изучение технологических процессов и методов производства.',
-                'requirements': 'Знание химии, физики. Базовые знания материаловедения.',
-                'tasks': 'Изучение технологий, работа с материалами, контроль качества.',
-                'specialization': 'Технология производства',
-                'duration': '2',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по автоматизации',
-                'description': 'Изучение систем автоматизации производственных процессов.',
-                'requirements': 'Знание основ автоматизации, программирования.',
-                'tasks': 'Изучение систем управления, программирование ПЛК, настройка оборудования.',
-                'specialization': 'Автоматизация',
-                'duration': '3',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по экономике предприятия',
-                'description': 'Изучение экономических процессов на производственном предприятии.',
-                'requirements': 'Знание экономики, математики. Интерес к бизнес-процессам.',
-                'tasks': 'Анализ экономических показателей, планирование, работа с документацией.',
-                'specialization': 'Экономика',
-                'duration': '2',
-                'is_remote': True,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по маркетингу',
-                'description': 'Изучение маркетинговых стратегий и продвижения продукции.',
-                'requirements': 'Знание основ маркетинга, коммуникативные навыки.',
-                'tasks': 'Анализ рынка, разработка маркетинговых материалов, работа с клиентами.',
-                'specialization': 'Маркетинг',
-                'duration': '2',
-                'is_remote': True,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по сварочным работам',
-                'description': 'Производственная практика по сварочным технологиям.',
-                'requirements': 'Студенты сварочных специальностей.',
-                'tasks': 'Изучение сварочных технологий, практические работы, получение навыков.',
-                'specialization': 'Сварочные работы',
-                'duration': '4',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по токарным работам',
-                'description': 'Изучение токарных работ на производстве.',
-                'requirements': 'Студенты токарных специальностей.',
-                'tasks': 'Работа на токарных станках, изучение технологий, обработка деталей.',
-                'specialization': 'Токарные работы',
-                'duration': '3',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по фрезерным работам',
-                'description': 'Изучение фрезерных работ на производстве.',
-                'requirements': 'Студенты фрезерных специальностей.',
-                'tasks': 'Работа на фрезерных станках, изучение технологий, обработка деталей.',
-                'specialization': 'Фрезерные работы',
-                'duration': '3',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по слесарным работам',
-                'description': 'Изучение слесарных и сборочных работ.',
-                'requirements': 'Студенты слесарных специальностей.',
-                'tasks': 'Слесарные работы, сборка узлов, изучение инструментов.',
-                'specialization': 'Слесарные работы',
-                'duration': '3',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по электромонтажу',
-                'description': 'Изучение электромонтажных работ.',
-                'requirements': 'Студенты электромонтажных специальностей.',
-                'tasks': 'Монтаж электрооборудования, изучение схем, работа с приборами.',
-                'specialization': 'Электромонтаж',
-                'duration': '4',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по контролю качества',
-                'description': 'Изучение методов контроля качества продукции.',
-                'requirements': 'Студенты специальностей по контролю качества.',
-                'tasks': 'Контроль качества, работа с приборами, ведение документации.',
-                'specialization': 'Контроль качества',
-                'duration': '3',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по наладке оборудования',
-                'description': 'Изучение наладки и регулировки оборудования.',
-                'requirements': 'Студенты специальностей по наладке оборудования.',
-                'tasks': 'Наладка станков, диагностика, регулировка оборудования.',
-                'specialization': 'Наладка оборудования',
-                'duration': '4',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по управлению производством',
-                'description': 'Изучение управления производственными процессами.',
-                'requirements': 'Студенты специальностей по управлению производством.',
-                'tasks': 'Планирование производства, управление персоналом, контроль качества.',
-                'specialization': 'Управление производством',
-                'duration': '4',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по логистике',
-                'description': 'Изучение логистических процессов на предприятии.',
-                'requirements': 'Студенты логистических специальностей.',
-                'tasks': 'Планирование поставок, работа со складами, оптимизация процессов.',
-                'specialization': 'Логистика',
-                'duration': '3',
-                'is_remote': True,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по бухгалтерскому учету',
-                'description': 'Изучение ведения бухгалтерского учета на предприятии.',
-                'requirements': 'Студенты бухгалтерских специальностей.',
-                'tasks': 'Ведение учета, составление отчетности, работа с документами.',
-                'specialization': 'Бухгалтерский учет',
-                'duration': '3',
-                'is_remote': True,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по продажам',
-                'description': 'Изучение продаж в производственной сфере.',
-                'requirements': 'Студенты специальностей по продажам.',
-                'tasks': 'Работа с клиентами, изучение продуктов, ведение переговоров.',
-                'specialization': 'Продажи',
-                'duration': '3',
-                'is_remote': True,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по охране труда',
-                'description': 'Изучение охраны труда на производстве.',
-                'requirements': 'Студенты специальностей по охране труда.',
-                'tasks': 'Изучение требований безопасности, проведение инструктажей, контроль соблюдения.',
-                'specialization': 'Охрана труда',
-                'duration': '3',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по материаловедению',
-                'description': 'Изучение свойств и применения материалов.',
-                'requirements': 'Студенты материаловедческих специальностей.',
-                'tasks': 'Изучение материалов, проведение испытаний, анализ свойств.',
-                'specialization': 'Материаловедение',
-                'duration': '3',
-                'is_remote': False,
-            },
-            {
-                'type': 'practice',
-                'title': 'Практика по метрологии',
-                'description': 'Изучение измерительных приборов и методов измерений.',
-                'requirements': 'Студенты метрологических специальностей.',
-                'tasks': 'Работа с приборами, проведение измерений, калибровка оборудования.',
-                'specialization': 'Метрология',
-                'duration': '3',
-                'is_remote': False,
-            },
-        ]
-
-        # Статусы для стажировок и практик
+        # Статусы для стажировок
         internship_statuses = ['published', 'published', 'published', 'published', 'draft', 'pending']
         
         # Создаем стажировки от HR
@@ -904,7 +687,7 @@ class Command(BaseCommand):
             
             Internship.objects.get_or_create(
                 title=internship_data['title'],
-                organization=company,
+                company=company,
                 defaults={
                     **internship_data,
                     'start_date': start_date,
@@ -916,12 +699,226 @@ class Command(BaseCommand):
                 }
             )
 
+    def create_practices(self):
+        """Создание практик от университетов"""
+        university_users = User.objects.filter(role='university')
+        
+        if not university_users.exists():
+            return
+
+        # Практики от университетов
+        practices_data = [
+            {
+                'title': 'Практика по программированию',
+                'description': 'Практическое изучение основ программирования и разработки ПО.',
+                'requirements': 'Знание основ программирования, математики.',
+                'tasks': 'Изучение алгоритмов, разработка простых приложений, работа в команде.',
+                'specialization': 'Программирование',
+                'students_count': random.randint(5, 15),
+                'duration': '2',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по машиностроению',
+                'description': 'Изучение основ машиностроения и производственных процессов.',
+                'requirements': 'Знание математики, физики. Интерес к техническим дисциплинам.',
+                'tasks': 'Изучение оборудования, работа с чертежами, участие в производственном процессе.',
+                'specialization': 'Машиностроение',
+                'students_count': random.randint(8, 20),
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по технологии производства',
+                'description': 'Изучение технологических процессов и методов производства.',
+                'requirements': 'Знание химии, физики. Базовые знания материаловедения.',
+                'tasks': 'Изучение технологий, работа с материалами, контроль качества.',
+                'specialization': 'Технология производства',
+                'students_count': random.randint(6, 18),
+                'duration': '2',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по автоматизации',
+                'description': 'Изучение систем автоматизации производственных процессов.',
+                'requirements': 'Знание основ автоматизации, программирования.',
+                'tasks': 'Изучение систем управления, программирование ПЛК, настройка оборудования.',
+                'specialization': 'Автоматизация',
+                'students_count': random.randint(4, 12),
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по экономике предприятия',
+                'description': 'Изучение экономических процессов на производственном предприятии.',
+                'requirements': 'Знание экономики, математики. Интерес к бизнес-процессам.',
+                'tasks': 'Анализ экономических показателей, планирование, работа с документацией.',
+                'specialization': 'Экономика',
+                'students_count': random.randint(5, 15),
+                'duration': '2',
+                'is_remote': True,
+            },
+            {
+                'title': 'Практика по маркетингу',
+                'description': 'Изучение маркетинговых стратегий и продвижения продукции.',
+                'requirements': 'Знание основ маркетинга, коммуникативные навыки.',
+                'tasks': 'Анализ рынка, разработка маркетинговых материалов, работа с клиентами.',
+                'specialization': 'Маркетинг',
+                'students_count': random.randint(6, 16),
+                'duration': '2',
+                'is_remote': True,
+            },
+            {
+                'title': 'Практика по сварочным работам',
+                'description': 'Производственная практика по сварочным технологиям.',
+                'requirements': 'Студенты сварочных специальностей.',
+                'tasks': 'Изучение сварочных технологий, практические работы, получение навыков.',
+                'specialization': 'Сварочные работы',
+                'students_count': random.randint(8, 20),
+                'duration': '4',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по токарным работам',
+                'description': 'Изучение токарных работ на производстве.',
+                'requirements': 'Студенты токарных специальностей.',
+                'tasks': 'Работа на токарных станках, изучение технологий, обработка деталей.',
+                'specialization': 'Токарные работы',
+                'students_count': random.randint(6, 18),
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по фрезерным работам',
+                'description': 'Изучение фрезерных работ на производстве.',
+                'requirements': 'Студенты фрезерных специальностей.',
+                'tasks': 'Работа на фрезерных станках, изучение технологий, обработка деталей.',
+                'specialization': 'Фрезерные работы',
+                'students_count': random.randint(6, 18),
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по слесарным работам',
+                'description': 'Изучение слесарных и сборочных работ.',
+                'requirements': 'Студенты слесарных специальностей.',
+                'tasks': 'Слесарные работы, сборка узлов, изучение инструментов.',
+                'specialization': 'Слесарные работы',
+                'students_count': random.randint(8, 20),
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по электромонтажу',
+                'description': 'Изучение электромонтажных работ.',
+                'requirements': 'Студенты электромонтажных специальностей.',
+                'tasks': 'Монтаж электрооборудования, изучение схем, работа с приборами.',
+                'specialization': 'Электромонтаж',
+                'students_count': random.randint(5, 15),
+                'duration': '4',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по контролю качества',
+                'description': 'Изучение методов контроля качества продукции.',
+                'requirements': 'Студенты специальностей по контролю качества.',
+                'tasks': 'Контроль качества, работа с приборами, ведение документации.',
+                'specialization': 'Контроль качества',
+                'students_count': random.randint(4, 12),
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по наладке оборудования',
+                'description': 'Изучение наладки и регулировки оборудования.',
+                'requirements': 'Студенты специальностей по наладке оборудования.',
+                'tasks': 'Наладка станков, диагностика, регулировка оборудования.',
+                'specialization': 'Наладка оборудования',
+                'students_count': random.randint(3, 10),
+                'duration': '4',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по управлению производством',
+                'description': 'Изучение управления производственными процессами.',
+                'requirements': 'Студенты специальностей по управлению производством.',
+                'tasks': 'Планирование производства, управление персоналом, контроль качества.',
+                'specialization': 'Управление производством',
+                'students_count': random.randint(5, 15),
+                'duration': '4',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по логистике',
+                'description': 'Изучение логистических процессов на предприятии.',
+                'requirements': 'Студенты логистических специальностей.',
+                'tasks': 'Планирование поставок, работа со складами, оптимизация процессов.',
+                'specialization': 'Логистика',
+                'students_count': random.randint(6, 16),
+                'duration': '3',
+                'is_remote': True,
+            },
+            {
+                'title': 'Практика по бухгалтерскому учету',
+                'description': 'Изучение ведения бухгалтерского учета на предприятии.',
+                'requirements': 'Студенты бухгалтерских специальностей.',
+                'tasks': 'Ведение учета, составление отчетности, работа с документами.',
+                'specialization': 'Бухгалтерский учет',
+                'students_count': random.randint(5, 15),
+                'duration': '3',
+                'is_remote': True,
+            },
+            {
+                'title': 'Практика по продажам',
+                'description': 'Изучение продаж в производственной сфере.',
+                'requirements': 'Студенты специальностей по продажам.',
+                'tasks': 'Работа с клиентами, изучение продуктов, ведение переговоров.',
+                'specialization': 'Продажи',
+                'students_count': random.randint(6, 16),
+                'duration': '3',
+                'is_remote': True,
+            },
+            {
+                'title': 'Практика по охране труда',
+                'description': 'Изучение охраны труда на производстве.',
+                'requirements': 'Студенты специальностей по охране труда.',
+                'tasks': 'Изучение требований безопасности, проведение инструктажей, контроль соблюдения.',
+                'specialization': 'Охрана труда',
+                'students_count': random.randint(4, 12),
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по материаловедению',
+                'description': 'Изучение свойств и применения материалов.',
+                'requirements': 'Студенты материаловедческих специальностей.',
+                'tasks': 'Изучение материалов, проведение испытаний, анализ свойств.',
+                'specialization': 'Материаловедение',
+                'students_count': random.randint(5, 15),
+                'duration': '3',
+                'is_remote': False,
+            },
+            {
+                'title': 'Практика по метрологии',
+                'description': 'Изучение измерительных приборов и методов измерений.',
+                'requirements': 'Студенты метрологических специальностей.',
+                'tasks': 'Работа с приборами, проведение измерений, калибровка оборудования.',
+                'specialization': 'Метрология',
+                'students_count': random.randint(3, 10),
+                'duration': '3',
+                'is_remote': False,
+            },
+        ]
+
+        # Статусы для практик
+        practice_statuses = ['published', 'published', 'published', 'published', 'draft', 'pending']
+        
         # Создаем практики от университетов
         for practice_data in practices_data:
             university = random.choice(university_users)
             start_date = timezone.now().date() + timedelta(days=random.randint(7, 30))
             end_date = start_date + timedelta(days=int(practice_data['duration']) * 30)
-            status = random.choice(internship_statuses)
+            status = random.choice(practice_statuses)
             
             # Определяем дату публикации в зависимости от статуса
             if status == 'published':
@@ -929,9 +926,9 @@ class Command(BaseCommand):
             else:
                 published_at = None
             
-            Internship.objects.get_or_create(
+            PracticeRequest.objects.get_or_create(
                 title=practice_data['title'],
-                organization=university,
+                university=university,
                 defaults={
                     **practice_data,
                     'start_date': start_date,

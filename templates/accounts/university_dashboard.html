@@ -118,7 +118,7 @@
                 
                 <!-- Recent Activity -->
                 <div class="row g-4">
-                    <div class="col-lg-6">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-header bg-white">
                                 <h5 class="fw-bold text-dark mb-0">Последние стажировки</h5>
@@ -147,41 +147,6 @@
                                 <div class="text-center py-3">
                                     <i class="fas fa-graduation-cap fa-2x text-muted mb-2"></i>
                                     <p class="text-muted mb-0">У вас пока нет стажировок</p>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6">
-                        <div class="card">
-                            <div class="card-header bg-white">
-                                <h5 class="fw-bold text-dark mb-0">Новые отклики</h5>
-                            </div>
-                            <div class="card-body">
-                                {% if recent_applications %}
-                                <div class="list-group list-group-flush">
-                                    {% for application in recent_applications %}
-                                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="fw-bold text-dark mb-1">{{ application.internship.specialization }}</h6>
-                                            <p class="text-muted mb-0">{{ application.candidate.get_full_name }}</p>
-                                        </div>
-                                        <div class="d-flex gap-2">
-                                            <span class="badge {% if application.status == 'new' %}bg-primary{% elif application.status == 'reviewed' %}bg-warning{% else %}bg-success{% endif %}">
-                                                {% if application.status == 'new' %}Новый{% elif application.status == 'reviewed' %}Просмотрен{% else %}Одобрен{% endif %}
-                                            </span>
-                                            <a href="{% url 'internships:applications' application.internship.pk %}" class="btn btn-outline-primary btn-sm">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                                {% else %}
-                                <div class="text-center py-3">
-                                    <i class="fas fa-paper-plane fa-2x text-muted mb-2"></i>
-                                    <p class="text-muted mb-0">Нет новых откликов</p>
                                 </div>
                                 {% endif %}
                             </div>
