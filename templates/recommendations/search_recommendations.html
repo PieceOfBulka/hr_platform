@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Поиск рекомендаций{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-filter"></i> Фильтры</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" id="searchForm">
+                        <div class="mb-3">
+                            <label for="q" class="form-label">Поиск</label>
+                            <input type="text" class="form-control" id="q" name="q" value="{{ search_query }}" placeholder="Должность, навыки...">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="experience" class="form-label">Уровень опыта</label>
+                            <select class="form-select" id="experience" name="experience">
+                                <option value="">Любой</option>
+                                <option value="no_experience" {% if experience_level == 'no_experience' %}selected{% endif %}>Без опыта</option>
+                                <option value="junior" {% if experience_level == 'junior' %}selected{% endif %}>Junior (1-3 года)</option>
+                                <option value="middle" {% if experience_level == 'middle' %}selected{% endif %}>Middle (3-5 лет)</option>
+                                <option value="senior" {% if experience_level == 'senior' %}selected{% endif %}>Senior (5+ лет)</option>
+                                <option value="lead" {% if experience_level == 'lead' %}selected{% endif %}>Lead/Team Lead</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="salary_min" class="form-label">Зарплата от</label>
+                            <input type="number" class="form-control" id="salary_min" name="salary_min" value="{{ salary_min }}" placeholder="0">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="salary_max" class="form-label">Зарплата до</label>
+                            <input type="number" class="form-control" id="salary_max" name="salary_max" value="{{ salary_max }}" placeholder="1000000">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="remote" name="remote" value="true" {% if is_remote == 'true' %}checked{% endif %}>
+                                <label class="form-check-label" for="remote">
+                                    Только удаленная работа
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search"></i> Найти
+                        </button>
+                        
+                        <a href="{% url 'recommendations:candidate_recommendations' %}" class="btn btn-outline-secondary w-100 mt-2">
+                            <i class="fas fa-times"></i> Сбросить
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Поиск рекомендаций</h2>
+                <div class="text-muted">
+                    Найдено: {{ total_recommendations }} вакансий
+                </div>
+            </div>
+
+            {% if recommendations %}
+                {% for recommendation in recommendations %}
+                <div class="card mb-3 recommendation-card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5 class="card-title">
+                                    <a href="{% url 'vacancies:detail' recommendation.vacancy.id %}" class="text-decoration-none">
+                                        {{ recommendation.vacancy.title }}
+                                    </a>
+                                </h5>
+                                <p class="text-muted mb-2">
+                                    <i class="fas fa-building"></i> {{ recommendation.vacancy.company.company }}
+                                </p>
+                                <p class="card-text">
+                                    {{ recommendation.vacancy.description|truncatewords:30 }}
+                                </p>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    {% if recommendation.vacancy.salary_min %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-ruble-sign"></i> 
+                                        {{ recommendation.vacancy.salary_min|floatformat:0 }} - {{ recommendation.vacancy.salary_max|floatformat:0 }} ₽
+                                    </span>
+                                    {% endif %}
+                                    {% if recommendation.vacancy.is_remote %}
+                                    <span class="badge bg-info">
+                                        <i class="fas fa-home"></i> Удаленно
+                                    </span>
+                                    {% endif %}
+                                    <span class="badge bg-secondary">
+                                        {{ recommendation.vacancy.get_experience_level_display }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="match-score">
+                                    <div class="score-circle">
+                                        <span class="score-number">{{ recommendation.match_percentage|floatformat:0 }}%</span>
+                                        <div class="score-label">совпадение</div>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="{% url 'vacancies:apply' recommendation.vacancy.id %}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-paper-plane"></i> Откликнуться
+                                    </a>
+                                    <a href="{% url 'recommendations:recommendation_details' recommendation.id %}" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-info-circle"></i> Подробнее
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Пагинация -->
+                {% if recommendations.has_other_pages %}
+                <nav aria-label="Навигация по рекомендациям">
+                    <ul class="pagination justify-content-center">
+                        {% if recommendations.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ recommendations.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if experience_level %}&experience={{ experience_level }}{% endif %}{% if salary_min %}&salary_min={{ salary_min }}{% endif %}{% if salary_max %}&salary_max={{ salary_max }}{% endif %}{% if is_remote %}&remote={{ is_remote }}{% endif %}">Предыдущая</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in recommendations.paginator.page_range %}
+                        {% if recommendations.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > recommendations.number|add:'-3' and num < recommendations.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if experience_level %}&experience={{ experience_level }}{% endif %}{% if salary_min %}&salary_min={{ salary_min }}{% endif %}{% if salary_max %}&salary_max={{ salary_max }}{% endif %}{% if is_remote %}&remote={{ is_remote }}{% endif %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if recommendations.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ recommendations.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if experience_level %}&experience={{ experience_level }}{% endif %}{% if salary_min %}&salary_min={{ salary_min }}{% endif %}{% if salary_max %}&salary_max={{ salary_max }}{% endif %}{% if is_remote %}&remote={{ is_remote }}{% endif %}">Следующая</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">Ничего не найдено</h4>
+                    <p class="text-muted">
+                        Попробуйте изменить параметры поиска или обновить свое резюме.
+                    </p>
+                    <a href="{% url 'resumes:update' %}" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Обновить резюме
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.recommendation-card {
+    border-left: 4px solid #007bff;
+    transition: box-shadow 0.3s ease;
+}
+
+.recommendation-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.match-score {
+    text-align: center;
+}
+
+.score-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 0 auto;
+}
+
+.score-number {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.score-label {
+    font-size: 0.8em;
+    opacity: 0.9;
+}
+</style>
+{% endblock %}

@@ -1,8 +1,13 @@
 Django==4.2.7
-Pillow==10.1.0
+Pillow>=10.0.0
 django-crispy-forms==2.1
 crispy-bootstrap5==0.7
 python-decouple==3.8
 django-extensions==3.2.3
 whitenoise==6.6.0
 gunicorn==21.2.0
+psycopg2-binary>=2.9.7
+requests==2.31.0
+PyPDF2>=3.0.0
+python-docx>=0.8.11
+phonenumbers>=8.13.0

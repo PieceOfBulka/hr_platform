@@ -1,0 +1,48 @@
+INSERT INTO sys.vacancy_skills (vacancy_id,skill_id,is_required,priority) VALUES
+	 ('f812ed62-ac6a-11f0-856b-a254c1cab119',18,1,3),
+	 ('f812ed62-ac6a-11f0-856b-a254c1cab119',94,1,5),
+	 ('f812ed62-ac6a-11f0-856b-a254c1cab119',95,1,4),
+	 ('f812ed62-ac6a-11f0-856b-a254c1cab119',96,1,4),
+	 ('f812ed62-ac6a-11f0-856b-a254c1cab119',98,0,2),
+	 ('f812f8de-ac6a-11f0-856b-a254c1cab119',18,1,4),
+	 ('f812f8de-ac6a-11f0-856b-a254c1cab119',93,1,5),
+	 ('f812f8de-ac6a-11f0-856b-a254c1cab119',97,0,3),
+	 ('f8130b08-ac6a-11f0-856b-a254c1cab119',16,1,4),
+	 ('f8130b08-ac6a-11f0-856b-a254c1cab119',17,1,5);
+INSERT INTO sys.vacancy_skills (vacancy_id,skill_id,is_required,priority) VALUES
+	 ('f8130b08-ac6a-11f0-856b-a254c1cab119',46,0,3),
+	 ('f8130b08-ac6a-11f0-856b-a254c1cab119',50,0,2),
+	 ('f8130b08-ac6a-11f0-856b-a254c1cab119',65,1,4),
+	 ('f813298a-ac6a-11f0-856b-a254c1cab119',18,1,2),
+	 ('f813298a-ac6a-11f0-856b-a254c1cab119',79,1,3),
+	 ('f813298a-ac6a-11f0-856b-a254c1cab119',80,1,3),
+	 ('f813298a-ac6a-11f0-856b-a254c1cab119',93,1,4),
+	 ('f8133236-ac6a-11f0-856b-a254c1cab119',1,1,5),
+	 ('f8133236-ac6a-11f0-856b-a254c1cab119',11,1,3),
+	 ('f8133236-ac6a-11f0-856b-a254c1cab119',18,1,4);
+INSERT INTO sys.vacancy_skills (vacancy_id,skill_id,is_required,priority) VALUES
+	 ('f8133236-ac6a-11f0-856b-a254c1cab119',21,0,2),
+	 ('f8133236-ac6a-11f0-856b-a254c1cab119',28,1,4),
+	 ('f81334d4-ac6a-11f0-856b-a254c1cab119',18,1,3),
+	 ('f81334d4-ac6a-11f0-856b-a254c1cab119',32,1,4),
+	 ('f81334d4-ac6a-11f0-856b-a254c1cab119',33,0,3),
+	 ('f81334d4-ac6a-11f0-856b-a254c1cab119',37,1,5),
+	 ('f81334d4-ac6a-11f0-856b-a254c1cab119',38,1,5),
+	 ('f8134f32-ac6a-11f0-856b-a254c1cab119',18,1,3),
+	 ('f8134f32-ac6a-11f0-856b-a254c1cab119',36,1,4),
+	 ('f8134f32-ac6a-11f0-856b-a254c1cab119',39,0,3);
+INSERT INTO sys.vacancy_skills (vacancy_id,skill_id,is_required,priority) VALUES
+	 ('f8134f32-ac6a-11f0-856b-a254c1cab119',40,1,5),
+	 ('f8134f32-ac6a-11f0-856b-a254c1cab119',41,1,5),
+	 ('f8135964-ac6a-11f0-856b-a254c1cab119',11,0,2),
+	 ('f8135964-ac6a-11f0-856b-a254c1cab119',18,1,3),
+	 ('f8135964-ac6a-11f0-856b-a254c1cab119',26,1,4),
+	 ('f8138754-ac6a-11f0-856b-a254c1cab119',11,0,2),
+	 ('f8138754-ac6a-11f0-856b-a254c1cab119',18,1,3),
+	 ('f8138754-ac6a-11f0-856b-a254c1cab119',108,1,4),
+	 ('f813e8d4-ac6a-11f0-856b-a254c1cab119',11,0,2),
+	 ('f813e8d4-ac6a-11f0-856b-a254c1cab119',18,1,3);
+INSERT INTO sys.vacancy_skills (vacancy_id,skill_id,is_required,priority) VALUES
+	 ('f813e8d4-ac6a-11f0-856b-a254c1cab119',32,1,4),
+	 ('f813e8d4-ac6a-11f0-856b-a254c1cab119',33,1,4),
+	 ('f813e8d4-ac6a-11f0-856b-a254c1cab119',37,1,5);

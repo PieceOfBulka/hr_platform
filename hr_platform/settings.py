@@ -6,6 +6,12 @@ from pathlib import Path
 from decouple import config
 import os
 
+# Загружаем переменные окружения из env.local
+from decouple import Config, RepositoryEnv
+env_file = Path(__file__).resolve().parent.parent / 'env.local'
+if env_file.exists():
+    config = Config(RepositoryEnv(str(env_file)))
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

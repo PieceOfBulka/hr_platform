@@ -1,0 +1,2 @@
+INSERT INTO sys.internship_requests (id,university_name,specialty,student_count,period_start,period_end,status,created_at,published_at,user_id) VALUES
+	 ('9565b660-ac6d-11f0-856b-a254c1cab119','МГТУ им. Н.Э. Баумана','Информатика и вычислительная техника',15,'2025-06-01','2025-08-15','pending_moderation','2025-10-19 00:58:30',NULL,'38cb1d64-ac63-11f0-856b-a254c1cab119');
