@@ -17,7 +17,7 @@
                             </ol>
                         </nav>
                         <h2 class="fw-bold text-dark mb-2">Заявки на стажировку</h2>
-                        <p class="text-muted">{{ internship.university.company }} • {{ internship.get_status_display }}</p>
+                        <p class="text-muted">{{ internship.organization.company }} • {{ internship.get_status_display }}</p>
                     </div>
                     <a href="{% url 'internships:my_internships' %}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-2"></i>Назад к стажировкам

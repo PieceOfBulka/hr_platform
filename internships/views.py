@@ -88,12 +88,12 @@ def apply_to_internship(request, pk):
 
 @login_required
 def my_internships(request):
-    """Мои стажировки (для представителей вузов)"""
-    if not request.user.is_university:
+    """Мои стажировки (для представителей вузов и HR)"""
+    if not (request.user.is_university or request.user.is_hr):
         messages.error(request, 'Доступ запрещен.')
         return redirect('accounts:dashboard')
     
-    internships = Internship.objects.filter(university=request.user).order_by('-created_at')
+    internships = Internship.objects.filter(organization=request.user).order_by('-created_at')
     
     # Фильтрация по статусу
     status = request.GET.get('status')
@@ -120,13 +120,13 @@ class InternshipCreateView(CreateView):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('accounts:login')
-        if not request.user.is_university:
-            messages.error(request, 'Только представители вузов могут создавать стажировки.')
+        if not (request.user.is_university or request.user.is_hr):
+            messages.error(request, 'Только представители вузов и HR могут создавать стажировки и практики.')
             return redirect('accounts:dashboard')
         return super().dispatch(request, *args, **kwargs)
     
     def form_valid(self, form):
-        form.instance.university = self.request.user
+        form.instance.organization = self.request.user
         form.instance.status = 'draft'  # Создаем как черновик
         messages.success(self.request, 'Стажировка создана как черновик.')
         return super().form_valid(form)
@@ -141,7 +141,7 @@ class InternshipUpdateView(UpdateView):
     
     def dispatch(self, request, *args, **kwargs):
         internship = self.get_object()
-        if internship.university != request.user:
+        if internship.organization != request.user:
             messages.error(request, 'Вы можете редактировать только свои стажировки.')
             return redirect('internships:my_internships')
         return super().dispatch(request, *args, **kwargs)
@@ -159,7 +159,7 @@ class InternshipUpdateView(UpdateView):
 @login_required
 def internship_applications(request, pk):
     """Заявки на стажировку"""
-    internship = get_object_or_404(Internship, pk=pk, university=request.user)
+    internship = get_object_or_404(Internship, pk=pk, organization=request.user)
     
     applications = InternshipApplication.objects.filter(internship=internship).order_by('-created_at')
     
@@ -184,7 +184,7 @@ def update_internship_application_status(request, pk):
     """Обновление статуса заявки на стажировку"""
     application = get_object_or_404(InternshipApplication, pk=pk)
     
-    if application.internship.university != request.user:
+    if application.internship.organization != request.user:
         messages.error(request, 'Доступ запрещен.')
         return redirect('internships:my_internships')
     
