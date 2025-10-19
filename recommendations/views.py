@@ -12,8 +12,6 @@ import tempfile
 
 from .services import RecommendationService
 from .models import ResumeRecommendation, HRRecommendation
-from vacancies.models import Vacancy
-from resumes.models import Resume
 
 User = get_user_model()
 
@@ -25,6 +23,9 @@ def candidate_recommendations(request):
         return render(request, '403.html', status=403)
     
     try:
+        from vacancies.models import Vacancy
+        from resumes.models import Resume
+        
         service = RecommendationService()
         recommendations = service.get_vacancy_recommendations_for_candidate(request.user)
         
@@ -53,6 +54,7 @@ def hr_recommendations(request, vacancy_id):
     if not request.user.is_hr:
         return render(request, '403.html', status=403)
     
+    from vacancies.models import Vacancy
     vacancy = get_object_or_404(Vacancy, id=vacancy_id, company=request.user)
     
     try:
@@ -85,6 +87,7 @@ def refresh_recommendations(request, vacancy_id):
     if not request.user.is_hr:
         return JsonResponse({'error': 'Доступ запрещен'}, status=403)
     
+    from vacancies.models import Vacancy
     vacancy = get_object_or_404(Vacancy, id=vacancy_id, company=request.user)
     
     try:
@@ -311,6 +314,8 @@ def update_resume_from_file(request):
         return JsonResponse({'error': 'Файл не найден'}, status=400)
     
     try:
+        from resumes.models import Resume
+        
         # Получаем или создаем резюме пользователя
         resume, created = Resume.objects.get_or_create(
             user=request.user,
