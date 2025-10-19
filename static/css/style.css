@@ -567,23 +567,25 @@ body{
   font-weight: 600;
   transition: all 0.3s ease;
   border: 2px solid transparent;
+  color: #000000 !important;
 }
 
 .catalog-tabs .nav-pills .nav-link.active {
   background: var(--accent-1);
   border-color: var(--accent-1);
+  color: #ffffff !important;
 }
 
 .catalog-tabs .nav-pills .nav-link:not(.active) {
   background: white;
-  color: var(--muted);
+  color: #000000;
   border-color: var(--neutral-4);
 }
 
 .catalog-tabs .nav-pills .nav-link:not(.active):hover {
   background: var(--neutral-6);
   border-color: var(--accent-1);
-  color: var(--accent-1);
+  color: #c68487;
 }
 
 /* Формы */
