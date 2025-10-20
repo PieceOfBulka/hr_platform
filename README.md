@@ -110,8 +110,4 @@ hr_platform/
 - **Backend**: Django 4.2, Python 3.8+
 - **Frontend**: Bootstrap 5, HTML5, CSS3, JavaScript
 - **База данных**: SQLite (разработка), PostgreSQL (продакшн)
-- **Дополнительно**: Pillow (работа с изображениями), django-crispy-forms
-
-## Лицензия
-
-Проект разработан для ОЭЗ "Технополис Москва".
+- **Дополнительно**: Pillow (работа с изображениями), django-crispy-form
